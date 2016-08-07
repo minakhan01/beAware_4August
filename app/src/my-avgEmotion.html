@@ -1,0 +1,100 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-overlay-behavior/iron-overlay-behavior.html">
+<link rel="import" href="chart-elements.html">
+<link rel="stylesheet" href="demo.css">
+
+<dom-module id="my-avgEmotion">
+
+  <template is="dom-repeat">
+
+    <chart-doughnut id="chart" class="square-chart" data="[[dataChart]]" style="position:absolute; left: 20px; top: 20px;"></chart-doughnut>
+    <chart-pie id="chart" class="square-chart" data="[[dataChart]]" style="position:absolute; left: 60px; top: 20px; height: 500px;"></chart-pie>
+
+  </template>
+
+  <script>
+
+    Polymer({
+
+      is: 'my-avgEmotion',
+
+      ready: function() {
+        console.log("hello");
+        this.dataChart = {
+          labels: [
+            "Red",
+            "Green",
+            "Yellow"
+          ],
+          datasets: [
+              {
+                  data: [300, 50, 100],
+                  backgroundColor: [
+                      "#FF6384",
+                      "#36A2EB",
+                      "#FFCE56"
+                  ],
+                  hoverBackgroundColor: [
+                      "#FF6384",
+                      "#36A2EB",
+                      "#FFCE56"
+                  ]
+              }
+          ]
+        };
+      }
+    });
+  // document.addEventListener('polymer-ready', function() {
+  // window.addEventListener('WebComponentsReady', function() {
+
+    // var scope = document.shadowRoot.querySelector('#chart');
+
+    // scope.data = {
+    // labels: [
+    //   "Red",
+    //   "Green",
+    //   "Yellow"
+    // ],
+    // datasets: [
+    //     {
+    //         data: [300, 50, 100],
+    //         backgroundColor: [
+    //             "#FF6384",
+    //             "#36A2EB",
+    //             "#FFCE56"
+    //         ],
+    //         hoverBackgroundColor: [
+    //             "#FF6384",
+    //             "#36A2EB",
+    //             "#FFCE56"
+    //         ]
+    //     }]
+    // };
+
+    //   scope.addData = function() {
+    //     this.push('data.labels', this.$.newLabel.value);
+    //     this.push('data.datasets.0.hoverBackgroundColor', this.$.newHighlight.value);
+    //     this.push('data.datasets.0.backgroundColor', this.$.newColor.value);
+    //     this.push('data.datasets.0.data', this.$.newValue.value);
+    //   };
+
+    //   scope.resize = function() {
+    //     this.$.chart.style.width = this.$.newWidth.value;
+    //     this.$.chart.style.height = this.$.newHeight.value;
+    //     this.$.chart.resize();
+    //   };
+  // });
+    
+  </script>
+
+</dom-module>
