@@ -5,8 +5,8 @@
   <template>
     <style>
       :host {
-                display: block;
-                height: 400px;
+                /*display: block;*/
+                /*height: 400px;*/
             }
       .arc text {
 			  font: 15px sans-serif;
@@ -23,29 +23,21 @@
     Polymer({
       /* this is the element's prototype */
       is: 'pie-polymer',
+      properties: {
+        data : Array
+      }, 
       createElements: function () {
-
-      	var data = [{
-		    "a": 1,
-		    "b": 2,
-		    "c": 3
-		},{
-		    "a": 4,
-		    "d": 5,
-		    "e": 6
-		},{
-		    "d": 4,
-		    "f": 5,
-		    "b": 6
-		}];
-
-		var fixedData = data.map(function(d){
+		var fixedData = this.data.map(function(d){
+      console.log(d);
+      console.log(d3.entries(d));
 		  return d3.entries(d);
 		});
 
+    console.log(fixedData);
+
 	    var width = 500,
 	        height = 500,
-	        radius = (Math.min(width, height) / 2) / data.length;
+	        radius = (Math.min(width, height) / 2)/ this.data.length;
 
         var color = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -84,53 +76,10 @@
 		    .text(function(d) { return d.data.key; });
         
       },
-      //       drawChart: function () {
-      //         var me = this;
-
-      //         me.data.forEach(function(d) {
-      //           d.amount = +d.amount;
-      //         });
-
-      //         me.g = me.svg.selectAll(".arc")
-      //             .data(me.pie(me.data))
-      //           .enter().append("g")
-      //             .attr("class", "arc");
-
-      //         me.g.append("path")
-      //             .attr("d", me.arc)
-      //             .style("fill", function(d) { return me.color(d.data.type); });
-
-      //         me.g.append("text")
-      //             .attr("transform", function(d) { return "translate(" + me.arc.centroid(d) + ")"; })
-      //             .attr("dy", ".35em")
-      //             .style("text-anchor", "middle")
-      //             .text(function(d) { return d.data.type; });
-      //       },
-      //       refreshChart: function () {
-      //         var me = this;
-
-      //         me.g.data(me.pie(me.data))
-      //           .select("path").attr("d", me.arc);
-
-      //         me.g.select("text")
-      //           .attr("transform", function(d) { return "translate(" + me.arc.centroid(d) + ")"; });
-      //       },
-      //       getData: function () {
-      //         var me = this;
-      //         d3.csv(me.url, function (error, data) {
-      //           me.data = data;
-      //           me.drawChart();
-      //         });
-      //       },
-            created: function () {
+      ready: function () {
               this.createElements();
-              // this.getData();
             },
-            // urlChanged: function (oldValue, newValue) {
-            //   if(newValue && oldValue) {
-            //     this.getData();
-            //   }
-            // }
+
     });
   </script>
 </dom-module>

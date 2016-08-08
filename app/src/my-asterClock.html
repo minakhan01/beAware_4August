@@ -16,14 +16,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <template>
     <style></style>
-    <pie-polymer></pie-polymer>
+    <pie-polymer data="[[data]]"></pie-polymer>
   </template>
 
   <script>
 
     Polymer({
 
-      is: 'my-asterClock'
+      is: 'my-asterClock',
+      properties: {
+        data: {
+          type: Array,
+          value: [{
+            "a": 1,
+            "b": 2,
+            "c": 3
+          },{
+            "a": 4,
+            "d": 5,
+            "e": 6
+          },{
+            "d": 4,
+            "f": 5,
+            "b": 6
+          }]
+        }
+      }, 
 
     });
 
