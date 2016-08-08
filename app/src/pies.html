@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.arc text {
+  font: 15px sans-serif;
+  text-anchor: middle;
+}
+
+.arc path {
+  stroke: #fff;
+}
+
+</style>
+<body>
+<script src="../d3/d3.min.js"></script>
+<script>
+
+var data = [{
+    "a": 1,
+    "b": 2,
+    "c": 3
+},{
+    "a": 4,
+    "d": 5,
+    "e": 6
+},{
+    "d": 4,
+    "f": 5,
+    "b": 6
+}];
+
+var fixedData = data.map(function(d){
+  return d3.entries(d);
+});
+
+var width = 500,
+    height = 500,
+    radius = (Math.min(width, height) / 2) / data.length;
+
+var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+var arc = d3.arc()
+    .outerRadius(radius - 10)
+    .innerRadius(0);
+    
+var labelArc = d3.arc()
+    .outerRadius(radius / 2)
+    .innerRadius(radius / 2);
+
+var pie = d3.pie()
+    .sort(null)
+    .value(function(d) { return d.value; });
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var p = svg.selectAll(".pie")
+  .data(fixedData)
+  .enter()
+  .append("g")
+  .attr("class", "pie")
+  .attr("transform",function(d,i){
+    return "translate(" + (width / 2) + "," + ((radius * i * 2) + radius) + ")";
+  });
+  
+var g = p.selectAll(".arc")
+  .data(function(d){
+    return pie(d);
+  })
+  .enter().append("g")
+  .attr("class", "arc");
+
+g.append("path")
+  .attr("d", arc)
+  .style("fill", function(d) { return color(d.data.key); });
+
+g.append("text")
+    .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
+    .text(function(d) { return d.data.key; });
+
+</script>
