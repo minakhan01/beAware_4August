@@ -6,9 +6,9 @@
   <template>
     <style>
       :host {
-                display: block;
-                height: 800px;
-                width: 800px;
+                /*display: block;*/
+                height: 1000px;
+                width: 1000px;
                 font: 10px sans-serif;
             }
 .axis path,
@@ -22,15 +22,26 @@
   fill: orange;
 }
 
-.solidArc:hover {
-  fill: orangered ;
-}
-
 .solidArc {
     -moz-transition: all 0.3s;
     -o-transition: all 0.3s;
     -webkit-transition: all 0.3s;
     transition: all 0.3s;
+}
+
+.solidArc:hover {
+  fill: orangered ;
+}
+
+.solidArcDonut {
+    -moz-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+.solidArcDonut:hover {
+  fill: greenyellow ;
 }
 
 .x.axis path {
@@ -82,9 +93,9 @@
       //   dataAster : Array
       // }, 
       createElements: function () {
-	var width = 500,
-    height = 500,
-    radius = Math.min(width, height) / 2,
+	var width = 600,
+    height = 600,
+    radius = Math.min(width, height) / 2 - 70,
     innerRadius = 0.3 * radius;
 
 var pie = d3.pie()
@@ -103,6 +114,10 @@ var arc = d3.arc()
   .outerRadius(function (d) { 
     return (radius - innerRadius) * (d.data.score / 100.0) + innerRadius; 
   });
+
+var arcDonut = d3.arc()
+  .innerRadius(radius)
+  .outerRadius(radius+50);
 
 var outlineArc = d3.arc()
         .innerRadius(innerRadius)
@@ -132,6 +147,14 @@ var svg = d3.select("body").append("svg")
       // .on('mouseover', tip.show)
       // .on('mouseout', tip.hide);
 
+  var pathDonut = svg.selectAll(".solidArcDonut")
+      .data(pie(data))
+    .enter().append("path")
+      .attr("fill", function(d) { return d.data.color; })
+      .attr("class", "solidArc")
+      .attr("stroke", "gray")
+      .attr("d", arcDonut);
+
   var outerPath = svg.selectAll(".outlineArc")
       .data(pie(data))
     .enter().append("path")
@@ -145,10 +168,10 @@ var svg = d3.select("body").append("svg")
   var score = 
     data.reduce(function(a, b) {
       //console.log('a:' + a + ', b.score: ' + b.score + ', b.weight: ' + b.weight);
-      return a + (b.score * b.weight); 
+      return a + (b.score * b.width); 
     }, 0) / 
     data.reduce(function(a, b) { 
-      return a + b.weight; 
+      return a + b.width; 
     }, 0);
 
   svg.append("svg:text")
@@ -156,6 +179,13 @@ var svg = d3.select("body").append("svg")
     .attr("dy", ".35em")
     .attr("text-anchor", "middle") // text-align: right
     .text(Math.round(score));
+
+  // svg.append("text")
+  //   .attr("x", radius + 6)
+  //   .attr("dy", ".35em")
+  //   .style("text-anchor", function(d) { return d < 270 && d > 90 ? "end" : null; })
+  //   .attr("transform", function(d) { return d < 270 && d > 90 ? "rotate(180 " + (radius + 6) + ",0)" : null; })
+  //   .text(function(d) { return d + "°"; });
 
       },
       ready: function () {
