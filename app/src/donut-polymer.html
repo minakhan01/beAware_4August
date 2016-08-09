@@ -1,0 +1,85 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<script type="text/javascript" src="../d3/d3.min.js"></script>
+
+<dom-module id="donut-polymer">
+  <template>
+    <style>
+      :host {
+                /*display: block;*/
+                /*height: 400px;*/
+            }
+      .arc text {
+			  font: 15px sans-serif;
+			  text-anchor: middle;
+			}
+
+			.arc path {
+			  stroke: #fff;
+			}
+    </style>
+    <svg id="svg"></svg>
+  </template>
+  <script>
+    Polymer({
+      /* this is the element's prototype */
+      is: 'donut-polymer',
+      properties: {
+        data : Array
+      }, 
+      createElements: function () {
+		var fixedData = this.data.map(function(d){
+      console.log(d);
+      console.log(d3.entries(d));
+		  return d3.entries(d);
+		});
+
+    console.log(fixedData);
+
+	    var width = 500,
+	        height = 500,
+	        radius = (Math.min(width, height) / 2)/ this.data.length;
+
+        var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+        var arc = d3.arc().outerRadius(radius - 10).innerRadius(radius - 30);
+
+        var labelArc = d3.arc().outerRadius(radius / 2).innerRadius(radius / 2);
+
+        var pie = d3.pie().sort(null).value(function(d) { return d.value; });
+
+        var svg = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+        var p = svg.selectAll(".pie")
+		  .data(fixedData)
+		  .enter()
+		  .append("g")
+		  .attr("class", "pie")
+		  .attr("transform",function(d,i){
+		    return "translate(" + (width / 2) + "," + ((radius * i * 2) + radius) + ")";
+		  });
+		  
+		var g = p.selectAll(".arc")
+		  .data(function(d){
+		    return pie(d);
+		  })
+		  .enter().append("g")
+		  .attr("class", "arc");
+
+		g.append("path")
+		  .attr("d", arc)
+		  .style("fill", function(d) { return color(d.data.key); });
+
+		g.append("text")
+		    .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
+		    .text(function(d) { return d.data.key; });
+        
+      },
+      ready: function () {
+              this.createElements();
+            },
+
+    });
+  </script>
+</dom-module>

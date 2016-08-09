@@ -12,6 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../d3/d3.min.js">
 <link rel="import" href="pie-polymer.html">
 <link rel="import" href="aster-polymer.html">
+<link rel="import" href="donut-polymer.html">
 
 <dom-module id="my-asterClock">
 
@@ -19,6 +20,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style></style>
     <aster-polymer></aster-polymer>
     <pie-polymer data="[[data]]"></pie-polymer>
+    <donut-polymer data="[[data]]"></donut-polymer>
   </template>
 
   <script>
@@ -48,7 +50,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: {
           "Red": "#FF5252",
           "Pink": "#FF4081",
-          "Purple", "#E040FB",
+          "Purple": "#E040FB",
           "DeepPurple": "#7C4DFF",
           "Indigo": "#536DFE",
           "Blue": "#448AFF",
@@ -61,7 +63,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           "Yellow": "#FFFF00",   
           "Amber": "#FFD740",   
           "Orange": "#FFAB40", 
-          "DeepOrange": "#FF6E40",   
+          "DeepOrange": "#FF6E40"  
           //"Brown": "#FF4081",   
           //"Grey": "#FF4081" 
           },
@@ -71,7 +73,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: {
           "Red": "#FF1744",
           "Pink": "#F50057",
-          "Purple", "#D500F9",
+          "Purple": "#D500F9",
           "DeepPurple": "#651FFF",
           "Indigo": "#3D5AFE",
           "Blue": "#2979FF",
@@ -84,7 +86,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           "Yellow": "#FFEA00",   
           "Amber": "#FFC400",   
           "Orange": "#FF9100", 
-          "DeepOrange": "#FF3D00",   
+          "DeepOrange": "#FF3D00"   
           //"Brown": "#FF4081",   
           //"Grey": "#FF4081" 
           },
@@ -94,7 +96,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: {
           "Red": "#D50000",
           "Pink": "#C51162",
-          "Purple", "#AA00FF",
+          "Purple": "#AA00FF",
           "DeepPurple": "#6200EA",
           "Indigo": "#304FFE",
           "Blue": "#2962FF",
@@ -107,7 +109,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           "Yellow": "#FFD600",   
           "Amber": "#FFAB00",   
           "Orange": "#FF6D00", 
-          "DeepOrange": "#DD2C00",   
+          "DeepOrange": "#DD2C00"   
           //"Brown": "#FF4081",   
           //"Grey": "#FF4081" 
           },
@@ -128,16 +130,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         emotionCategories: {
           type: Array,
           value: [
-          { "name": "Joy", "isPositive", true, "color": "Lime", "colorType": "A400"},
-          { "name": "Calm", "isPositive", true, "color": "Cyan", "colorType": "A400"},
-          { "name": "Creativity", "isPositive", true, "color": "DeepPurple", "colorType": "A400"},
-          { "name": "Gratitude", "isPositive", true, "color": "Teal", "colorType": "A400"},
-          { "name": "Pride", "isPositive", true, "color": "Indigo", "colorType": "A400"},
-          { "name": "Fear", "isPositive", false, "color": "Orange", "colorType": "A700"},
-          { "name": "Stress", "isPositive", false, "color": "Pink", "colorType": "A700"},
-          { "name": "Sadness", "isPositive", false, "color": "Yellow", "colorType": "A700"},
-          { "name": "Anger", "isPositive", false, "color": "Red", "colorType": "A700"},
-          { "name": "Guilt", "isPositive", false, "color": "Amber", "colorType": "A700"},
+          { "name": "Joy", "isPositive": true, "color": "Lime", "colorType": "A400"},
+          { "name": "Calm", "isPositive": true, "color": "Cyan", "colorType": "A400"},
+          { "name": "Creativity", "isPositive": true, "color": "DeepPurple", "colorType": "A400"},
+          { "name": "Gratitude", "isPositive": true, "color": "Teal", "colorType": "A400"},
+          { "name": "Pride", "isPositive": true, "color": "Indigo", "colorType": "A400"},
+          { "name": "Fear", "isPositive": false, "color": "Orange", "colorType": "A700"},
+          { "name": "Stress", "isPositive": false, "color": "Pink", "colorType": "A700"},
+          { "name": "Sadness", "isPositive": false, "color": "Yellow", "colorType": "A700"},
+          { "name": "Anger", "isPositive": false, "color": "Red", "colorType": "A700"},
+          { "name": "Guilt", "isPositive": false, "color": "Amber", "colorType": "A700"},
           ],
         },
         exampleDay: {
