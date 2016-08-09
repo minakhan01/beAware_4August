@@ -29,19 +29,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       properties: {
         data: {
           type: Array,
-          value: [{
-            "a": 1,
-            "b": 2,
-            "c": 3
-          },{
-            "a": 4,
-            "d": 5,
-            "e": 6
-          },{
-            "d": 4,
-            "f": 5,
-            "b": 6
-          }]
+          value: 
+          [{ "a": 1, "b": 2, "c": 3 },
+          { "a": 4, "d": 5, "e": 6 },
+          { "d": 4, "f": 5, "b": 6 }]
         },
         dataAster: {
           type: Array,
@@ -50,7 +41,138 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           { "name": "two", "score": 20, "width": 2, "color": "#C32F4B"},
           { "name": "three", "score": 40, "width": 5, "color": "#E1514B"},
           { "name": "four", "score": 10, "width": 4, "color": "#F47245"},
-          { "name": "five", "score": 5, "width": 6, "color": "#FB9F59"}]
+          { "name": "five", "score": 5, "width": 6, "color": "#FB9F59"}],
+        },
+        colorsA200: {
+          type: Object,
+          value: {
+          "Red": "#FF5252",
+          "Pink": "#FF4081",
+          "Purple", "#E040FB",
+          "DeepPurple": "#7C4DFF",
+          "Indigo": "#536DFE",
+          "Blue": "#448AFF",
+          "LightBlue": "#40C4FF",
+          "Cyan": "#18FFFF",
+          "Teal": "#64FFDA",   
+          "Green": "#69F0AE",   
+          "LightGreen": "#B2FF59",   
+          "Lime": "#EEFF41",   
+          "Yellow": "#FFFF00",   
+          "Amber": "#FFD740",   
+          "Orange": "#FFAB40", 
+          "DeepOrange": "#FF6E40",   
+          //"Brown": "#FF4081",   
+          //"Grey": "#FF4081" 
+          },
+        },
+        colorsA400: {
+          type: Object,
+          value: {
+          "Red": "#FF1744",
+          "Pink": "#F50057",
+          "Purple", "#D500F9",
+          "DeepPurple": "#651FFF",
+          "Indigo": "#3D5AFE",
+          "Blue": "#2979FF",
+          "LightBlue": "#00B0FF",
+          "Cyan": "#00E5FF",
+          "Teal": "#1DE9B6",   
+          "Green": "#00E676",   
+          "LightGreen": "#76FF03",   
+          "Lime": "#C6FF00",   
+          "Yellow": "#FFEA00",   
+          "Amber": "#FFC400",   
+          "Orange": "#FF9100", 
+          "DeepOrange": "#FF3D00",   
+          //"Brown": "#FF4081",   
+          //"Grey": "#FF4081" 
+          },
+        },
+        colorsA700: {
+          type: Object,
+          value: {
+          "Red": "#D50000",
+          "Pink": "#C51162",
+          "Purple", "#AA00FF",
+          "DeepPurple": "#6200EA",
+          "Indigo": "#304FFE",
+          "Blue": "#2962FF",
+          "LightBlue": "#0091EA",
+          "Cyan": "#00B8D4",
+          "Teal": "#00BFA5",   
+          "Green": "#00C853",   
+          "LightGreen": "#64DD17",   
+          "Lime": "#AEEA00",   
+          "Yellow": "#FFD600",   
+          "Amber": "#FFAB00",   
+          "Orange": "#FF6D00", 
+          "DeepOrange": "#DD2C00",   
+          //"Brown": "#FF4081",   
+          //"Grey": "#FF4081" 
+          },
+        },
+        //A200 list
+        activityCategories: {
+          type: Array,
+          value: [
+          { "name": "Sleep", "color": "Green", "colorType": "A200"},
+          { "name": "Work", "color": "Blue", "colorType": "A200"},
+          { "name": "Gym", "color": "Pink", "colorType": "A200"},
+          { "name": "Social", "color": "Amber", "colorType": "A200"},
+          { "name": "Leisure", "color": "Purple", "colorType": "A200"},
+          ],
+        },
+        //positive : A400 list
+        //negative: A700 list
+        emotionCategories: {
+          type: Array,
+          value: [
+          { "name": "Joy", "isPositive", true, "color": "Lime", "colorType": "A400"},
+          { "name": "Calm", "isPositive", true, "color": "Cyan", "colorType": "A400"},
+          { "name": "Creativity", "isPositive", true, "color": "DeepPurple", "colorType": "A400"},
+          { "name": "Gratitude", "isPositive", true, "color": "Teal", "colorType": "A400"},
+          { "name": "Pride", "isPositive", true, "color": "Indigo", "colorType": "A400"},
+          { "name": "Fear", "isPositive", false, "color": "Orange", "colorType": "A700"},
+          { "name": "Stress", "isPositive", false, "color": "Pink", "colorType": "A700"},
+          { "name": "Sadness", "isPositive", false, "color": "Yellow", "colorType": "A700"},
+          { "name": "Anger", "isPositive", false, "color": "Red", "colorType": "A700"},
+          { "name": "Guilt", "isPositive", false, "color": "Amber", "colorType": "A700"},
+          ],
+        },
+        exampleDay: {
+          type: Array,
+          value: 
+          [
+          { "startTime": 0, "endTime": 7, "activityName":  "Sleep", "emotionsList" : [
+                {"name": "Calm", "intensity": 3}
+              ]
+          },
+          { "startTime": 7, "endTime": 15, "activityName":  "Work", "emotionsList" : [
+              {"name": "Stress", "intensity": 1},
+              {"name": "Joy", "intensity": 2},
+              {"name": "Fear", "intensity": 1},
+              {"name": "Gratitude", "intensity": 1}
+              ]
+          },
+          { "startTime": 15, "endTime": 18, "activityName":  "Gym", "emotionsList" : [
+              {"name": "Joy", "intensity": 1},
+              {"name": "Creativity", "intensity": 1},
+              {"name": "Calm", "intensity": 1}
+              ]
+          },
+          { "startTime": 18, "endTime": 20, "activityName":  "Social", "emotionsList" : [
+              {"name": "Sad", "intensity": 1},
+              {"name": "Calm", "intensity": 1}
+              ]
+          },
+          { "startTime": 20, "endTime": 23, "activityName":  "Leisure", "emotionsList" : []
+          },
+          { "startTime": 23, "endTime": 24, "activityName":  "Sleep", "emotionsList" : [
+              {"name": "Stress", "intensity": 1}
+              ]
+          },
+          ]
         }
       }, 
 
