@@ -141,15 +141,15 @@
         properties: {
           selected: {
             type: Number,
-            notify: true,
+            // notify: true,
             value: -1,
-            observer: '_selectedChanged'
+            // observer: '_selectedChanged'
           },
           selecting: {
             type: Boolean,
-            notify: true,
-            value: true,
-            observer: '_selectingChanged'
+            // notify: true,
+            value: false,
+            // observer: '_selectingChanged'
           },
           selectedStart: {
             type: Number,
@@ -211,40 +211,29 @@
           // .attr("height", height)
           // .attr("width", width);
 
-// var vis = d3.select("#clock");
+          var vis = d3.select(this.$.clock);
 
-// var pi = Math.PI;
+          var pi = Math.PI;
 
-//           var arc = d3.arc()
-//             .innerRadius(50)
-//             .outerRadius(70)
-//             .startAngle(0) //converting from degs to radians
-//             .endAngle(3) //just radians
+          console.log("deg: "+deg);
+          console.log("selectedStart"+ this.selectedStart);
+          console.log("selected"+ this.selected);
+          var startRadian = (2*pi / this.count) * this.selectedStart;
+          var endRadian = (2*pi / this.count) * this.selected;
+          if (deg >0 && this.selecting) {
+            var arc = d3.arc()
+              .innerRadius(this._radius)
+              .outerRadius(this._radius+5)
+              .startAngle(startRadian) //converting from degs to radians
+              .endAngle(endRadian); //just radians
+            
 
-          // svg.select("g").remove();
+            // svg.select("g").remove();
 
-// vis.append("path")
-//     .attr("d", arc)
-//     .attr("transform", "translate(50,50)")
-
-          // this.$.clock.svg.append("g")
-          //     .attr("transform", "translate(200,200)")
-          //     .selectAll("path.arc")
-          //     .enter()
-          //         .append("path")
-          //         .attr("class", "arc")
-          //         .attr("fill", function (d, i) {
-          //             return colors(i);
-          //         })
-          //         .transition().duration(1000)
-          //         .attrTween("d", function (d) { 
-          //             var start = {startAngle: 0, endAngle: 0};
-          //             var interpolate = d3.interpolate(start, d);
-          //             return function (t) {
-          //                 return arc(interpolate(t));
-          //             };
-          //         });
-
+            vis.append("path")
+                .attr("d", arc)
+                .attr("transform", "translate("+this._radius+","+this._radius+")");
+          }
           this.$.clock.classList.remove('animating');
 
           var current, transform = this._getTransform(this.$.clockHand);
@@ -490,26 +479,30 @@
           // determine the selected number
           this.selected = Math.round(theta / intervalRad);
 
+          console.log("ON TOUCH ontouch: "+ this.selected);
+
           switch (event.detail.state) {
             case "start": 
               this.selectedStart = this.selected;
-              console.log("selectedStart: "+ this.selectedStart);
+              console.log("STARTING selectedStart: "+ this.selectedStart);
               this.$.clockHand.style.opacity = 1;
+              this.selecting = true;
               break;
             case "touchmove":
               break;
             case "end":        
               this.selectedEnd = this.selected;
-              console.log("selectedEnd: "+ this.selectedEnd);
+              console.log("ENDING selectedEnd: "+ this.selectedEnd);
               this.selected = 0;
               this.$.clockHand.style.opacity = 0.1;
+              this.selecting = false;
               break;
           }
-
-          /* only fire selected when we've tapped or stopped tracking */
-          if (event.type === 'tap' || event.detail.state === 'end') {
-            this.fire('paper-clock-selected', {value: this.selected, animated: this.animated});
-          }
+          this.setClockHand((360 / this.count) * this.selected, true);
+          // /* only fire selected when we've tapped or stopped tracking */
+          // if (event.type === 'tap' || event.detail.state === 'end') {
+          //   this.fire('paper-clock-selected', {value: this.selected, animated: this.animated});
+          // }
         },
         _formatNumber: function(value) {
           if (this.zeroPad) {
