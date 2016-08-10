@@ -15,6 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="paper-clock-selector.html">
 <link rel="import" href="simple-menu.html">
 <link rel="import" href="simple-menubar.html">
+<link rel="import" href="my-animatable.html">
 
 <dom-module id="my-input">
 
@@ -61,6 +62,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div id="scope">
             <paper-time-picker id="picker" periodStartSelected="{{periodStartSelected}}" periodEndSelected="{{periodEndSelected}}"></paper-time-picker>
     </div>
+    <button on-click="_onCircleButtonClick">toggle circle</button>
+
+    <my-animatable id="orange"></my-animatable>
+    
     <menu-overlay id="plain" tabindex="-1">
       <h2>Hello world!</h2>
       <p>This can be closed by pressing the ESC key too.</p>
@@ -120,7 +125,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
       </div>
     </div>
-
   </div>
 
   </template>
@@ -155,6 +159,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _closePopUp: function() {
         console.log("close");
         this.$.plain.close();
+      },
+      _onCircleButtonClick: function(event) {
+        var node = this.$.orange;
+        console.log("_onCircleButtonClick");
+        if (node) {
+          node.animate();
+          console.log("animating");
+        }
       }
     });
 
