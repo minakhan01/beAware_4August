@@ -9,8 +9,6 @@
 <link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="paper-clock-selector.html">
-<link rel="import" href="paper-time-picker-dialog-style.html">
-<script type="text/javascript" src="../d3/d3.min.js"></script>
 
 <!--
 
@@ -47,7 +45,7 @@ If you include this element as part of `paper-dialog`, use the class
 @demo demo/index.html
 -->
 
-<style is="custom-style" include="paper-time-picker-dialog-style">
+<style is="custom-style">
   /* include dialog style at document-level for backward compatibility */
 </style>
 
@@ -184,7 +182,7 @@ If you include this element as part of `paper-dialog`, use the class
             entry-animation="fade-in-animation" exit-animation="fade-out-animation">
             <neon-animatable class="fit" name="hours">
               <paper-clock-selector class="clock fit" id="hourClock" count="12" step="1"
-                animated="[[animated]]" selected="{{hour12}}"></paper-clock-selector> 
+                animated="[[animated]]" selected="{{hour12}}" selectedStart="{{periodStartSelected}}" selectedEnd="{{periodEndSelected}}"></paper-clock-selector> 
             </neon-animatable>
           </neon-animated-pages>
         </div>
@@ -229,6 +227,24 @@ If you include this element as part of `paper-dialog`, use the class
             notify: true,
             value: 0
           },
+          periodStartSelected: {
+            type: Number,
+            notify: true,
+            value: 0,
+            observer: '_periodStartChanged'
+          },
+          /**
+           * 
+           */
+          periodEndSelected: {
+            type: Number,
+            notify: true,
+            value: 0,
+            observer: '_periodEndChanged'
+          },
+          /**
+           * The current minute (0-59)
+           */
           /**
            * The current 12-hour value (0-12)
            */
@@ -403,6 +419,14 @@ If you include this element as part of `paper-dialog`, use the class
         _hour12Changed: function(hour12) {
           var add = (this.period === 'PM' ? 12 : 0);
           this.hour = ((hour12 % 12) + add) % 24;
+        },
+        _periodStartChanged: function(periodStartSelected) {
+          var add = (this.period === 'PM' ? 12 : 0);
+          this.periodStartSelected = ((periodStartSelected % 12) + add) % 24;
+        },
+        _periodEndChanged: function(periodEndSelected) {
+          var add = (this.period === 'PM' ? 12 : 0);
+          this.periodEndSelected = ((periodEndSelected % 12) + add) % 24;
         },
         _hourChanged: function(hour, oldValue) {
           hour = parseInt(hour);

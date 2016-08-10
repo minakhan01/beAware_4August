@@ -11,8 +11,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="paper-time-picker.html">
+<!-- <link rel="import" href="menu-overlay.html"> -->
 <link rel="import" href="paper-clock-selector.html">
-<link rel="import" href="paper-time-picker-dialog-style.html">
 
 <dom-module id="my-input">
 
@@ -23,36 +23,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
         padding: 10px;
       }
-      .card {
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-        padding: 16px;
-        margin: 24px;
-        border-radius: 5px;
-        background-color: #fff;
-        color: #757575;
-      }
-      .circle {
-        display: inline-block;
-        height: 64px;
-        width: 64px;
-        border-radius: 50%;
-        background: #ddd;
-        line-height: 64px;
-        font-size: 30px;
-        color: #555;
-        text-align: center;
-      }
-      h1 {
-        font-size: 22px;
-        margin: 16px 0;
-        color: #212121;
-      }
     </style>
 
     <div id="scope">
-      <h1>{{time}}</h1>
-        <paper-time-picker id="picker" time="[[time]]"></paper-time-picker>
+            <paper-time-picker id="picker" periodStartSelected="{{periodStartSelected}}" periodEndSelected="{{periodEndSelected}}"></paper-time-picker>
     </div>
+    <menu-overlay id="plain" tabindex="-1"  with-backdrop>
+      <h2>Hello world!</h2>
+      <p>This can be closed by pressing the ESC key too.</p>
+      <button onclick="plain.close()">Close</button>
+    </menu-overlay>
 
   </template>
 
@@ -60,8 +40,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     Polymer({
 
-      is: 'my-input'
-
+      is: 'my-input',
+      properties: {
+          periodEndSelected: {
+            type: Number,
+            value: 0,
+            notify: true,
+            observer: '_periodEndChanged' 
+          },
+          periodStartSelected: {
+            type: Number,
+            value: 0,
+            notify: true,
+            observer: '_periodStartChanged' 
+          }
+      },
+      _periodStartChanged: function(periodStartSelected) {
+        },
+      _periodEndChanged: function(periodStartSelected) {
+        // this.createPopUp();
+        },
+      createPopUp: function() {
+        // this.$.plain.open();
+      }
     });
 
   </script>
