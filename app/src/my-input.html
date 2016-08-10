@@ -13,6 +13,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="paper-time-picker.html">
 <link rel="import" href="menu-overlay.html">
 <link rel="import" href="paper-clock-selector.html">
+<link rel="import" href="simple-menu.html">
+<link rel="import" href="simple-menubar.html">
 
 <dom-module id="my-input">
 
@@ -23,6 +25,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
         padding: 10px;
       }
+
+      simple-menu,
+    simple-menubar {
+      display: inline-block;
+      width: 100%;
+    }
+
+    simple-menu a {
+      display: block;
+    }
+
+    simple-menubar a,
+    simple-menu a {
+      padding: 15px 20px;
+      color: var(--primary-text-color);
+      text-decoration: none;
+    }
+
+    simple-menu a[disabled],
+    simple-menubar a[disabled] {
+      color: var(--google-grey-300);
+    }
+
+    .horizontal-section {
+      padding: 0;
+      margin-bottom: 20px;
+    }
+
+    .row {
+      height: 100px;
+    }
     </style>
 
     <div id="scope">
@@ -33,6 +66,62 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <p>This can be closed by pressing the ESC key too.</p>
       <button on-click="_closePopUp">Close</button>
     </menu-overlay>
+
+    <div class="horizontal-section-container">
+    <div>
+      <h3>Simple menu</h3>
+      <div class="horizontal-section">
+        <simple-menu>
+          <a href="javascript:void(0)" role="menuitem">Item 0</a>
+          <a href="javascript:void(0)" role="menuitem">Item 1</a>
+          <a href="javascript:void(0)" role="menuitem" disabled>Item 2</a>
+          <a href="javascript:void(0)" role="menuitem" hidden>Ghost</a>
+          <a href="javascript:void(0)" role="menuitem">Item 3</a>
+          <a href="javascript:void(0)" role="menuitem" style="display:none">Another ghost</a>
+        </simple-menu>
+      </div>
+    </div>
+
+    <div>
+      <h3>Multi-select menu</h3>
+      <div class="horizontal-section">
+        <simple-menu multi>
+          <a href="javascript:void(0)" role="menuitem">Item 0</a>
+          <a href="javascript:void(0)" role="menuitem" disabled>Item 1</a>
+          <a href="javascript:void(0)" role="menuitem" hidden>Ghost</a>
+          <a href="javascript:void(0)" role="menuitem">Item 2</a>
+          <a href="javascript:void(0)" role="menuitem">Item 3</a>
+          <a href="javascript:void(0)" role="menuitem" style="display:none">Another ghost</a>
+        </simple-menu>
+      </div>
+    </div>
+
+    <div>
+      <div class="row">
+        <h3>Simple menubar</h3>
+        <div class="horizontal-section">
+          <simple-menubar>
+            <a href="javascript:void(0)" role="menuitem">Item 0</a>
+            <a href="javascript:void(0)" role="menuitem">Item 1</a>
+            <a href="javascript:void(0)" role="menuitem" disabled>Item 2</a>
+            <a href="javascript:void(0)" role="menuitem">Item 3</a>
+          </simple-menubar>
+        </div>
+      </div>
+      <div class="row">
+        <h3>Multi-select menubar</h3>
+        <div class="horizontal-section">
+          <simple-menubar multi>
+            <a href="javascript:void(0)" role="menuitem">Item 0</a>
+            <a href="javascript:void(0)" role="menuitem">Item 1</a>
+            <a href="javascript:void(0)" role="menuitem">Item 2</a>
+            <a href="javascript:void(0)" role="menuitem">Item 3</a>
+          </simple-menubar>
+        </div>
+      </div>
+    </div>
+
+  </div>
 
   </template>
 
