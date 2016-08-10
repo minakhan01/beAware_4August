@@ -67,7 +67,7 @@
         z-index: 3;
         fill: var(--primary-text-color);
         @apply(--paper-font-subhead);
-        pointer-events: none;
+        pointer-events: visible;
         dominant-baseline: middle;
         text-align: center;
         text-anchor: middle;
@@ -80,6 +80,9 @@
       .select-area {
         cursor: pointer;
         fill-opacity: 0;
+        fill: none;
+        stroke: black;
+        stroke-opacity: 0.5;
       }
       .time-area {
         fill: none;
@@ -97,18 +100,18 @@
           <circle id="clipCircle" r$="{{_selectorSize}}" cx$="{{_handX}}" cy$="{{_handY}}"></circle>
         </clipPath>
       </defs>
-      <circle id="face" class="bg" r$="{{_radius}}" cx$="{{_radius}}" cy$="{{_radius}}"></circle>
+      <circle id="face" class="bg" r$="{{_selectorInner}}" cx$="{{_radius}}" cy$="{{_radius}}" on-track="_onTouchOut" on-tap="_onTouchOut"></circle>
       <g id="clockHand" class="clock-hand">
-        <circle class="dot" r="2" cx$="{{_radius}}" cy$="{{_radius}}"></circle>
+        <circle id="dot" class="dot" r="2" cx$="{{_radius}}" cy$="{{_radius}}"></circle>
         <line class="line" x1$="{{_radius}}" y1$="{{_radius}}" x2$="{{_handX}}" y2$="{{_handY}}"></line>
         <circle class="disc-large" r$="{{_selectorSize}}" cx$="{{_handX}}" cy$="{{_handY}}"></circle>
         <circle class="disc-small" r$="{{_selectorDotSize}}" cx$="{{_handX}}" cy$="{{_handY}}"></circle>
       </g>
       <g id="numbers"></g>
-      <path class="select-area" on-tap="_onTouch" on-track="_onTouch"
+      <path class="select-area" on-track="_onTouch" on-tap="_onTouch"
         d$="{{_getSelectArea(_radius, _selectorInner, _selectorOuter)}}"></path>
-      <path class="time-area" on-tap="_onTouch" on-track="_onTouch"
-        d$="{{_getSelectArea(_radius, _selectorInner, _selectorOuter)}}"></path>
+      <!-- <path class="time-area" on-tap="_onTouch" on-track="_onTouch"
+        d$="{{_getSelectArea(_radius, _selectorInner, _selectorOuter)}}"></path> -->
     </svg>
   </template>
   <script>
@@ -123,17 +126,21 @@
         a = a ? a % 360 : 0;
         return a < 0 ? a + 360 : a;
       };
-      function getShortestAngle(from, to) {
+
+      function getClockwiseAngle(from, to) {
         var angle, offset = 0;
         from = from || 0;
-        angle = normalizeAngle(from);
-        if ( angle < 180 && (to > (angle + 180)) ) {
-          offset = -360; 
+        normalizedFrom = normalizeAngle(from);
+        normalizedTo = normalizeAngle(to);
+        if (normalizedFrom < normalizedTo) {
+          return (normalizedTo - normalizedFrom);
         }
-        if ( angle >= 180 && (to <= (angle - 180)) ) {
-          offset = 360; 
+        else if (normalizedFrom > normalizedTo) {
+          return (normalizedTo + 360 - normalizedFrom);
         }
-        return from + offset + (to - angle);
+        else {
+          return 0;
+        }
       }
 
       Polymer({
@@ -176,11 +183,6 @@
             type: Boolean,
             value: false
           },
-          zeroPad: {
-            type: Boolean,
-            value: false,
-            observer: '_zeroPadChanged'
-          },
           animated: {
             type: Boolean,
             value: false
@@ -215,12 +217,12 @@
 
           var pi = Math.PI;
 
-          console.log("deg: "+deg);
-          console.log("selectedStart"+ this.selectedStart);
-          console.log("selected"+ this.selected);
+          // console.log("deg: "+deg);
+          // console.log("selectedStart"+ this.selectedStart);
+          // console.log("selected"+ this.selected);
           var startRadian = (2*pi / this.count) * this.selectedStart;
           var endRadian = (2*pi / this.count) * this.selected;
-          if (deg >0 && this.selecting) {
+          if (this.selecting) {
             var arc = d3.arc()
               .innerRadius(this._radius)
               .outerRadius(this._radius+5)
@@ -243,7 +245,7 @@
             current = 0;
           }
 
-          var rotate = getShortestAngle(current, deg);
+          var rotate = getClockwiseAngle(current, deg);
           if (normalizeAngle(rotate) === current) {
             return this._setHandRotation(current);
           }
@@ -296,7 +298,6 @@
             this.selected = value;
             return;
           }
-          this._vibrate();
           this.setClockHand((360 / this.count) * this.selected, true);
         },
         _stepChanged: function(value, oldValue) {
@@ -338,7 +339,7 @@
               display: value % this._step === 0,
               x: 0,
               y: 0,
-              label: this._formatNumber(value)
+              label: value.toString()
             };
 
             number.dom = this._createNumberElement(number);
@@ -356,10 +357,10 @@
           if (number.x && number.y && dom.text) {
             dom.text.setAttributeNS(null, 'x', number.x);
             dom.text.setAttributeNS(null, 'y', number.y);
-            dom.text.textContent  = this._formatNumber(number.value);
+            dom.text.textContent  = number.value.toString();
             dom.textClipped.setAttributeNS(null, 'x', number.x);
             dom.textClipped.setAttributeNS(null, 'y', number.y);
-            dom.textClipped.textContent = this._formatNumber(number.value);
+            dom.textClipped.textContent = number.value.toString();
           }
         },
         _createNumberElement: function(number) {
@@ -459,11 +460,13 @@
             'A ' + inner + ' ' + inner + ' 0 0 1 ' + (radius - inner) + ' ' + radius;
         },
         _onTouch: function(event) {
-          var x = event.detail.x - this._bounds.left - this._radius;
-          var y = event.detail.y - this._bounds.top - this._radius;
-
+          console.log("scrollTop: "+this.$.clock.scrollTop);
+          var x = event.detail.x - this._bounds.left - this._selectorInner;
+          var y = event.detail.y - this._bounds.top - this._selectorInner;
           /* only rotate while in the touch area */
           var distance = Math.abs(Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+          // console.log("TOUCHED. distance: "+ distance+", _selectorInner: "+this._selectorInner+", _selectorOuter: "+this._selectorOuter);
+          console.log("event.detail.x: "+event.detail.x+ " event.detail.y: "+event.detail.y +" x: "+x+" y: "+y+" distance: "+distance+ " _selectorOuter: "+this._selectorOuter);
           if (distance < this._selectorInner || distance > this._selectorOuter) {
             return;
           }
@@ -504,11 +507,29 @@
           //   this.fire('paper-clock-selected', {value: this.selected, animated: this.animated});
           // }
         },
-        _formatNumber: function(value) {
-          if (this.zeroPad) {
-            return ('0' + value).substr(-2);
+        _onTouchOut: function(event) {
+          console.log("ON TOUCH OUT: ");
+          var x = event.detail.x - this._bounds.left - this._selectorInner;
+          var y = event.detail.y - this._bounds.top - this._selectorInner;
+          var distance = Math.abs(Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+          console.log("event.detail.x: "+event.detail.x+ " event.detail.y: "+event.detail.y +" x: "+x+" y: "+y+" distance: "+distance+ " _selectorOuter: "+this._selectorOuter);
+          switch (event.detail.state) {
+            case "end":
+              console.log("ENDING selectedEnd: "+ this.selectedEnd);
+              if (this.selecting) {
+                this.selectedEnd = this.selected;
+                this.selected = 0;
+                this.$.clockHand.style.opacity = 0.1;
+                this.selecting = false;
+              }
+              break;
           }
-          return value.toString();
+          
+          // this.setClockHand((360 / this.count) * this.selected, true);
+          // /* only fire selected when we've tapped or stopped tracking */
+          // if (event.type === 'tap' || event.detail.state === 'end') {
+          //   this.fire('paper-clock-selected', {value: this.selected, animated: this.animated});
+          // }
         },
         _getNumberClass: function(pfx, n, selected) {
           var cssClass = pfx;
@@ -516,18 +537,6 @@
             cssClass += ' selected';
           }
           return cssClass;
-        },
-        _vibrate: function() {
-          this.debounce('vibrate', function() {
-            if (navigator.vibrate) {
-              navigator.vibrate(10);
-            }
-          });
-        },
-        _zeroPadChanged: function() {
-          this._numbers.forEach(function(number) {
-            this._updateNumber(number);
-          }.bind(this));
         },
         _once: function(eventName, callback, node) {
           node = node || this;
