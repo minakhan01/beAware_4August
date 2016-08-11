@@ -160,15 +160,15 @@
           },
           selectedStart: {
             type: Number,
-            // notify: true,
+            notify: true,
             value: 0,
             // observer: '_selectedStartChanged'
           },
-          selectedStopped: {
+          selectedEnd: {
             type: Number,
-            // notify: true,
+            notify: true,
             value: 0,
-            // observer: '_selectedStoppedChanged'
+            observer: '_selectedEndChanged'
           },
           count: {
             type: Number,
@@ -201,6 +201,9 @@
           this._transitionEvent = this.style.WebkitTransition ? 'transitionEnd' : 'webkitTransitionEnd';
           this._populate();
           // this._selectedChanged(this.selected);
+        },
+        _selectedEndChanged: function(selectedEnd) {
+          console.log("_selectedEndChanged");
         },
         setClockHand: function(deg, animate, callback) {
           deg = normalizeAngle(deg);
@@ -460,13 +463,12 @@
             'A ' + inner + ' ' + inner + ' 0 0 1 ' + (radius - inner) + ' ' + radius;
         },
         _onTouch: function(event) {
-          console.log("scrollTop: "+this.$.clock.scrollTop);
           var x = event.detail.x - this._bounds.left - this._selectorInner;
           var y = event.detail.y - this._bounds.top - this._selectorInner;
           /* only rotate while in the touch area */
           var distance = Math.abs(Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
           // console.log("TOUCHED. distance: "+ distance+", _selectorInner: "+this._selectorInner+", _selectorOuter: "+this._selectorOuter);
-          console.log("event.detail.x: "+event.detail.x+ " event.detail.y: "+event.detail.y +" x: "+x+" y: "+y+" distance: "+distance+ " _selectorOuter: "+this._selectorOuter);
+          // console.log("event.detail.x: "+event.detail.x+ " event.detail.y: "+event.detail.y +" x: "+x+" y: "+y+" distance: "+distance+ " _selectorOuter: "+this._selectorOuter);
           if (distance < this._selectorInner || distance > this._selectorOuter) {
             return;
           }
@@ -512,7 +514,7 @@
           var x = event.detail.x - this._bounds.left - this._selectorInner;
           var y = event.detail.y - this._bounds.top - this._selectorInner;
           var distance = Math.abs(Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-          console.log("event.detail.x: "+event.detail.x+ " event.detail.y: "+event.detail.y +" x: "+x+" y: "+y+" distance: "+distance+ " _selectorOuter: "+this._selectorOuter);
+          // console.log("event.detail.x: "+event.detail.x+ " event.detail.y: "+event.detail.y +" x: "+x+" y: "+y+" distance: "+distance+ " _selectorOuter: "+this._selectorOuter);
           switch (event.detail.state) {
             case "end":
               console.log("ENDING selectedEnd: "+ this.selectedEnd);

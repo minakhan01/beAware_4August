@@ -17,6 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="simple-menubar.html">
 <link rel="import" href="my-animatable.html">
 <link rel="import" href="my-animatable-triangle.html">
+<link rel="import" href="my-icons.html">
 
 <dom-module id="my-input">
 
@@ -45,6 +46,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       text-decoration: none;
     }
 
+    p.heading {
+      color: var(--app-primary-color);
+      text-decoration: none;
+      margin-bottom:0px;
+    }
+
     simple-menu a[disabled],
     simple-menubar a[disabled] {
       color: var(--google-grey-300);
@@ -61,74 +68,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <div id="scope">
-            <paper-time-picker id="picker" periodStartSelected="{{periodStartSelected}}" periodEndSelected="{{periodEndSelected}}"></paper-time-picker>
+            <paper-time-picker id="picker" period-start-selected="{{periodStartSelected}}" period-end-selected="{{periodEndSelected}}"></paper-time-picker>
     </div>
-    <button on-click="_onCircleButtonClick">start</button>
-    <button on-click="_onCircleStopClick">stop</button>
 
     <my-animatable id="orange" on-tap="_onPressedAnimation" on-track="_onPressedAnimation"></my-animatable>
     <my-animatable-triangle id="orangeTriangle" on-tap="_onPressedAnimationTriangle" on-track="_onPressedAnimationTriangle"></my-animatable-triangle>
     
     <menu-overlay id="plain" tabindex="-1">
-      <h2>Hello world!</h2>
-      <p>This can be closed by pressing the ESC key too.</p>
-      <button on-click="_closePopUp">Close</button>
-    </menu-overlay>
-
+    <div><paper-icon-button icon="icons:close" style="float: right;" on-tap="_closePopUp"></paper-icon-button><div>
+    <br><p style="text-align: center;">{{periodStartSelected}} pm to {{periodEndSelected}} pm</p>
+    <p class="heading">Select Activity</p><hr style="margin-bottom:20px;">
     <div class="horizontal-section-container">
-    <div>
-      <h3>Simple menu</h3>
-      <div class="horizontal-section">
-        <simple-menu>
-          <a href="javascript:void(0)" role="menuitem">Item 0</a>
-          <a href="javascript:void(0)" role="menuitem">Item 1</a>
-          <a href="javascript:void(0)" role="menuitem" disabled>Item 2</a>
-          <a href="javascript:void(0)" role="menuitem" hidden>Ghost</a>
-          <a href="javascript:void(0)" role="menuitem">Item 3</a>
-          <a href="javascript:void(0)" role="menuitem" style="display:none">Another ghost</a>
-        </simple-menu>
-      </div>
-    </div>
-
-    <div>
-      <h3>Multi-select menu</h3>
-      <div class="horizontal-section">
-        <simple-menu multi>
-          <a href="javascript:void(0)" role="menuitem">Item 0</a>
-          <a href="javascript:void(0)" role="menuitem" disabled>Item 1</a>
-          <a href="javascript:void(0)" role="menuitem" hidden>Ghost</a>
-          <a href="javascript:void(0)" role="menuitem">Item 2</a>
-          <a href="javascript:void(0)" role="menuitem">Item 3</a>
-          <a href="javascript:void(0)" role="menuitem" style="display:none">Another ghost</a>
-        </simple-menu>
-      </div>
-    </div>
-
-    <div>
-      <div class="row">
-        <h3>Simple menubar</h3>
-        <div class="horizontal-section">
-          <simple-menubar>
-            <a href="javascript:void(0)" role="menuitem">Item 0</a>
-            <a href="javascript:void(0)" role="menuitem">Item 1</a>
-            <a href="javascript:void(0)" role="menuitem" disabled>Item 2</a>
-            <a href="javascript:void(0)" role="menuitem">Item 3</a>
-          </simple-menubar>
-        </div>
-      </div>
-      <div class="row">
-        <h3>Multi-select menubar</h3>
-        <div class="horizontal-section">
-          <simple-menubar multi>
-            <a href="javascript:void(0)" role="menuitem">Item 0</a>
-            <a href="javascript:void(0)" role="menuitem">Item 1</a>
-            <a href="javascript:void(0)" role="menuitem">Item 2</a>
-            <a href="javascript:void(0)" role="menuitem">Item 3</a>
-          </simple-menubar>
+      <div>
+        <div class="row">
+          <div class="horizontal-section">
+            <simple-menubar selected="0">
+              <a role="menuitem">Work</a>
+              <a role="menuitem">Sleep</a>
+              <a role="menuitem">Gym</a>
+              <a role="menuitem">Social</a>
+              <a role="menuitem">Leisure</a>
+            </simple-menubar>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+    <p class="heading">Select Emotion</p><hr style="margin-bottom:20px;">
+    </menu-overlay>
 
   </template>
 
@@ -152,8 +118,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
       },
       _periodStartChanged: function(periodStartSelected) {
+        
         },
-      _periodEndChanged: function(periodStartSelected) {
+      _periodEndChanged: function(periodEndSelected) {
+        console.log("MY-INPUT _periodEndChanged");
         this.createPopUp();
         },
       createPopUp: function() {
@@ -162,6 +130,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _closePopUp: function() {
         console.log("close");
         this.$.plain.close();
+      },
+      printEndValue: function() {
+        console.log("printEndValue: "+this.periodEndSelected);
       },
       _onPressedAnimation: function(event) {
         var node = this.$.orange;
@@ -202,6 +173,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         values = values.split(',');
         var scale = values[0];
         var scaleNew = ((parseFloat(scale)+0.01)*100%100)/100;
+        scaleNew += 0.1;
         console.log('scaleNew: '+scaleNew);
         node.style.transform = 'scale('+scaleNew+','+scaleNew+')';
         if (node) {

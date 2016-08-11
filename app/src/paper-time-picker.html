@@ -182,7 +182,7 @@ If you include this element as part of `paper-dialog`, use the class
             entry-animation="fade-in-animation" exit-animation="fade-out-animation">
             <neon-animatable class="fit" name="hours">
               <paper-clock-selector class="clock fit" id="hourClock" count="12" step="1"
-                animated="[[animated]]" selected="{{hour12}}" selectedStart="{{periodStartSelected}}" selectedEnd="{{periodEndSelected}}"></paper-clock-selector> 
+                animated="[[animated]]" selected="{{hour12}}" selected-start="{{periodStartSelected}}" selected-end="{{periodEndSelected}}"></paper-clock-selector> 
             </neon-animatable>
           </neon-animated-pages>
         </div>
@@ -426,6 +426,7 @@ If you include this element as part of `paper-dialog`, use the class
         },
         _periodEndChanged: function(periodEndSelected) {
           var add = (this.period === 'PM' ? 12 : 0);
+          console.log("PAPER-TIME period end changed: "+periodEndSelected);
           this.periodEndSelected = ((periodEndSelected % 12) + add) % 24;
         },
         _hourChanged: function(hour, oldValue) {
