@@ -11,25 +11,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/neon-animation/neon-animation-runner-behavior.html">
 <link rel="import" href="../bower_components/neon-animation/animations/scale-down-animation.html">
 
-<dom-module id="my-animatable">
+<dom-module id="my-animatable-triangle">
   <template>
     <style>
       :host {
         display: inline-block;
 
-        /*circle*/
-        border-radius: 50%;
-        width: 300px;
-        height: 300px;
-        background: orange;
-        transform: scale(0.1, 0.1);
-
         /*triangle*/
-/*        width: 0;
+        width: 0;
         height: 0;
-        border-left: 50px solid transparent;
-        border-right: 50px solid transparent;
-        border-bottom: 100px solid red;*/
+        border-left: 150px solid transparent;
+        border-right: 150px solid transparent;
+        border-bottom: 300px solid red;
+        transform: scale(0.1, 0.1);
       }
       #triangle-up {
         width: 0;
@@ -48,7 +42,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   Polymer({
 
-    is: 'my-animatable',
+    is: 'my-animatable-triangle',
 
     behaviors: [
       Polymer.NeonAnimationRunnerBehavior

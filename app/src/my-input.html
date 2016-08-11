@@ -16,6 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="simple-menu.html">
 <link rel="import" href="simple-menubar.html">
 <link rel="import" href="my-animatable.html">
+<link rel="import" href="my-animatable-triangle.html">
 
 <dom-module id="my-input">
 
@@ -62,9 +63,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div id="scope">
             <paper-time-picker id="picker" periodStartSelected="{{periodStartSelected}}" periodEndSelected="{{periodEndSelected}}"></paper-time-picker>
     </div>
-    <button on-click="_onCircleButtonClick">toggle circle</button>
+    <button on-click="_onCircleButtonClick">start</button>
+    <button on-click="_onCircleStopClick">stop</button>
 
-    <my-animatable id="orange"></my-animatable>
+    <my-animatable id="orange" on-tap="_onPressedAnimation" on-track="_onPressedAnimation"></my-animatable>
+    <my-animatable-triangle id="orangeTriangle" on-tap="_onPressedAnimationTriangle" on-track="_onPressedAnimationTriangle"></my-animatable-triangle>
     
     <menu-overlay id="plain" tabindex="-1">
       <h2>Hello world!</h2>
@@ -160,12 +163,67 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log("close");
         this.$.plain.close();
       },
-      _onCircleButtonClick: function(event) {
+      _onPressedAnimation: function(event) {
         var node = this.$.orange;
-        console.log("_onCircleButtonClick");
+        console.log("_onPressedAnimation");
+        var st = window.getComputedStyle(node, null);
+        var transformValues = st.getPropertyValue("-webkit-transform") ||
+         st.getPropertyValue("-moz-transform") ||
+         st.getPropertyValue("-ms-transform") ||
+         st.getPropertyValue("-o-transform") ||
+         st.getPropertyValue("transform") ||
+         "Either no transform set, or browser doesn't do getComputedStyle";
+        console.log("transformValues: "+transformValues);
+        var values = transformValues.split('(')[1];
+        values = values.split(')')[0];
+        values = values.split(',');
+        var scale = values[0];
+        var scaleNew = ((parseFloat(scale)+0.01)*100%100)/100;
+        console.log('scaleNew: '+scaleNew);
+        node.style.transform = 'scale('+scaleNew+','+scaleNew+')';
         if (node) {
-          node.animate();
+          // node.animate();
           console.log("animating");
+        }
+      },
+      _onPressedAnimationTriangle: function(event) {
+        var node = this.$.orangeTriangle;
+        console.log("_onPressedAnimation");
+        var st = window.getComputedStyle(node, null);
+        var transformValues = st.getPropertyValue("-webkit-transform") ||
+         st.getPropertyValue("-moz-transform") ||
+         st.getPropertyValue("-ms-transform") ||
+         st.getPropertyValue("-o-transform") ||
+         st.getPropertyValue("transform") ||
+         "Either no transform set, or browser doesn't do getComputedStyle";
+        console.log("transformValues: "+transformValues);
+        var values = transformValues.split('(')[1];
+        values = values.split(')')[0];
+        values = values.split(',');
+        var scale = values[0];
+        var scaleNew = ((parseFloat(scale)+0.01)*100%100)/100;
+        console.log('scaleNew: '+scaleNew);
+        node.style.transform = 'scale('+scaleNew+','+scaleNew+')';
+        if (node) {
+          // node.animate();
+          console.log("animating");
+        }
+      },
+      _onCircleButtonClick: function(event) {
+        var node = this.$.orangeTriangle;
+        console.log("_onCircleButtonClick");
+        node.style.transform = 'scale(0,0)';
+        if (node) {
+          // node.animate();
+          console.log("animating");
+        }
+      },
+      _onCircleStopClick: function(event) {
+        var node = this.$.orange;
+        console.log("_onCircleStopClick");
+        if (node) {
+          console.log("cancelling animation");
+          node.cancelAnimation();
         }
       }
     });
