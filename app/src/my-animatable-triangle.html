@@ -14,71 +14,102 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="my-animatable-triangle">
   <template>
     <style>
-      :host {
-        display: inline-block;
-
-        /*triangle*/
-        width: 0;
-        height: 0;
-        border-left: 150px solid transparent;
-        border-right: 150px solid transparent;
-        border-bottom: 300px solid red;
-        transform: scale(0.1, 0.1);
-      }
-      #triangle-up {
+          :host {
+        display: flex;
         width: 0;
         height: 0;
         border-left: 50px solid transparent;
         border-right: 50px solid transparent;
+        border-bottom: 100px solid #eee;
+
+      }
+/*      :host {
+        display: flex;
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        background: #eee;
+      }*/
+      .center-text {
+        position: absolute;
+        width: 100px;
+        text-align: center;
+        line-height:100px;
+        font-size:14px;
+        transform: translate(-50%, -0%);
+      }
+      .triangle-grey {
+        width: 0;
+        height: 0;
+        border-left: 50px solid transparent;
+        border-right: 50px solid transparent;
+        border-bottom: 100px solid #eee;
+      }
+      .triangle {
+        width: 0;
+        height: 0;
+/*        position: ;
+        left: 0%;*/
+        border-left: 50px solid transparent;
+        border-right: 50px solid transparent;
         border-bottom: 100px solid red;
+        transform: translate(-50%, -0%) scale(0.1,0.1);
+        opacity: 0.5;
+      }
+      /*circle*/
+      .circle {
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        background: green;
+        transform: scale(0.2, 0.2);
+        opacity: 0.5;
       }
     </style>
-    <content></content>
+  <div>
+    <p class="center-text">this one</p>
+    <section id="shape" class="triangle" on-tap="_onPressedAnimation" on-track="_onPressedAnimation"></section>
+  </div>
 
   </template>
-</dom-module>
-
-<script>
+  <script>
 
   Polymer({
 
     is: 'my-animatable-triangle',
 
-    behaviors: [
-      Polymer.NeonAnimationRunnerBehavior
-    ],
-
     properties: {
 
-      animationConfig: {
-        type: Object,
-        value: function() {
-          return {
-            name: 'scale-down-animation',
-            node: this
-          }
+    },
+
+    ready: function() {
+    },
+    _onPressedAnimation: function(event) {
+        var node = this.$.shape;
+        console.log("_onPressedAnimation");
+        var st = window.getComputedStyle(node, null);
+        var transformValues = st.getPropertyValue("-webkit-transform") ||
+         st.getPropertyValue("-moz-transform") ||
+         st.getPropertyValue("-ms-transform") ||
+         st.getPropertyValue("-o-transform") ||
+         st.getPropertyValue("transform") ||
+         "Either no transform set, or browser doesn't do getComputedStyle";
+        console.log("transformValues: "+transformValues);
+        var values = transformValues.split('(')[1];
+        values = values.split(')')[0];
+        values = values.split(',');
+        var scale = values[0];
+        var scaleNew = ((parseFloat(scale)+0.01)*100%100)/100;
+        scaleNew += 0.1;
+        console.log('scaleNew: '+scaleNew);
+        node.style.transform = 'translate(-50%, -0%) scale('+scaleNew+','+scaleNew+')';
+        if (node) {
+          // node.animate();
+          console.log("animating");
         }
-      }
-
-    },
-
-    listeners: {
-      'neon-animation-finish': '_onNeonAnimationFinish'
-    },
-
-    animate: function() {
-      // this.playAnimation();
-    },
-
-    cancelAnimation: function() {
-      console.log("my-animatable: cancelAnimation");
-      // this.cancelAnimation();
-    },
-
-    _onNeonAnimationFinish: function() {
-      console.log('animation finish!');
-    }
+      },
 
   });
 
 </script>
+</dom-module>

@@ -65,19 +65,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     .row {
       height: 100px;
     }
+
+    .menuitem-floating {
+      float:left; 
+      display:inline;
+      margin: 20px;
+    }
     </style>
 
     <div id="scope">
             <paper-time-picker id="picker" period-start-selected="{{periodStartSelected}}" period-end-selected="{{periodEndSelected}}"></paper-time-picker>
     </div>
 
-    <my-animatable id="orange" on-tap="_onPressedAnimation" on-track="_onPressedAnimation"></my-animatable>
     <my-animatable-triangle id="orangeTriangle" on-tap="_onPressedAnimationTriangle" on-track="_onPressedAnimationTriangle"></my-animatable-triangle>
     
     <menu-overlay id="plain" tabindex="-1">
     <div><paper-icon-button icon="icons:close" style="float: right;" on-tap="_closePopUp"></paper-icon-button><div>
     <br><p style="text-align: center;">{{periodStartSelected}} pm to {{periodEndSelected}} pm</p>
-    <p class="heading">Select Activity</p><hr style="margin-bottom:20px;">
+<!--     <p class="heading">Select Activity</p><hr style="margin-bottom:20px;">
     <div class="horizontal-section-container">
       <div>
         <div class="row">
@@ -92,8 +97,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <p class="heading">Select Emotion</p><hr style="margin-bottom:20px;">
+    <div>
+    <my-animatable class="menuitem-floating"></my-animatable>
+    <my-animatable class="menuitem-floating"></my-animatable>
+    <my-animatable class="menuitem-floating"></my-animatable>
+    </div>
+    <div>
+    <my-animatable-triangle class="menuitem-floating"></my-animatable-triangle>
+    <my-animatable-triangle class="menuitem-floating"></my-animatable-triangle>
+    <my-animatable-triangle id="orange" class="menuitem-floating"></my-animatable>
+    </div>
     </menu-overlay>
 
   </template>
@@ -134,29 +149,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       printEndValue: function() {
         console.log("printEndValue: "+this.periodEndSelected);
       },
-      _onPressedAnimation: function(event) {
-        var node = this.$.orange;
-        console.log("_onPressedAnimation");
-        var st = window.getComputedStyle(node, null);
-        var transformValues = st.getPropertyValue("-webkit-transform") ||
-         st.getPropertyValue("-moz-transform") ||
-         st.getPropertyValue("-ms-transform") ||
-         st.getPropertyValue("-o-transform") ||
-         st.getPropertyValue("transform") ||
-         "Either no transform set, or browser doesn't do getComputedStyle";
-        console.log("transformValues: "+transformValues);
-        var values = transformValues.split('(')[1];
-        values = values.split(')')[0];
-        values = values.split(',');
-        var scale = values[0];
-        var scaleNew = ((parseFloat(scale)+0.01)*100%100)/100;
-        console.log('scaleNew: '+scaleNew);
-        node.style.transform = 'scale('+scaleNew+','+scaleNew+')';
-        if (node) {
-          // node.animate();
-          console.log("animating");
-        }
-      },
       _onPressedAnimationTriangle: function(event) {
         var node = this.$.orangeTriangle;
         console.log("_onPressedAnimation");
@@ -173,7 +165,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         values = values.split(',');
         var scale = values[0];
         var scaleNew = ((parseFloat(scale)+0.01)*100%100)/100;
-        scaleNew += 0.1;
+        scaleNew += 0.3;
         console.log('scaleNew: '+scaleNew);
         node.style.transform = 'scale('+scaleNew+','+scaleNew+')';
         if (node) {

@@ -15,77 +15,86 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <style>
       :host {
-        display: inline-block;
+        display: flex;
 
         /*circle*/
         border-radius: 50%;
-        width: 300px;
-        height: 300px;
-        background: orange;
-        transform: scale(0.1, 0.1);
-
-        /*triangle*/
-/*        width: 0;
-        height: 0;
-        border-left: 50px solid transparent;
-        border-right: 50px solid transparent;
-        border-bottom: 100px solid red;*/
+        width: 100px;
+        height: 100px;
+        background: #eee;
+        /*text-align: center;*/
+        /*font-size:14px;*/
+        /*line-height:100px;*/
+        /*transform: scale(0.9, 0.9);*/
+      }
+      .center-text {
+        position: absolute;
+        width: 100px;
+        text-align: center;
+        line-height:100px;
+        font-size:14px;
       }
       #triangle-up {
         width: 0;
         height: 0;
-        border-left: 50px solid transparent;
-        border-right: 50px solid transparent;
-        border-bottom: 100px solid red;
+        border-left: 500px solid transparent;
+        border-right: 500px solid transparent;
+        border-bottom: 1000px solid red;
+      }
+      /*circle*/
+      .circle {
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        background: green;
+        transform: scale(0.1, 0.1);
+        opacity: 0.5;
       }
     </style>
-    <p>Hello</p>
     <content></content>
-
+    <p class="center-text">this one</p>
+    <section id="shape" class="circle" on-tap="_onPressedAnimation" on-track="_onPressedAnimation"></section>
+          
   </template>
-</dom-module>
-
-<script>
+  <script>
 
   Polymer({
 
     is: 'my-animatable',
 
-    behaviors: [
-      Polymer.NeonAnimationRunnerBehavior
-    ],
-
     properties: {
 
-      animationConfig: {
-        type: Object,
-        value: function() {
-          return {
-            name: 'scale-down-animation',
-            node: this
-          }
-        }
-      }
-
     },
 
-    listeners: {
-      'neon-animation-finish': '_onNeonAnimationFinish'
-    },
-
-    animate: function() {
+    ready: function() {
       // this.playAnimation();
     },
-
-    cancelAnimation: function() {
-      console.log("my-animatable: cancelAnimation");
-      // this.cancelAnimation();
-    },
-
-    _onNeonAnimationFinish: function() {
-      console.log('animation finish!');
-    }
+    _onPressedAnimation: function(event) {
+        var node = this.$.shape;
+        console.log("_onPressedAnimation");
+        var st = window.getComputedStyle(node, null);
+        var transformValues = st.getPropertyValue("-webkit-transform") ||
+         st.getPropertyValue("-moz-transform") ||
+         st.getPropertyValue("-ms-transform") ||
+         st.getPropertyValue("-o-transform") ||
+         st.getPropertyValue("transform") ||
+         "Either no transform set, or browser doesn't do getComputedStyle";
+        console.log("transformValues: "+transformValues);
+        var values = transformValues.split('(')[1];
+        values = values.split(')')[0];
+        values = values.split(',');
+        var scale = values[0];
+        var scaleNew = ((parseFloat(scale)+0.01)*100%100)/100;
+        scaleNew += 0.1;
+        console.log('scaleNew: '+scaleNew);
+        node.style.transform = 'scale('+scaleNew+','+scaleNew+')';
+        if (node) {
+          // node.animate();
+          console.log("animating");
+        }
+      },
 
   });
 
 </script>
+</dom-module>
