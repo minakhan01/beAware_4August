@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <script type="text/javascript" src="../d3/d3.min.js"></script>
+<script type="text/javascript" src="../d3/d3-transition.min.js"></script>
 
 <dom-module id="pie-polymer">
   <template>
@@ -39,7 +40,10 @@
 	        height = 500,
 	        radius = (Math.min(width, height) / 2)/ this.data.length;
 
-        var color = d3.scaleOrdinal(d3.schemeCategory10);
+console.log(d3.schemeCategory10);
+        var color = d3.scaleOrdinal(["#FF6384",
+                      "#36A2EB",
+                      "#FFCE56"]]);
 
         var arc = d3.arc().outerRadius(radius - 10).innerRadius(0);
 
@@ -69,7 +73,15 @@
 
 		g.append("path")
 		  .attr("d", arc)
-		  .style("fill", function(d) { return color(d.data.key); });
+		  .style("fill", function(d) { return color(d.data.key); })
+          .transition()
+          .duration(2000)
+          .ease(d3.easeLinear)
+          .attrTween("d", function(b) {
+  b.innerRadius = 0;
+  var i = d3.interpolate({startAngle: 0, endAngle: 0}, b);
+  return function(t) { return arc(i(t)); };
+})
 
 		g.append("text")
 		    .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })

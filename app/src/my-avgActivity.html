@@ -10,15 +10,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-overlay-behavior/iron-overlay-behavior.html">
-<link rel="import" href="chart-elements.html">
-<link rel="stylesheet" href="demo.css">
+<link rel="import" href="pie-polymer.html">
+<link rel="import" href="donut-polymer.html">
 
 <dom-module id="my-avgActivity">
 
   <template is="dom-repeat">
 
-    <chart-doughnut id="chart" class="square-chart" data="[[dataChart]]" style="position:absolute; left: 20px; top: 20px;"></chart-doughnut>
-    <chart-pie id="chart" class="square-chart" data="[[dataChart]]" style="position:absolute; left: 60px; top: 20px; height: 500px;"></chart-pie>
+    <pie-polymer data="[[data]]"></pie-polymer>
+    <donut-polymer data="[[data]]"></donut-polymer>
 
   </template>
 
@@ -27,7 +27,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
 
       is: 'my-avgActivity',
-
+      properties: {
+        data: {
+          type: Array,
+          value: 
+          [{ "a": 1, "b": 2, "c": 3 },
+          { "d": 4, "e": 5, "f": 6 },
+          { "g": 4, "h": 5, "i": 6 }]
+        },
+        dataAster: {
+          type: Array,
+          value: [
+          { "name": "one", "score": 10, "width": 2, "color": "#9E0041"},
+          { "name": "two", "score": 20, "width": 2, "color": "#C32F4B"},
+          { "name": "three", "score": 40, "width": 5, "color": "#E1514B"},
+          { "name": "four", "score": 10, "width": 4, "color": "#F47245"},
+          { "name": "five", "score": 5, "width": 6, "color": "#FB9F59"}],
+        }
+      },
       ready: function() {
         console.log("hello");
         this.dataChart = {
@@ -54,47 +71,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         };
       }
     });
-  // document.addEventListener('polymer-ready', function() {
-  // window.addEventListener('WebComponentsReady', function() {
-
-    // var scope = document.shadowRoot.querySelector('#chart');
-
-    // scope.data = {
-    // labels: [
-    //   "Red",
-    //   "Green",
-    //   "Yellow"
-    // ],
-    // datasets: [
-    //     {
-    //         data: [300, 50, 100],
-    //         backgroundColor: [
-    //             "#FF6384",
-    //             "#36A2EB",
-    //             "#FFCE56"
-    //         ],
-    //         hoverBackgroundColor: [
-    //             "#FF6384",
-    //             "#36A2EB",
-    //             "#FFCE56"
-    //         ]
-    //     }]
-    // };
-
-    //   scope.addData = function() {
-    //     this.push('data.labels', this.$.newLabel.value);
-    //     this.push('data.datasets.0.hoverBackgroundColor', this.$.newHighlight.value);
-    //     this.push('data.datasets.0.backgroundColor', this.$.newColor.value);
-    //     this.push('data.datasets.0.data', this.$.newValue.value);
-    //   };
-
-    //   scope.resize = function() {
-    //     this.$.chart.style.width = this.$.newWidth.value;
-    //     this.$.chart.style.height = this.$.newHeight.value;
-    //     this.$.chart.resize();
-    //   };
-  // });
-    
   </script>
 
 </dom-module>
