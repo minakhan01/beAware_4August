@@ -35,8 +35,8 @@
 
     console.log(fixedData);
 
-	    var width = 500,
-	        height = 500,
+	    var width = 300,
+	        height = 300,
 	        radius = (Math.min(width, height) / 2)/ this.data.length;
 
         var color = d3.scaleOrdinal(d3.schemeCategory10);
@@ -69,7 +69,16 @@
 
 		g.append("path")
 		  .attr("d", arc)
-		  .style("fill", function(d) { return color(d.data.key); });
+		  .style("fill", function(d) { return color(d.data.key); })
+      .transition()
+          .duration(2000)
+          .ease(d3.easeLinear)
+          .attrTween("d", function(b) {
+  b.innerRadius = 0;
+  var i = d3.interpolate({startAngle: 0, endAngle: 0}, b);
+  return function(t) { return arc(i(t)); };
+})
+;
 
 		g.append("text")
 		    .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })

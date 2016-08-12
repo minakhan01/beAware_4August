@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <script type="text/javascript" src="../d3/d3.min.js"></script>
 <!-- <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script> -->
+<script type="text/javascript" src="tool-tip.js"></script>
 
 <dom-module id="aster-polymer">
   <template>
@@ -102,12 +103,12 @@ var pie = d3.pie()
     .sort(null)
     .value(function(d) { return d.width; });
 
-// var tip = d3.tip()
-//   .attr('class', 'd3-tip')
-//   .offset([0, 0])
-//   .html(function(d) {
-//     return d.data.name + ": <span style='color:orangered'>" + d.data.score + "</span>";
-//   });
+var tip = d3tip()
+  .attr('class', 'd3-tip')
+  .offset([0, 0])
+  .html(function(d) {
+    return d.data.name + ": <span style='color:orangered'>" + d.data.score + "</span>";
+  });
 
 var arc = d3.arc()
   .innerRadius(innerRadius)
@@ -129,7 +130,7 @@ var svg = d3.select(this.$.svg)
     .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-// svg.call(tip);
+svg.call(tip);
   
   data = [{ "name": "one", "score": 10, "width": 2, "color": "#9E0041"},
           { "name": "two", "score": 20, "width": 2, "color": "#C32F4B"},
@@ -143,9 +144,9 @@ var svg = d3.select(this.$.svg)
       .attr("fill", function(d) { return d.data.color; })
       .attr("class", "solidArc")
       .attr("stroke", "gray")
-      .attr("d", arc);
-      // .on('mouseover', tip.show)
-      // .on('mouseout', tip.hide);
+      .attr("d", arc)
+      .on('mouseover', tip.show)
+      .on('mouseout', tip.hide);
 
   var pathDonut = svg.selectAll(".solidArcDonut")
       .data(pie(data))

@@ -18,6 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="my-animatable.html">
 <link rel="import" href="my-animatable-triangle.html">
 <link rel="import" href="my-icons.html">
+<link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
 
 <dom-module id="my-input">
 
@@ -73,16 +74,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     </style>
 
+        <!-- <paper-icon-button id="id_1" icon="menu" alt="heart"></paper-icon-button> -->
+    <!-- <paper-tooltip for="id_1" offset="0">&lt;3 &lt;3 &lt;3 </paper-tooltip> -->
+
     <div id="scope">
             <paper-time-picker id="picker" period-start-selected="{{periodStartSelected}}" period-end-selected="{{periodEndSelected}}"></paper-time-picker>
     </div>
 
-    <my-animatable-triangle id="orangeTriangle" on-tap="_onPressedAnimationTriangle" on-track="_onPressedAnimationTriangle"></my-animatable-triangle>
+    <!-- <my-animatable-triangle id="orangeTriangle" on-tap="_onPressedAnimationTriangle" on-track="_onPressedAnimationTriangle"></my-animatable-triangle> -->
     
     <menu-overlay id="plain" tabindex="-1">
     <div><paper-icon-button icon="icons:close" style="float: right;" on-tap="_closePopUp"></paper-icon-button><div>
     <br><p style="text-align: center;">{{periodStartSelected}} pm to {{periodEndSelected}} pm</p>
-<!--     <p class="heading">Select Activity</p><hr style="margin-bottom:20px;">
+    <p class="heading">Select Activity</p><hr style="margin-bottom:20px;">
     <div class="horizontal-section-container">
       <div>
         <div class="row">
@@ -97,7 +101,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
     <p class="heading">Select Emotion</p><hr style="margin-bottom:20px;">
     <div>
     <my-animatable class="menuitem-floating"></my-animatable>
