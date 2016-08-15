@@ -3,7 +3,8 @@
   "shell": "src/my-app.html",
   "fragments": [
     "src/my-input.html",
-    "src/my-daily.html",
-    "src/my-avg.html"
+    "src/my-asterClock.html",
+    "src/my-avgActivity.html",
+    "src/my-avgEmotion.html"
   ]
 }

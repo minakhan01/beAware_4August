@@ -18,9 +18,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="my-icons.html">
+<link rel="import" href="../bower_components/platinum-sw/platinum-sw-elements.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="my-toolbar.html">
+<link rel="import" href="my-login.html">
+<link rel="import" href="toolbar-behavior.html">
 
 <dom-module id="my-app">
 
@@ -62,10 +70,76 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding-left: 32px;
       }
 
+      #navheader {
+        font-size: inherit;
+        color: white;
+        flex-shrink: 0;
+      }
+
+      #navheader iron-image {
+        background-blend-mode: multiply;
+        background-repeat: no-repeat;
+        background-color: #999;
+        background-size: cover;
+      }
+
+      #navheader img.profile {
+        border-radius: 50%;
+        width: 64px;
+        height: 64px;
+        margin-bottom: 20px;
+      }
+
+      #coverimage {
+        height: 192px;
+        top: 0;
+      }
+
+
 
     </style>
 
+    
+
+    <my-login
+        on-sign-in="signIn"
+        signed-in="[[signedIn]]"
+        disabled="[[!online]]">
+    </my-login>
+
+    <platinum-sw-register
+        auto-register
+        skip-waiting
+        clients-claim
+        reload-on-install
+        href="sw-import.js">
+      <platinum-sw-cache
+          default-cache-strategy="networkFirst">
+      </platinum-sw-cache>
+    </platinum-sw-register>
+
+    <firebase-app
+        api-key="AIzaSyDyR8rI9pbiTrwoP-uRRc39iuXyzN5Kdoc"
+        auth-domain="beaware-140408.firebaseapp.com"
+        database-url="https://beaware-140408.firebaseio.com">
+    </firebase-app>
+
+    <firebase-auth
+        id="auth"
+        provider="google"
+        signed-in="{{signedIn}}"
+        user="{{user}}">
+    </firebase-auth>
+
     <app-location route="{{route}}"></app-location>
+
+    <app-indexeddb-mirror
+        session="[[user.uid]]"
+        key="notes"
+        data="{{data}}"
+        persisted-data="{{persistedData}}">
+    </app-indexeddb-mirror>
+
     <app-route
         route="{{route}}"
         pattern="/:page"
@@ -76,7 +150,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <!-- Drawer content -->
       <app-drawer>
-        <app-toolbar>Menu</app-toolbar>
+        <app-toolbar>      
+          <div class="bottom layout vertical">
+            <span>{{user.name}}</span>
+            <span>{{user.email}}</span>
+          </div>
+        </app-toolbar>
 
         <div>
           
@@ -124,10 +203,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <app-header-layout has-scrolling-region>
 
         <app-header condenses reveals effects="waterfall">
-          <app-toolbar>
+            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+
+        <my-toolbar
+        signed-in="[[signedIn]]"
+        on-sign-out="signOut">
+
+        </my-toolbar>
+<!--           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
             <div title>beAware</div>
-          </app-toolbar>
+          </app-toolbar> -->
         </app-header>
 
         <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
@@ -206,6 +292,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         if (this.$.collapseAverage.opened) {
           this.$.collapseAverage.toggle();
+        }
+      },
+
+      signIn : function() {
+        this.$.auth.signInWithPopup();
+      },
+
+      signOut : function()  {
+        if (this.$.auth) {
+          this.$.auth.signOut();
         }
       }
 

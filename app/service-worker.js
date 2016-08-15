@@ -8,5 +8,5 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 console.info('Service worker disabled for development, will be generated at build time.');
-importScripts('bower_components/platinum-sw/service-worker.js');
+// importScripts('bower_components/platinum-sw/service-worker.js');
 
