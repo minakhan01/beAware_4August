@@ -20,7 +20,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="my-icons.html">
 <link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
 
+<link rel="import" href="../bower_components/platinum-sw/platinum-sw-elements.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-app.html">
 <dom-module id="my-input">
+
+<link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
 
   <template>
 
@@ -74,6 +79,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     </style>
 
+    <platinum-sw-register
+        auto-register
+        skip-waiting
+        clients-claim
+        reload-on-install
+        href="sw-import.js">
+      <platinum-sw-cache
+          default-cache-strategy="networkFirst">
+      </platinum-sw-cache>
+    </platinum-sw-register>
+
+    <firebase-app
+        name="beAware"
+        api-key="AIzaSyDyR8rI9pbiTrwoP-uRRc39iuXyzN5Kdoc"
+        auth-domain="beaware-140408.firebaseapp.com"
+        database-url="https://beaware-140408.firebaseio.com">
+    </firebase-app>
+
+    <firebase-auth
+        id="auth"
+        app-name="beAware"
+        provider="google"
+        signed-in="{{signedIn}}"
+        user="{{user}}">
+    </firebase-auth>
         <!-- <paper-icon-button id="id_1" icon="menu" alt="heart"></paper-icon-button> -->
     <!-- <paper-tooltip for="id_1" offset="0">&lt;3 &lt;3 &lt;3 </paper-tooltip> -->
 
