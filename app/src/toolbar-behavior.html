@@ -70,8 +70,8 @@
         if (this.$.document.isNew &&
             (this.editableNote.title ||
              this.editableNote.body)) {
-          console.log("hello save");
-          return this.$.document.save(this.notesPath).then(() => {
+          console.log("notesPath: "+this.notesPath);
+          return this.$.document.save("atleastsave").then(() => {
             this.$.document.reset();
           });
         }
