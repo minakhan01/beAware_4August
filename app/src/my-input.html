@@ -19,11 +19,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="my-animatable-triangle.html">
 <link rel="import" href="my-icons.html">
 <link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
-
-<link rel="import" href="../bower_components/platinum-sw/platinum-sw-elements.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="my-toolbar.html">
+<link rel="import" href="my-login.html">
+<link rel="import" href="toolbar-behavior.html">
+<link rel="import" href="../bower_components/note-app/common/note-app/na-editor.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+
 <dom-module id="my-input">
 
   <template>
@@ -78,37 +84,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     </style>
 
-    <platinum-sw-register
-        auto-register
-        skip-waiting
-        clients-claim
-        reload-on-install
-        href="sw-import.js">
-      <platinum-sw-cache
-          default-cache-strategy="networkFirst">
-      </platinum-sw-cache>
-    </platinum-sw-register>
-
-    <firebase-app
-        name="beAware"
-        api-key="AIzaSyDyR8rI9pbiTrwoP-uRRc39iuXyzN5Kdoc"
-        auth-domain="beaware-140408.firebaseapp.com"
-        database-url="https://beaware-140408.firebaseio.com">
-    </firebase-app>
-
-    <firebase-auth
-        id="auth"
-        app-name="beAware"
-        provider="google"
-        signed-in="{{signedIn}}"
-        user="{{user}}">
-    </firebase-auth>
-        <!-- <paper-icon-button id="id_1" icon="menu" alt="heart"></paper-icon-button> -->
-    <!-- <paper-tooltip for="id_1" offset="0">&lt;3 &lt;3 &lt;3 </paper-tooltip> -->
-
     <div id="scope">
             <paper-time-picker id="picker" period-start-selected="{{periodStartSelected}}" period-end-selected="{{periodEndSelected}}"></paper-time-picker>
     </div>
+
+
+    <paper-fab
+        icon="add"
+        on-tap="create"
+        disabled="[[!online]]"
+        aria-label="Add note">
+    </paper-fab>
+
+    <firebase-document
+        id="document"
+        app-name="notes"
+        path="/user/"
+        data="{{editableNote}}">
+    </firebase-document>
+
+    <na-editor
+        id="editor"
+        note="{{editableNote}}"
+        on-close="commitChange">
+    </na-editor>
 
     <!-- <my-animatable-triangle id="orangeTriangle" on-tap="_onPressedAnimationTriangle" on-track="_onPressedAnimationTriangle"></my-animatable-triangle> -->
     
@@ -151,6 +150,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
 
       is: 'my-input',
+
+      behaviors: [
+        Polymer.NoteAppBehavior
+      ],
+
       properties: {
           periodEndSelected: {
             type: Number,
@@ -167,6 +171,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       _periodStartChanged: function(periodStartSelected) {
         
+        },
+      createFabDialog: function() {
+        console.log("createFabDialog");
+        this.$.editor.open();
         },
       _periodEndChanged: function(periodEndSelected) {
         console.log("MY-INPUT _periodEndChanged");

@@ -17,6 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
@@ -29,7 +30,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="my-toolbar.html">
 <link rel="import" href="my-login.html">
 <link rel="import" href="toolbar-behavior.html">
-
+<link rel="import" href="../bower_components/note-app/common/note-app/na-editor.html">
 <dom-module id="my-app">
 
   <template>
@@ -95,8 +96,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         top: 0;
       }
 
-
-
     </style>
 
     
@@ -119,17 +118,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </platinum-sw-register>
 
     <firebase-app
+    name="notes"
         api-key="AIzaSyDyR8rI9pbiTrwoP-uRRc39iuXyzN5Kdoc"
         auth-domain="beaware-140408.firebaseapp.com"
         database-url="https://beaware-140408.firebaseio.com">
     </firebase-app>
 
     <firebase-auth
+    app-name="notes"
         id="auth"
         provider="google"
         signed-in="{{signedIn}}"
         user="{{user}}">
     </firebase-auth>
+
+<!--     <paper-fab
+        icon="add"
+        on-tap="create"
+        disabled="[[!online]]"
+        aria-label="Add note">
+    </paper-fab>
+
+    <firebase-document
+        id="document"
+        app-name="beAware"
+        path="user"
+        data="{{user}}">
+    </firebase-document> -->
+
+<!--     <na-editor
+        id="editor"
+        note="{{editableNote}}"
+        on-close="commitChange">
+    </na-editor> -->
 
     <app-location route="{{route}}"></app-location>
 

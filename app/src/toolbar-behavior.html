@@ -20,6 +20,7 @@
       },
 
       toEditableId(noteId) {
+        console.log("toEditableId: "+nodeId);
         return noteId;
       },
 
@@ -35,6 +36,7 @@
       },
 
       create() {
+        console.log("create note");
         if (this.isEditable) {
           this.editableNoteId = null;
           this.$.editor.open();
@@ -46,6 +48,7 @@
 
         switch (event.detail) {
           case 'save':
+            console.log("save ");
             changeCommits = this.save();
             break;
           case 'delete':
@@ -63,10 +66,11 @@
         }
       },
 
-      save() {
+      save() {  
         if (this.$.document.isNew &&
             (this.editableNote.title ||
              this.editableNote.body)) {
+          console.log("hello save");
           return this.$.document.save(this.notesPath).then(() => {
             this.$.document.reset();
           });
