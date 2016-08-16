@@ -205,6 +205,35 @@
         _selectedEndChanged: function(selectedEnd) {
           console.log("_selectedEndChanged");
         },
+        drawArc: function(start, end, color) {
+          var vis = d3.select(this.$.clock);
+
+          var pi = Math.PI;
+
+          // console.log("deg: "+deg);
+          // console.log("selectedStart"+ this.selectedStart);
+          // console.log("selected"+ this.selected);
+          var startRadian = (2*pi / this.count) * start;
+          if (end == 0) {
+            end = 12;
+          }
+          var endRadian = (2*pi / this.count) * end;
+            var arc = d3.arc()
+              .innerRadius(this._radius)
+              .outerRadius(this._radius+5)
+              .startAngle(startRadian) //converting from degs to radians
+              .endAngle(endRadian); //just radians
+            
+
+            // svg.select("g").remove();
+
+            vis.append("path")
+                .attr("d", arc)
+                .attr("fill", function(d, i){
+                  return d3.color(color);
+                })
+                .attr("transform", "translate("+this._radius+","+this._radius+")");
+        },
         setClockHand: function(deg, animate, callback) {
           deg = normalizeAngle(deg);
 
@@ -237,6 +266,9 @@
 
             vis.append("path")
                 .attr("d", arc)
+                .attr("fill", function(d, i){
+                  return d3.rgb(0, 255, 0, 0.5);
+                })
                 .attr("transform", "translate("+this._radius+","+this._radius+")");
           }
           this.$.clock.classList.remove('animating');

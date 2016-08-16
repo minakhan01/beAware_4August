@@ -344,6 +344,9 @@ If you include this element as part of `paper-dialog`, use the class
           this.isTouch = 'ontouchstart' in window;
           this.view = 'hours';
         },
+        drawArcOnClock: function(start, end, color)  {
+          this.$.hourClock.drawArc(start, end, color);
+        },
         _timeChanged: function(time) {
           if (!time) {
             this.rawValue = 0;
