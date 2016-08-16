@@ -52,7 +52,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
     <content></content>
-    <p class="center-text">this one</p>
+    <p class="center-text">{{emotion}}</p>
     <section id="shape" class="circle" on-tap="_onPressedAnimation" on-track="_onPressedAnimation"></section>
           
   </template>
@@ -63,7 +63,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     is: 'my-animatable',
 
     properties: {
-
+        score: {
+          type: Number,
+          notify: true,
+        },
+        emotion: {
+          type: String,
+          notify: true,
+          value: 'this'
+        },
     },
 
     ready: function() {
@@ -85,8 +93,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         values = values.split(',');
         var scale = values[0];
         var scaleNew = ((parseFloat(scale)+0.01)*100%100)/100;
+        if (scaleNew < 0.1) {
+          scaleNew = 0;
+        }
         scaleNew += 0.1;
-        console.log('scaleNew: '+scaleNew);
+        this.score = Math.floor(scaleNew*10) - 1;
+        console.log('score: '+this.score);
         node.style.transform = 'scale('+scaleNew+','+scaleNew+')';
         if (node) {
           // node.animate();

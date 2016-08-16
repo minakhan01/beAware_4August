@@ -226,14 +226,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
       <p class="heading">Select Emotion</p><hr style="margin-bottom:20px;">
       <div>
-      <my-animatable class="menuitem-floating"></my-animatable>
-      <my-animatable class="menuitem-floating"></my-animatable>
-      <my-animatable class="menuitem-floating"></my-animatable>
+      <my-animatable class="menuitem-floating" emotion="Joy" score={{joyScore}}></my-animatable>
+      <my-animatable class="menuitem-floating" emotion="Hope" score={{hopeScore}}></my-animatable>
+      <my-animatable class="menuitem-floating" emotion="Calm" score={{calmScore}}></my-animatable>
       </div>
       <div>
-      <my-animatable-triangle class="menuitem-floating"></my-animatable-triangle>
-      <my-animatable-triangle class="menuitem-floating"></my-animatable-triangle>
-      <my-animatable-triangle id="orange" class="menuitem-floating"></my-animatable>
+      <my-animatable-triangle class="menuitem-floating" emotion="Sorrow" score={{sorrowScore}}></my-animatable-triangle>
+      <my-animatable-triangle class="menuitem-floating" emotion="Fear" score={{fearScore}}></my-animatable-triangle>
+      <my-animatable-triangle id="orange" class="menuitem-floating" emotion="Anger" score={{angerScore}}></my-animatable>
       </div>
     </div>
     </menu-overlay>
@@ -276,10 +276,58 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: Array,
             value: [],
             observer: '_activityListChanged' 
-          }
+          },
+          joyScore: {
+            type: Number,
+            value: 0,
+            observer: '_joyScoreChanged'
+          },
+          hopeScore: {
+            type: Number,
+            value: 0,
+            observer: '_hopeScoreChanged'
+          },
+          calmScore: {
+            type: Number,
+            value: 0,
+            observer: '_calmScoreChanged'
+          },
+          fearScore: {
+            type: Number,
+            value: 0,
+            observer: '_fearScoreChanged'
+          },
+          sorrowScore: {
+            type: Number,
+            value: 0,
+            observer: '_sorrowScoreChanged'
+          },
+          angerScore: {
+            type: Number,
+            value: 0,
+            observer: '_angerScoreChanged'
+          },
       },
       _periodStartChanged: function(periodStartSelected) {
         
+        },
+      _angerScoreChanged: function(angerScore) {
+        console.log("anger: "+this.angerScore);
+        },
+      _fearScoreChanged: function(fearScore) {
+        console.log("fear: "+this.fearScore);
+        },
+      _sorrowScoreChanged: function(sorrowScore) {
+        console.log("sorrow: "+this.sorrowScore);
+        },
+      _joyScoreChanged: function(joyScore) {
+        console.log("joy: "+this.joyScore);
+        },
+      _calmScoreChanged: function(calmScore) {
+        console.log("calm: "+this.calmScore);
+        },
+      _hopeScoreChanged: function(hopeScore) {
+        console.log("hope: "+this.hopeScore);
         },
       _activityListChanged: function(activityList) {
         console.log("activityList: "+this.activityList);
@@ -322,6 +370,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.activityDetails.activityType = this.activity;
         this.activityDetails.startTime = this.periodStartSelected;
         this.activityDetails.endTime = this.periodEndSelected;
+        this.activityDetails.emotion = {};
+        this.activityDetails.emotion.joy = this.joyScore;
+        this.activityDetails.emotion.calm = this.calmScore;
+        this.activityDetails.emotion.hope = this.hopeScore;
+        this.activityDetails.emotion.anger = this.angerScore;
+        this.activityDetails.emotion.fear = this.fearScore;
+        this.activityDetails.emotion.sorrow = this.sorrowScore;
         console.log("activityDetails: " +this.activityDetails);
         this.activityList.push(this.activityDetails);
         var activitySelected = this.activity;

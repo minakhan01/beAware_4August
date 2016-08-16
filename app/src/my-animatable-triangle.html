@@ -67,7 +67,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
   <div>
-    <p class="center-text">this one</p>
+    <p class="center-text">{{emotion}}</p>
     <section id="shape" class="triangle" on-tap="_onPressedAnimation" on-track="_onPressedAnimation"></section>
   </div>
 
@@ -79,7 +79,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     is: 'my-animatable-triangle',
 
     properties: {
-
+        score: {
+          type: Number,
+          notify: true,
+        },
+        emotion: {
+          type: String,
+          notify: true,
+          value: 'this'
+        },
     },
 
     ready: function() {
@@ -100,7 +108,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         values = values.split(',');
         var scale = values[0];
         var scaleNew = ((parseFloat(scale)+0.01)*100%100)/100;
+        if (scaleNew < 0.1) {
+          scaleNew = 0;
+        }
         scaleNew += 0.1;
+        this.score = Math.floor(scaleNew*10) - 1;
+        console.log('score: '+this.score);
         console.log('scaleNew: '+scaleNew);
         node.style.transform = 'translate(-50%, -0%) scale('+scaleNew+','+scaleNew+')';
         if (node) {
