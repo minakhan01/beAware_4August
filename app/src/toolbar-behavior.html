@@ -71,7 +71,7 @@
             (this.editableNote.title ||
              this.editableNote.body)) {
           console.log("notesPath: "+this.notesPath);
-          return this.$.document.save("atleastsave").then(() => {
+          return this.$.document.save().then(() => {
             this.$.document.reset();
           });
         }

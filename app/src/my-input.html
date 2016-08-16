@@ -40,7 +40,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 10px;
       }
 
-      simple-menu,
+    simple-menu,
     simple-menubar {
       display: inline-block;
       width: 100%;
@@ -82,6 +82,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       display:inline;
       margin: 20px;
     }
+
+    .with-margin {
+          margin: 24px 40px;
+        }
+
+    .scrollable {
+          border: 1px solid lightgray;
+          padding: 24px;
+          @apply(--layout-scroll);
+        }
     </style>
 
     <div id="scope">
@@ -99,8 +109,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <firebase-document
         id="document"
         app-name="notes"
-        path="/user/"
-        data="{{editableNote}}">
+        path="/"
+        data="[[editableNote]]">
+    </firebase-document>
+
+    <firebase-document
+        id="activityFirebase"
+        app-name="notes"
+        path="/heelo/"
+        data="{{activity}}">
     </firebase-document>
 
     <na-editor
@@ -111,35 +128,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <!-- <my-animatable-triangle id="orangeTriangle" on-tap="_onPressedAnimationTriangle" on-track="_onPressedAnimationTriangle"></my-animatable-triangle> -->
     
-    <menu-overlay id="plain" tabindex="-1">
-    <div><paper-icon-button icon="icons:close" style="float: right;" on-tap="_closePopUp"></paper-icon-button><div>
-    <br><p style="text-align: center;">{{periodStartSelected}} pm to {{periodEndSelected}} pm</p>
-    <p class="heading">Select Activity</p><hr style="margin-bottom:20px;">
-    <div class="horizontal-section-container">
-      <div>
-        <div class="row">
-          <div class="horizontal-section">
-            <simple-menubar selected="0">
-              <a role="menuitem">Work</a>
-              <a role="menuitem">Sleep</a>
-              <a role="menuitem">Gym</a>
-              <a role="menuitem">Social</a>
-              <a role="menuitem">Leisure</a>
-            </simple-menubar>
+    <menu-overlay id="plain" tabindex="-1" class="with-margin scrollable">
+    <div style="padding-bottom: 40px;">    
+      <paper-icon-button icon="icons:close" style="float: left;" on-tap="_closePopUp"></paper-icon-button>
+      <paper-icon-button icon="icons:check" style="float: right;" on-tap="_saveSelection"></paper-icon-button>
+    </div>
+    <div class="scrollable">
+      <p style="text-align: center;">{{periodStartSelected}} pm to {{periodEndSelected}} pm</p>
+      <p class="heading">Select Activity</p><hr style="margin-bottom:20px;">
+      <div class="horizontal-section-container">
+        <div>
+          <div class="row">
+            <div class="horizontal-section">
+              <simple-menubar selected="{{activity}}" id="activitySelection" attr-for-selected="name" fallback-selection="Work">
+                <a role="menuitem" name="Work">Work</a>
+                <a role="menuitem" name="Sleep">Sleep</a>
+                <a role="menuitem" name="Gym">Gym</a>
+                <a role="menuitem" name="Social">Social</a>
+                <a role="menuitem" name="Leisure">Leisure</a>
+              </simple-menubar>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <p class="heading">Select Emotion</p><hr style="margin-bottom:20px;">
-    <div>
-    <my-animatable class="menuitem-floating"></my-animatable>
-    <my-animatable class="menuitem-floating"></my-animatable>
-    <my-animatable class="menuitem-floating"></my-animatable>
-    </div>
-    <div>
-    <my-animatable-triangle class="menuitem-floating"></my-animatable-triangle>
-    <my-animatable-triangle class="menuitem-floating"></my-animatable-triangle>
-    <my-animatable-triangle id="orange" class="menuitem-floating"></my-animatable>
+      <p class="heading">Select Emotion</p><hr style="margin-bottom:20px;">
+      <div>
+      <my-animatable class="menuitem-floating"></my-animatable>
+      <my-animatable class="menuitem-floating"></my-animatable>
+      <my-animatable class="menuitem-floating"></my-animatable>
+      </div>
+      <div>
+      <my-animatable-triangle class="menuitem-floating"></my-animatable-triangle>
+      <my-animatable-triangle class="menuitem-floating"></my-animatable-triangle>
+      <my-animatable-triangle id="orange" class="menuitem-floating"></my-animatable>
+      </div>
     </div>
     </menu-overlay>
 
@@ -167,10 +189,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             value: 0,
             notify: true,
             observer: '_periodStartChanged' 
+          },
+          activity: {
+            type: String,
+            reflectToAttribute: true,
+            observer: '_activityChanged' 
           }
       },
       _periodStartChanged: function(periodStartSelected) {
         
+        },
+      saveEntry: function() {  
+        if (this.$.activityFirebase.isNew) {
+          return this.$.activityFirebase.save("new").then(() => {
+            this.$.activityFirebase.reset();
+          });
+        }
+        return Promise.resolve();
+      },
+      _activityChanged: function(activitySelected) {
+        console.log("_activityChanged: "+this.activity)
         },
       createFabDialog: function() {
         console.log("createFabDialog");
@@ -186,6 +224,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _closePopUp: function() {
         console.log("close");
         this.$.plain.close();
+      },
+      _saveSelection: function() {
+        console.log("activity: " +this.activity);
+        this.saveEntry();
+        this._closePopUp();
       },
       printEndValue: function() {
         console.log("printEndValue: "+this.periodEndSelected);
