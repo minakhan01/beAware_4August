@@ -30,6 +30,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="toolbar-behavior.html">
 <link rel="import" href="../bower_components/note-app/common/note-app/na-editor.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 
 <dom-module id="my-input">
 
@@ -69,6 +70,66 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       color: var(--google-grey-300);
     }
 
+    paper-button.sleep {
+      background-color: white;
+      border-style: solid;
+      border-width: 1px;
+      border-color: var(--paper-green-a700);
+      color: var(--paper-green-a700);
+      --paper-button-raised-keyboard-focus: {
+        background-color: var(--paper-pink-a200) !important;
+        color: white !important;
+      };
+    }
+
+    paper-button.gym {
+      background-color: white;
+      color: var(--paper-pink-a700);
+      border-style: solid;
+      border-width: 1px;
+      border-color: var(--paper-pink-a700);
+      --paper-button-raised-keyboard-focus: {
+        background-color: var(--paper-pink-a200) !important;
+        color: white !important;
+      };
+    }
+
+    paper-button.social {
+      background-color: white;
+      border-style: solid;
+      border-width: 1px;
+      border-color: var(--paper-amber-a700);
+      color: var(--paper-amber-a700);
+      --paper-button-raised-keyboard-focus: {
+        background-color: var(--paper-pink-a200) !important;
+        color: white !important;
+      };
+    }
+
+    paper-button.leisure {
+      background-color: white;
+      border-style: solid;
+      border-width: 1px;
+      border-color: var(--paper-purple-a700);
+      color: var(--paper-purple-a700);
+      --paper-button-raised-keyboard-focus: {
+        background-color: var(--paper-pink-a200) !important;
+        color: white !important;
+      };
+    }
+
+    paper-button.work {
+      background-color: white;
+      border-style: solid;
+      border-width: 1px;
+      border-color: var(--paper-blue-a700);
+      color: var(--paper-blue-a700);
+    }
+    
+    paper-button.sleep[active] {
+      background-color: var(--paper-red-700);
+    }
+
     .horizontal-section {
       padding: 0;
       margin-bottom: 20px;
@@ -97,8 +158,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <div id="scope">
             <paper-time-picker id="picker" period-start-selected="{{periodStartSelected}}" period-end-selected="{{periodEndSelected}}"></paper-time-picker>
+            <paper-button class="work">Work</paper-button>
+<paper-button class="sleep">Sleep</paper-button>
+<paper-button class="gym">Gym</paper-button>
+<paper-button class="social">Social</paper-button>
+<paper-button class="leisure">Leisure</paper-button>
     </div>
 
+
+<!-- 
+    <paper-fab
+        on-tap=""
+        label="Wo">
+    </paper-fab> -->
 
     <paper-fab
         icon="add"
@@ -256,7 +328,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log("activitySelected: "+activitySelected);
         var colorShadeString = activityColors[activitySelected].colorShade;
         console.log("colorShadeString: "+colorShadeString);
-        var activitySelectedColor = this.$.colorSheet.colors[colorShadeString].a100;
+        var activitySelectedColor = this.$.colorSheet.colors[colorShadeString].a700;
         this.$.picker.drawArcOnClock(this.periodStartSelected, this.periodEndSelected, activitySelectedColor);
         this.saveEntry();
         this._closePopUp();
