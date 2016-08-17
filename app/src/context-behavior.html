@@ -65,7 +65,12 @@
     attached: function() {
       this.ctx = this.$.canvas.getContext('2d');
       this.ctx.canvas.width = 300;
-      this.ctx.canvas.height = 300;
+      var height = 300;
+      if (this.showLegend()) {
+        height = 90;
+        this.ctx.canvas.width = 500;
+      }
+      this.ctx.canvas.height = height;
       console.log("TITLE: "+this.getTitle());
       this._queue();
     }

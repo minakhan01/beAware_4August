@@ -25,7 +25,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </firebase-query>
         <colors-material id="colorSheet"></colors-material>
 
-<chart-pie id="chartJoy" data="[[dataChartLegend]]" chart-title="Legend" is-legend=1></chart-pie>
+<chart-pie id="chartJoy" data="[[dataChartLegend]]" chart-title="Legend" is-legend=1></chart-pie><br>
     <chart-pie id="chartJoy" data="[[dataChartJoy]]" chart-title="Joy"></chart-pie>
     <chart-pie id="chartCalm" class="square-chart" data="[[dataChartCalm]]" chart-title="Calm"></chart-pie>
     <chart-pie id="chartHope" class="square-chart" data="[[dataChartHope]]" chart-title="Hope"></chart-pie>
@@ -51,6 +51,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: 
           ["Work", "Sleep", "Leisure", "Social", "Gym"]
         },
+        joyArray: {
+          type: Array,
+          value: 
+          [0, 0, 0, 0, 0]
+        },
+        sorrowArray: {
+          type: Array,
+          value: 
+          [0, 0, 0, 0, 0]
+        },
+        hopeArray: {
+          type: Array,
+          value: 
+          [0, 0, 0, 0, 0]
+        },
+        calmArray: {
+          type: Array,
+          value: 
+          [0, 0, 0, 0, 0]
+        },
+        angerArray: {
+          type: Array,
+          value: 
+          [0, 0, 0, 0, 0]
+        },
+        fearArray: {
+          type: Array,
+          value: 
+          [0, 0, 0, 0, 0]
+        },
         datadb: {
           type: Object,
           observer: 'dataChanged'
@@ -59,6 +89,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Array,
           value: 
           [{ "a": 1, "b": 2, "c": 3 }]
+        },
+        activityColors: {
+          type: Object,
+          value: 
+          { "Sleep": {"colorShade": "Green", "colorType": "A200"},
+          "Work" : {"colorShade": "Blue", "colorType": "A200"},
+          "Gym" : {"colorShade": "Pink", "colorType": "A200"},
+          "Social" : {"colorShade": "Amber", "colorType": "A200"},
+          "Leisure": {"colorShade": "Purple", "colorType": "A200"}
+          }
         },
         dataAster: {
           type: Array,
@@ -75,73 +115,168 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ],
 
       dataChanged: function (datadb) {
-        var activityColors = 
-        { "Sleep": {"colorShade": "Green", "colorType": "A200"},
-          "Work" : {"colorShade": "Blue", "colorType": "A200"},
-          "Gym" : {"colorShade": "Pink", "colorType": "A200"},
-          "Social" : {"colorShade": "Amber", "colorType": "A200"},
-          "Leisure": {"colorShade": "Purple", "colorType": "A200"}
-        };
               // do something when the query returns values
-        console.log("---BEFORE in DATACHANGED ASTERCLOCK");
+        this.fearArray = [0, 0, 0, 0, 0];
+        this.hopeArray = [0, 0, 0, 0, 0];
+        this.sorrowArray = [0, 0, 0, 0, 0];
+        this.joyArray = [0, 0, 0, 0, 0];
+        this.calmArray = [0, 0, 0, 0, 0];
+        this.angerArray = [0, 0, 0, 0, 0];
         var data = this.datadb;
         var localDataAster = [];
         var colorSheet = this.$.colorSheet;
+        var activities = this.activities;
+        var emotions = this.emotions;
+        var that = this;
         data.forEach(function(childSnapshot) {
           console.log(childSnapshot);
           // key will be "fred" the first time and "barney" the second time
           var activityLabel = childSnapshot.activityType;
-          var emotionNet = childSnapshot.emotion.total;
-          var duration = childSnapshot.duration;
-          var colorShadeString = activityColors[activityLabel].colorShade;
-          var activitySelectedColor = colorSheet.colors[colorShadeString].a700;
-          var element = {"name" : activityLabel, "score" : emotionNet, "width" : duration, color: activitySelectedColor};
-          localDataAster.push(element);
+          var activityIndex = activities.indexOf(activityLabel);
+          for (var j = 0; j < emotions.length; j++) {
+            var emotionName = emotions[j];
+            console.log("emotionName: "+ emotionName);
+            var score = childSnapshot.emotion[emotionName];
+            console.log("score: "+ score);
+            if (score > 0) {
+              switch (emotionName) {
+                case "joy":
+                  that.joyArray[activityIndex] += score;
+                  console.log("joy: "+that.joyArray[activityIndex]);
+                  break;
+
+                case "sorrow":
+                  that.sorrowArray[activityIndex] += score;
+                  console.log("sorrow: "+that.sorrowArray[activityIndex]);
+                  break;
+
+                case "calm":
+                  that.calmArray[activityIndex] += score;
+                  console.log("calm: "+that.calmArray[activityIndex]);
+                  break;
+
+                case "anger":
+                  that.angerArray[activityIndex] += score;
+                  console.log("anger: "+that.angerArray[activityIndex]);
+                  break;
+
+                case "hope":
+                  that.hopeArray[activityIndex] += score;
+                  console.log("hope: "+that.hopeArray[activityIndex]);
+                  break;
+
+                case "fear":
+                  that.fearArray[activityIndex] += score;
+                  console.log("fear: "+ that.fearArray[activityIndex]);
+                  break;
+              }
+            }
+          }
+
         });
-        console.log("AFTER");
-        this.dataAster = localDataAster;
-      },
-      ready: function() {
-        console.log("hello");
+        console.log(this.fearArray);
+        console.log(this.hopeArray);
+        console.log(this.sorrowArray);
+        console.log(this.joyArray);
+        console.log(this.calmArray);
+        console.log(this.angerArray);
         this.dataChartJoy = {
-          labels: [
-            "Red",
-            "Green",
-            "Yellow"
-          ],
+          labels: this.activities,
           datasets: [
               {
-                  data: [300, 50, 100],
-                  backgroundColor: [
-                      "#FF6384",
-                      "#36A2EB",
-                      "#FFCE56"
-                  ],
-                  hoverBackgroundColor: [
-                      "#FF6384",
-                      "#36A2EB",
-                      "#FFCE56"
-                  ]
+                  data: this.joyArray,
+                  backgroundColor: 
+                      this.colorsArray,
+                  hoverBackgroundColor: this.backgroundColorsArray
+              }
+          ]
+        };
+        this.dataChartHope = {
+          labels: this.activities,
+          datasets: [
+              {
+                  data: this.hopeArray,
+                  backgroundColor: 
+                      this.colorsArray,
+                  hoverBackgroundColor: this.backgroundColorsArray
+              }
+          ]
+        };
+        this.dataChartCalm = {
+          labels: this.activities,
+          datasets: [
+              {
+                  data: this.calmArray,
+                  backgroundColor: 
+                      this.colorsArray,
+                  hoverBackgroundColor: this.backgroundColorsArray
+              }
+          ]
+        };
+        this.dataChartFear = {
+          labels: this.activities,
+          datasets: [
+              {
+                  data: this.fearArray,
+                  backgroundColor: 
+                      this.colorsArray,
+                  hoverBackgroundColor: this.backgroundColorsArray
+              }
+          ]
+        };
+        this.dataChartAnger = {
+          labels: this.activities,
+          datasets: [
+              {
+                  data: this.angerArray,
+                  backgroundColor: 
+                      this.colorsArray,
+                  hoverBackgroundColor: this.backgroundColorsArray
+              }
+          ]
+        };
+        this.dataChartSorrow = {
+          labels: this.activities,
+          datasets: [
+              {
+                  data: this.sorrowArray,
+                  backgroundColor: 
+                      this.colorsArray,
+                  hoverBackgroundColor: this.backgroundColorsArray
               }
           ]
         };
         this.dataChartLegend = {
-          labels: [
-            "Red",
-            "Green",
-            "Yellow"
-          ],
+          labels: this.activities,
           datasets: [
               {
-                  data: [0, 0, 0],
-                  backgroundColor: [
-                      "#FF6384",
-                      "#36A2EB",
-                      "#FFCE56"
-                  ]
+                  data: [0, 0, 0, 0, 0],
+                  backgroundColor: this.colorsArray
               }
           ]
         };
+      },
+      ready: function() {
+        console.log("hello");
+        var colorsArray = [];
+        var backgroundColorsArray = [];
+        var colorSheet = this.$.colorSheet;
+        console.log(this.activities);
+        console.log(this.activities[0]);
+        for (var i=0; i<this.activities.length;i++) {
+          //TODO: WHY IS activity 0
+          console.log(this.activities[i]);
+          var colorShadeString = this.activityColors[this.activities[i]].colorShade;
+          var activitySelectedColor = colorSheet.colors[colorShadeString].a200;
+          var activitySelectedBackgroundColor = colorSheet.colors[colorShadeString].a700;
+          colorsArray.push(activitySelectedColor);
+          backgroundColorsArray.push(activitySelectedBackgroundColor);
+        }
+        this.colorsArray = colorsArray;
+        this.backgroundColorsArray = backgroundColorsArray;
+        console.log("colorsArray");
+        console.log(colorsArray);
+        
 
       }
     });
