@@ -15,11 +15,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 <link rel="import" href="/bower_components/app-storage/app-network-status-behavior.html">
+<link rel="import" href="colors-material.html">
 
 <dom-module id="my-asterClock">
 
   <template>
     <style></style>
+    <colors-material id="colorSheet"></colors-material>
     <aster-polymer data="[[dataAster]]" query-done="queryDone"></aster-polymer>
     <firebase-query
       id="query"
@@ -197,17 +199,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ],
 
       dataChanged: function (datadb) {
+        var activityColors = 
+        { "Sleep": {"colorShade": "Green", "colorType": "A200"},
+          "Work" : {"colorShade": "Blue", "colorType": "A200"},
+          "Gym" : {"colorShade": "Pink", "colorType": "A200"},
+          "Social" : {"colorShade": "Amber", "colorType": "A200"},
+          "Leisure": {"colorShade": "Purple", "colorType": "A200"}
+        };
       // do something when the query returns values
       console.log("---BEFORE in DATACHANGED ASTERCLOCK");
         var data = this.datadb;
         var localDataAster = [];
+        var colorSheet = this.$.colorSheet;
         data.forEach(function(childSnapshot) {
           console.log(childSnapshot);
           // key will be "fred" the first time and "barney" the second time
           var activityLabel = childSnapshot.activityType;
           var emotionNet = childSnapshot.emotion.total;
           var duration = childSnapshot.duration;
-          var element = {"name" : activityLabel, "score" : emotionNet, "width" : duration, color: "#546654"};
+          var colorShadeString = activityColors[activityLabel].colorShade;
+          var activitySelectedColor = colorSheet.colors[colorShadeString].a700;
+          var element = {"name" : activityLabel, "score" : emotionNet, "width" : duration, color: activitySelectedColor};
           localDataAster.push(element);
         });
         console.log("AFTER");
