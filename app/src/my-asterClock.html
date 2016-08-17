@@ -11,12 +11,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../d3/d3.min.js">
 <link rel="import" href="aster-polymer.html">
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
+<link rel="import" href="/bower_components/app-storage/app-network-status-behavior.html">
 
 <dom-module id="my-asterClock">
 
   <template>
     <style></style>
-    <aster-polymer></aster-polymer>
+    <!-- <aster-polymer></aster-polymer> -->
+    <firebase-query
+      id="query"
+      app-name="notes"
+      path="/-KPMZgGr9fN2e6slWNDl"
+      data="{{datadb}}">
+    </firebase-query>
+    <template is="dom-repeat" items="[[datadb]]" as="note">
+        <p>hello [[note.name]]</p>
+      </template>
+        
   </template>
 
   <script>
@@ -25,6 +39,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       is: 'my-asterClock',
       properties: {
+        datadb: {
+          type: Array,
+          observer: 'dataChanged'
+        },
         data: {
           type: Array,
           value: 
@@ -172,7 +190,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           },
           ]
         }
-      }, 
+      },
+      observers: [
+           'dataChanged(datadb.splices)'
+      ],
+
+      dataChanged: function (datadb) {
+      // do something when the query returns values
+        console.log(datadb);
+      },
+      ready: function() {
+        changeCommits = Promise.resolve();
+        console.log("this.$.query.query: "+this.$.query.query);
+        // console.log(this.$.query.getStoredValue());
+        // if (this.$.query && this.$.query.isNew) {
+        //   console.log("this.$.query.refresh");
+        //     changeCommits.then(() => {
+        //       console.log(this.$.query.getStoredValue());
+        //     });
+        // }
+      }
 
     });
 

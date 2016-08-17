@@ -19,16 +19,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="my-animatable-triangle.html">
 <link rel="import" href="my-icons.html">
 <link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
-<link rel="import" href="../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
-<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
 <link rel="import" href="my-toolbar.html">
 <link rel="import" href="my-login.html">
 <link rel="import" href="colors-material.html">
 <link rel="import" href="toolbar-behavior.html">
 <link rel="import" href="../bower_components/note-app/common/note-app/na-editor.html">
+<link rel="import" href="../bower_components/note-app/common/note-app/na-note.html">
+<link rel="import" href="../bower_components/note-app/common/note-app/shared-styles.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 
@@ -36,7 +36,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <template>
 
-    <style>
+    <style include="note-app-shared-styles">
       :host {
         display: block;
         padding: 10px;
@@ -171,7 +171,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         on-tap=""
         label="Wo">
     </paper-fab> -->
+    <firebase-query
+        id="query"
+        app-name="notes"
+        path="/"
+        data="{{data}}">
+    </firebase-query>
 
+    <app-indexeddb-mirror
+        session="[[user.uid]]"
+        key="notes"
+        data="{{data}}"
+        persisted-data="{{persistedData}}">
+    </app-indexeddb-mirror>
+
+    <div class="notes">
+      <p>heelo out</p>
+      <template is="dom-repeat" items="[[data]]" as="note">
+        <p>heelo</p>
+        <na-note
+            id$="[[note.$key]]"
+            title="[[note.title]]"
+            body="[[note.body]]"
+            on-tap="edit">
+        </na-note>
+      </template>
+    </div>
     <paper-fab
         icon="add"
         on-tap="create"
@@ -301,6 +326,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: Number,
             value: 0,
             observer: '_sorrowScoreChanged'
+          },
+          angerScore: {
+            type: Number,
+            value: 0,
+            observer: '_angerScoreChanged'
           },
           angerScore: {
             type: Number,

@@ -45,6 +45,7 @@
 
       commitChange(event) {
         var changeCommits;
+        console.log("commitChange: "+event.detail);
 
         switch (event.detail) {
           case 'save':
@@ -59,9 +60,10 @@
             break;
         }
 
-        if (this.$.query && this.$.query.refresh) {
+        if (this.$.query && this.$.query.isNew) {
           changeCommits.then(() => {
-            this.$.query.refresh();
+            console.log(this.$.query.getStoredValue());
+            console.log("refreshing");
           });
         }
       },
