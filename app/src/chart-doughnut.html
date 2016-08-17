@@ -64,7 +64,12 @@ They are also registered under two aliases in the Chart core. Other than their d
     Polymer({
 
       is: 'chart-doughnut',
-
+      properties: {
+        chartTitle: {
+          type: String,
+          value: "set title"
+        }
+      },
       behaviors: [
         Polymer.IronResizableBehavior,
         ChartBehaviors.ChartPropertyBehavior,
@@ -74,6 +79,10 @@ They are also registered under two aliases in the Chart core. Other than their d
 
       ready: function() {
         this._setType('doughnut');
+      },
+      getTitle: function() {
+        console.log("this.title: "+this.chartTitle);
+        return this.chartTitle;
       }
 
 

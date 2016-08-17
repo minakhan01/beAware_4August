@@ -58,7 +58,12 @@ It is sometimes used to show trend data, and the comparison of multiple data set
     Polymer({
 
       is: 'chart-horizontal-bar',
-
+      properties: {
+        title: {
+          type: String,
+          value: "set title"
+        },
+      },
       behaviors: [
         Polymer.IronResizableBehavior,
         ChartBehaviors.ChartPropertyBehavior,

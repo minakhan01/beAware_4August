@@ -12,10 +12,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-overlay-behavior/iron-overlay-behavior.html">
 <link rel="import" href="pie-polymer.html">
 <link rel="import" href="donut-polymer.html">
+<link rel="import" href="colors-material.html">
 
 <dom-module id="my-avgActivity">
 
   <template is="dom-repeat">
+    <firebase-query
+      id="query"
+      app-name="notes"
+      path="/Wed Aug 17 2016"
+      data="{{datadb}}">
+    </firebase-query>
+        <colors-material id="colorSheet"></colors-material>
 
     <pie-polymer data="[[data]]"></pie-polymer>
     <donut-polymer data="[[data]]"></donut-polymer>
@@ -28,6 +36,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       is: 'my-avgActivity',
       properties: {
+        datadb: {
+          type: Object,
+          observer: 'dataChanged'
+        },
         data: {
           type: Array,
           value: 

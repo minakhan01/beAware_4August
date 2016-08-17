@@ -42,9 +42,16 @@
                 type: this.type,
                 data: this.data,
                 options: { 
-    responsive: true,
-    maintainAspectRatio: false
-}
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  title: {
+                      display: true,
+                      text: this.getTitle()
+                  },
+                  legend: {
+                    display: this.showLegend()
+                 },
+                }
               });
             }
           }, null, 0);
@@ -57,6 +64,9 @@
 
     attached: function() {
       this.ctx = this.$.canvas.getContext('2d');
+      this.ctx.canvas.width = 300;
+      this.ctx.canvas.height = 300;
+      console.log("TITLE: "+this.getTitle());
       this._queue();
     }
 

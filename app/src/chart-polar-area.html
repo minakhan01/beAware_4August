@@ -59,7 +59,12 @@ This type of chart is often useful when we want to show a comparison data simila
     Polymer({
 
       is: 'chart-polar-area',
-
+      properties: {
+        title: {
+          type: String,
+          value: "set title"
+        },
+      },
       behaviors: [
         Polymer.IronResizableBehavior,
         ChartBehaviors.ChartPropertyBehavior,

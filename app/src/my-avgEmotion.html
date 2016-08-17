@@ -12,13 +12,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-overlay-behavior/iron-overlay-behavior.html">
 <link rel="import" href="chart-elements.html">
 <link rel="stylesheet" href="demo.css">
+<link rel="import" href="colors-material.html">
 
 <dom-module id="my-avgEmotion">
 
   <template is="dom-repeat">
+    <firebase-query
+      id="query"
+      app-name="notes"
+      path="/Wed Aug 17 2016"
+      data="{{datadb}}">
+    </firebase-query>
+        <colors-material id="colorSheet"></colors-material>
 
-    <chart-doughnut id="chart" class="square-chart" data="[[dataChart]]"></chart-doughnut>
-    <chart-pie id="chart" class="square-chart" data="[[dataChart]]"></chart-pie>
+<chart-pie id="chartJoy" data="[[dataChartLegend]]" chart-title="Legend" is-legend=1></chart-pie>
+    <chart-pie id="chartJoy" data="[[dataChartJoy]]" chart-title="Joy"></chart-pie>
+    <chart-pie id="chartCalm" class="square-chart" data="[[dataChartCalm]]" chart-title="Calm"></chart-pie>
+    <chart-pie id="chartHope" class="square-chart" data="[[dataChartHope]]" chart-title="Hope"></chart-pie>
+    <chart-pie id="chartSorrow" class="square-chart" data="[[dataChartSorrow]]" chart-title="Sorrrow"></chart-pie>
+    <chart-pie id="chartAnger" class="square-chart" data="[[dataChartAnger]]" chart-title="Anger"></chart-pie>
+    <chart-pie id="chartFear" class="square-chart" data="[[dataChartFear]]" chart-title="Fear"></chart-pie>
 
   </template>
 
@@ -27,10 +40,70 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
 
       is: 'my-avgEmotion',
+      properties: {
+        emotions: {
+          type: Array,
+          value: 
+          ["joy", "calm", "hope", "sorrow", "anger", "fear"]
+        },
+        activities: {
+          type: Array,
+          value: 
+          ["Work", "Sleep", "Leisure", "Social", "Gym"]
+        },
+        datadb: {
+          type: Object,
+          observer: 'dataChanged'
+        },
+        data: {
+          type: Array,
+          value: 
+          [{ "a": 1, "b": 2, "c": 3 }]
+        },
+        dataAster: {
+          type: Array,
+          value: [
+          { "name": "one", "score": 10, "width": 2, "color": "#9E0041"},
+          { "name": "two", "score": 20, "width": 2, "color": "#C32F4B"},
+          { "name": "three", "score": 40, "width": 5, "color": "#E1514B"},
+          { "name": "four", "score": 10, "width": 4, "color": "#F47245"},
+          { "name": "five", "score": 5, "width": 6, "color": "#FB9F59"}],
+        }
+      },
+      observers: [
+          'dataChanged(datadb.*)'
+      ],
 
+      dataChanged: function (datadb) {
+        var activityColors = 
+        { "Sleep": {"colorShade": "Green", "colorType": "A200"},
+          "Work" : {"colorShade": "Blue", "colorType": "A200"},
+          "Gym" : {"colorShade": "Pink", "colorType": "A200"},
+          "Social" : {"colorShade": "Amber", "colorType": "A200"},
+          "Leisure": {"colorShade": "Purple", "colorType": "A200"}
+        };
+              // do something when the query returns values
+        console.log("---BEFORE in DATACHANGED ASTERCLOCK");
+        var data = this.datadb;
+        var localDataAster = [];
+        var colorSheet = this.$.colorSheet;
+        data.forEach(function(childSnapshot) {
+          console.log(childSnapshot);
+          // key will be "fred" the first time and "barney" the second time
+          var activityLabel = childSnapshot.activityType;
+          var emotionNet = childSnapshot.emotion.total;
+          var duration = childSnapshot.duration;
+          var colorShadeString = activityColors[activityLabel].colorShade;
+          var activitySelectedColor = colorSheet.colors[colorShadeString].a700;
+          var element = {"name" : activityLabel, "score" : emotionNet, "width" : duration, color: activitySelectedColor};
+          localDataAster.push(element);
+        });
+        console.log("AFTER");
+        this.dataAster = localDataAster;
+      },
       ready: function() {
         console.log("hello");
-        this.dataChart = {
+        this.dataChartJoy = {
           labels: [
             "Red",
             "Green",
@@ -52,6 +125,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               }
           ]
         };
+        this.dataChartLegend = {
+          labels: [
+            "Red",
+            "Green",
+            "Yellow"
+          ],
+          datasets: [
+              {
+                  data: [0, 0, 0],
+                  backgroundColor: [
+                      "#FF6384",
+                      "#36A2EB",
+                      "#FFCE56"
+                  ]
+              }
+          ]
+        };
+
       }
     });
   // document.addEventListener('polymer-ready', function() {

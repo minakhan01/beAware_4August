@@ -65,7 +65,12 @@ They are often useful for comparing the points of two or more different data set
     Polymer({
 
       is: 'chart-radar',
-
+      properties: {
+        title: {
+          type: String,
+          value: "set title"
+        },
+      },
       behaviors: [
         Polymer.IronResizableBehavior,
         ChartBehaviors.ChartPropertyBehavior,

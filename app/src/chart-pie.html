@@ -64,7 +64,17 @@ They are also registered under two aliases in the Chart core. Other than their d
     Polymer({
 
       is: 'chart-pie',
+      properties: {
+        chartTitle: {
+          type: String,
+          value: "set title"
+        },
+        isLegend: {
+          type: Boolean,
+          value: false
+        },
 
+      },
       behaviors: [
         Polymer.IronResizableBehavior,
         ChartBehaviors.ChartPropertyBehavior,
@@ -74,6 +84,12 @@ They are also registered under two aliases in the Chart core. Other than their d
 
       ready: function() {
         this._setType('pie');
+      },
+      getTitle: function() {
+        return this.chartTitle;
+      },
+      showLegend: function() {
+        return this.isLegend;
       }
 
     });
