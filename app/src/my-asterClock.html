@@ -20,16 +20,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <template>
     <style></style>
-    <!-- <aster-polymer></aster-polymer> -->
+    <aster-polymer data="[[dataAster]]" query-done="queryDone"></aster-polymer>
     <firebase-query
       id="query"
       app-name="notes"
-      path="/-KPMZgGr9fN2e6slWNDl"
+      path="/Wed Aug 17 2016"
       data="{{datadb}}">
     </firebase-query>
-    <template is="dom-repeat" items="[[datadb]]" as="note">
-        <p>hello [[note.name]]</p>
-      </template>
         
   </template>
 
@@ -40,8 +37,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       is: 'my-asterClock',
       properties: {
         datadb: {
-          type: Array,
+          type: Object,
           observer: 'dataChanged'
+        },
+        queryDone: {
+          type: Boolean,
+          value : false
         },
         data: {
           type: Array,
@@ -192,12 +193,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       },
       observers: [
-           'dataChanged(datadb.splices)'
+           'dataChanged(datadb.*)'
       ],
 
       dataChanged: function (datadb) {
       // do something when the query returns values
-        console.log(datadb);
+      console.log("---BEFORE in DATACHANGED ASTERCLOCK");
+        var data = this.datadb;
+        var localDataAster = [];
+        data.forEach(function(childSnapshot) {
+          console.log(childSnapshot);
+          // key will be "fred" the first time and "barney" the second time
+          var activityLabel = childSnapshot.activityType;
+          var emotionNet = childSnapshot.emotion.total;
+          var duration = childSnapshot.duration;
+          var element = {"name" : activityLabel, "score" : emotionNet, "width" : duration, color: "#546654"};
+          localDataAster.push(element);
+        });
+        console.log("AFTER");
+        this.dataAster = localDataAster;
       },
       ready: function() {
         changeCommits = Promise.resolve();
