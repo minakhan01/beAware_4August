@@ -68,9 +68,12 @@
         height = 90;
         this.ctx.canvas.width = 500;
       }
-        //       var height = this.getTotalScore()*50 + 100;
-        // console.log("this.getTotalScore(): "+this.getTotalScore());
-        // this.ctx.canvas.height = height;
+      else {
+        var height = this.getTotalScore()*10 + 100;
+        console.log("this.getTotalScore(): "+this.getTotalScore());
+        this.ctx.canvas.height = height;
+        this.ctx.canvas.width = height;
+      }
       this.ctx.canvas.height = height;
       console.log("TITLE: "+this.getTitle());
       this._queue();

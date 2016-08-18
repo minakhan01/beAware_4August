@@ -15,16 +15,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="colors-material.html">
 
 <dom-module id="my-avgActivity">
-
-  <template is="dom-repeat">
+ <template>
     <firebase-query
       id="query"
       app-name="notes"
       path="/Wed Aug 17 2016"
       data="{{datadb}}">
     </firebase-query>
-        <colors-material id="colorSheet"></colors-material>
+    <firebase-query
+      id="query"
+      app-name="notes"
+      path="/test"
+      sequentialTransactions=true
+      data="{{testdata}}">
+    </firebase-query>
+  <colors-material id="colorSheet"></colors-material>
 
+  <template is="dom-repeat" items="{{testdata}}">
 <chart-pie id="chartLegend" data="[[dataChartLegend]]" chart-title="Legend" is-legend=1></chart-pie><br>
     <chart-pie id="chartWork" data="[[dataChartWork]]" chart-title="Work" total-score=[[workTotal]]></chart-pie>
     <chart-pie id="chartSleep" class="square-chart" data="[[dataChartSleep]]" chart-title="Sleep" total-score=[[sleepTotalEmotion]]></chart-pie>
@@ -33,6 +40,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <chart-pie id="chartGym" class="square-chart" data="[[dataChartGym]]" chart-title="Gym" total-score=[[gymTotalEmotion]]></chart-pie>
 
   </template>
+</template>
 
   <script>
 

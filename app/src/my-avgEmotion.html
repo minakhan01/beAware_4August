@@ -15,15 +15,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="colors-material.html">
 
 <dom-module id="my-avgEmotion">
-
-  <template is="dom-repeat">
-    <firebase-query
+<template>
+      <firebase-query
       id="query"
       app-name="notes"
       path="/Wed Aug 17 2016"
       data="{{datadb}}">
     </firebase-query>
+    <firebase-query
+      id="query"
+      app-name="notes"
+      path="/test"
+      sequentialTransactions=true
+      data="{{testdata}}">
+    </firebase-query>
         <colors-material id="colorSheet"></colors-material>
+  <template is="dom-repeat" items="{{testdata}}">
 
 <chart-pie id="chartJoy" data="[[dataChartLegend]]" chart-title="Legend" is-legend=1></chart-pie><br>
     <chart-pie id="chartJoy" data="[[dataChartJoy]]" chart-title="Joy" total-score=[[joyTotal]]></chart-pie>
@@ -32,7 +39,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <chart-pie id="chartSorrow" class="square-chart" data="[[dataChartSorrow]]" chart-title="Sorrrow" total-score=[[sorrowTotal]]></chart-pie>
     <chart-pie id="chartAnger" class="square-chart" data="[[dataChartAnger]]" chart-title="Anger" total-score=[[angerTotal]]></chart-pie>
     <chart-pie id="chartFear" class="square-chart" data="[[dataChartFear]]" chart-title="Fear" total-score=[[fearTotal]]></chart-pie>
-
+</template>
   </template>
 
   <script>
@@ -41,6 +48,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       is: 'my-avgEmotion',
       properties: {
+        updates: {
+          type: Array,
+          value: [0],
+          observer: 'updated'
+        },
         joyTotal: {
           type: Number,
           value: 0,
@@ -136,8 +148,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       },
       observers: [
-          'dataChanged(datadb.*)'
+          'dataChanged(datadb.*)',
+          'updatedupdateArray(updates.splices)'
       ],
+      updated: function() {
+        console.log("updates array updated");
+      },
       joyTotalChanged: function (datadb) {
         console.log("joyTotalChanged: "+this.joyTotal);
       },
@@ -298,6 +314,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               }
           ]
         };
+        this.updates.pop();
+        this.updates.push(0);
+        this.updates = ["new array"];
       },
       ready: function() {
         console.log("hello");
