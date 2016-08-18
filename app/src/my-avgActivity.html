@@ -27,10 +27,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <chart-pie id="chartLegend" data="[[dataChartLegend]]" chart-title="Legend" is-legend=1></chart-pie><br>
     <chart-pie id="chartWork" data="[[dataChartWork]]" chart-title="Work" total-score=[[workTotal]]></chart-pie>
-    <chart-pie id="chartSleep" class="square-chart" data="[[dataChartSleep]]" chart-title="Sleep" total-score=[[sleepTotal]]></chart-pie>
-    <chart-pie id="chartLeisure" class="square-chart" data="[[dataChartLeisure]]" chart-title="Hope" total-score=[[leisureTotal]]></chart-pie>
+    <chart-pie id="chartSleep" class="square-chart" data="[[dataChartSleep]]" chart-title="Sleep" total-score=[[sleepTotalEmotion]]></chart-pie>
+    <chart-pie id="chartLeisure" class="square-chart" data="[[dataChartLeisure]]" chart-title="Leisure" total-score=[[leisureTotal]]></chart-pie>
     <chart-pie id="chartSocial" class="square-chart" data="[[dataChartSocial]]" chart-title="Social" total-score=[[socialTotal]]></chart-pie>
-    <chart-pie id="chartGym" class="square-chart" data="[[dataChartGym]]" chart-title="Gym" total-score=[[gymTotal]]></chart-pie>
+    <chart-pie id="chartGym" class="square-chart" data="[[dataChartGym]]" chart-title="Gym" total-score=[[gymTotalEmotion]]></chart-pie>
 
   </template>
 
@@ -40,23 +40,43 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       is: 'my-avgActivity',
       properties: {
-        gymTotal: {
+        gymTotalEmotion: {
           type: Number,
           value: 0
         },
-        leisureTotal: {
+        leisureTotalEmotion: {
           type: Number,
           value: 0
         },
-        socialTotal: {
+        socialTotalEmotion: {
           type: Number,
           value: 0
         },
-        sleepTotal: {
+        sleepTotalEmotion: {
           type: Number,
           value: 0
         },
-        workTotal: {
+        workTotalEmotion: {
+          type: Number,
+          value: 0
+        },
+        gymTotalHours: {
+          type: Number,
+          value: 0
+        },
+        leisureTotalHours: {
+          type: Number,
+          value: 0
+        },
+        socialTotalHours: {
+          type: Number,
+          value: 0
+        },
+        sleepTotalHours: {
+          type: Number,
+          value: 0
+        },
+        workTotalHours: {
           type: Number,
           value: 0
         },
@@ -126,6 +146,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.socialArray = [0, 0, 0, 0, 0, 0];
         this.gymArray = [0, 0, 0, 0, 0, 0];
         this.leisureArray = [0, 0, 0, 0, 0, 0];
+        this.workTotalHours = 0;
+        this.sleepTotalHours = 0;
+        this.gymTotalHours = 0;
+        this.leisureTotalHours = 0;
+        this.socialTotalHours = 0;
         var data = this.datadb;
         var localDataAster = [];
         var colorSheet = this.$.colorSheet;
@@ -139,22 +164,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           switch (activity) {
                 case "Work":
                   that.modifyArray(that.workArray, childSnapshot);
+                  that.workTotalHours += childSnapshot.duration;
                   break;
 
                 case "Sleep":
                   that.modifyArray(that.sleepArray, childSnapshot);
+                  that.sleepTotalHours += childSnapshot.duration;
                   break;
 
                 case "Social":
                   that.modifyArray(that.socialArray, childSnapshot);
+                  that.socialTotalHours += childSnapshot.duration;
                   break;
 
                 case "Leisure":
                   that.modifyArray(that.leisureArray, childSnapshot);
+                  that.leisureTotalHours += childSnapshot.duration;
                   break;
 
                 case "Gym":
                   that.modifyArray(that.gymArray, childSnapshot);
+                  that.gymTotalHours += childSnapshot.duration;
                   break;
               }          
         });
@@ -167,16 +197,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         function add(a, b) {
             return a + b;
         }
-        this.workTotal = this.workArray.reduce(add, 0);
-        this.sleepTotal = this.sleepArray.reduce(add, 0);
-        this.socialTotal = this.socialArray.reduce(add, 0);
-        this.leisureTotal = this.leisureArray.reduce(add, 0);
-        this.gymTotal = this.gymArray.reduce(add, 0);
-        console.log("this.gymTotal: "+this.gymTotal);
-        console.log("this.socialTotal: "+this.socialTotal);
-        console.log("this.workTotal: "+this.workTotal);
-        console.log("this.leisureTotal: "+this.leisureTotal);
-        console.log("this.sleepTotal: "+this.sleepTotal);
+        this.workTotalEmotion = this.workArray.reduce(add, 0);
+        this.sleepTotalEmotion = this.sleepArray.reduce(add, 0);
+        this.socialTotalEmotion = this.socialArray.reduce(add, 0);
+        this.leisureTotalEmotion = this.leisureArray.reduce(add, 0);
+        this.gymTotalEmotion = this.gymArray.reduce(add, 0);
+        console.log("this.gymTotalEmotion: "+this.gymTotalEmotion);
+        console.log("this.socialTotalEmotion: "+this.socialTotalEmotion);
+        console.log("this.workTotalEmotion: "+this.workTotalEmotion);
+        console.log("this.leisureTotalEmotion: "+this.leisureTotalEmotion);
+        console.log("this.sleepTotalEmotion: "+this.sleepTotalEmotion);
+        console.log("this.gymTotalHours: "+this.gymTotalHours);
+        console.log("this.socialTotalHours: "+this.socialTotalHours);
+        console.log("this.workTotalHours: "+this.workTotalHours);
+        console.log("this.leisureTotalHours: "+this.leisureTotalHours);
+        console.log("this.sleepTotalHours: "+this.sleepTotalHours);
         this.dataChartWork = {
           labels: this.emotions,
           datasets: [
