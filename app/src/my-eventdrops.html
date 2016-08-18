@@ -1,0 +1,75 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
+<link rel="import" href="/bower_components/app-storage/app-network-status-behavior.html">
+<link rel="import" href="colors-material.html">
+<link rel="import" href="polymer-eventdrops.html">
+
+<dom-module id="my-eventdrops">
+
+  <template>
+    <style></style>
+    <colors-material id="colorSheet"></colors-material>
+    <polymer-eventdrops></polymer-eventdrops>
+    <firebase-query
+      id="query"
+      app-name="notes"
+      path="/Wed Aug 17 2016"
+      data="{{datadb}}">
+    </firebase-query>
+        
+  </template>
+
+  <script>
+
+    Polymer({
+
+      is: 'my-eventdrops',
+      properties: {
+      },
+      observers: [
+      ],
+
+      dataChanged: function (datadb) {
+        var activityColors = 
+        { "Sleep": {"colorShade": "Green", "colorType": "A200"},
+          "Work" : {"colorShade": "Blue", "colorType": "A200"},
+          "Gym" : {"colorShade": "Pink", "colorType": "A200"},
+          "Social" : {"colorShade": "Amber", "colorType": "A200"},
+          "Leisure": {"colorShade": "Purple", "colorType": "A200"}
+        };
+      // do something when the query returns values
+      // console.log("---BEFORE in DATACHANGED ASTERCLOCK");
+      //   var data = this.datadb;
+      //   var localDataAster = [];
+      //   var colorSheet = this.$.colorSheet;
+      //   data.forEach(function(childSnapshot) {
+      //     console.log(childSnapshot);
+      //     // key will be "fred" the first time and "barney" the second time
+      //     var activityLabel = childSnapshot.activityType;
+      //     var emotionNet = childSnapshot.emotion.total;
+      //     var duration = childSnapshot.duration;
+      //     var colorShadeString = activityColors[activityLabel].colorShade;
+      //     var activitySelectedColor = colorSheet.colors[colorShadeString].a700;
+      //     var element = {"name" : activityLabel, "score" : emotionNet, "width" : duration, color: activitySelectedColor};
+      //     localDataAster.push(element);
+      //   });
+      //   console.log("AFTER");
+      //   this.dataAster = localDataAster;
+      }
+    });
+
+  </script>
+
+</dom-module>
