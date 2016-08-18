@@ -26,12 +26,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <colors-material id="colorSheet"></colors-material>
 
 <chart-pie id="chartJoy" data="[[dataChartLegend]]" chart-title="Legend" is-legend=1></chart-pie><br>
-    <chart-pie id="chartJoy" data="[[dataChartJoy]]" chart-title="Joy"></chart-pie>
-    <chart-pie id="chartCalm" class="square-chart" data="[[dataChartCalm]]" chart-title="Calm"></chart-pie>
-    <chart-pie id="chartHope" class="square-chart" data="[[dataChartHope]]" chart-title="Hope"></chart-pie>
-    <chart-pie id="chartSorrow" class="square-chart" data="[[dataChartSorrow]]" chart-title="Sorrrow"></chart-pie>
-    <chart-pie id="chartAnger" class="square-chart" data="[[dataChartAnger]]" chart-title="Anger"></chart-pie>
-    <chart-pie id="chartFear" class="square-chart" data="[[dataChartFear]]" chart-title="Fear"></chart-pie>
+    <chart-pie id="chartJoy" data="[[dataChartJoy]]" chart-title="Joy" total-score=[[joyTotal]]></chart-pie>
+    <chart-pie id="chartCalm" class="square-chart" data="[[dataChartCalm]]" chart-title="Calm" total-score=[[calmTotal]]></chart-pie>
+    <chart-pie id="chartHope" class="square-chart" data="[[dataChartHope]]" chart-title="Hope" total-score=[[hopeTotal]]></chart-pie>
+    <chart-pie id="chartSorrow" class="square-chart" data="[[dataChartSorrow]]" chart-title="Sorrrow" total-score=[[sorrowTotal]]></chart-pie>
+    <chart-pie id="chartAnger" class="square-chart" data="[[dataChartAnger]]" chart-title="Anger" total-score=[[angerTotal]]></chart-pie>
+    <chart-pie id="chartFear" class="square-chart" data="[[dataChartFear]]" chart-title="Fear" total-score=[[fearTotal]]></chart-pie>
 
   </template>
 
@@ -41,6 +41,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       is: 'my-avgEmotion',
       properties: {
+        joyTotal: {
+          type: Number,
+          value: 0,
+          observer: 'joyTotalChanged'
+        },
+        sorrowTotal: {
+          type: Number,
+          value: 0
+        },
+        calmTotal: {
+          type: Number,
+          value: 0
+        },
+        angerTotal: {
+          type: Number,
+          value: 0
+        },
+        fearTotal: {
+          type: Number,
+          value: 0
+        },
+        hopeTotal: {
+          type: Number,
+          value: 0
+        },
         emotions: {
           type: Array,
           value: 
@@ -113,7 +138,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       observers: [
           'dataChanged(datadb.*)'
       ],
-
+      joyTotalChanged: function (datadb) {
+        console.log("joyTotalChanged: "+this.joyTotal);
+      },
       dataChanged: function (datadb) {
               // do something when the query returns values
         this.fearArray = [0, 0, 0, 0, 0];
@@ -180,6 +207,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log(this.joyArray);
         console.log(this.calmArray);
         console.log(this.angerArray);
+
+        function add(a, b) {
+            return a + b;
+        }
+        this.joyTotal = this.joyArray.reduce(add, 0);
+        this.sorrowTotal = this.sorrowArray.reduce(add, 0);
+        this.angerTotal = this.angerArray.reduce(add, 0);
+        this.calmTotal = this.calmArray.reduce(add, 0);
+        this.hopeTotal = this.hopeArray.reduce(add, 0);
+        this.fearTotal = this.fearArray.reduce(add, 0);
+        console.log("this.joyTotal: "+this.joyTotal);
+        console.log("this.sorrowTotal: "+this.sorrowTotal);
+        console.log("this.angerTotal: "+this.angerTotal);
+        console.log("this.calmTotal: "+this.calmTotal);
+        console.log("this.hopeTotal: "+this.hopeTotal);
+        console.log("this.fearTotal: "+this.fearTotal);
         this.dataChartJoy = {
           labels: this.activities,
           datasets: [

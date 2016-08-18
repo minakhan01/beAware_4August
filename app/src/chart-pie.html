@@ -73,6 +73,11 @@ They are also registered under two aliases in the Chart core. Other than their d
           type: Boolean,
           value: false
         },
+        totalScore: {
+          type: Number,
+          value: 2,
+          observer: 'totalScoreChanged'
+        },
 
       },
       behaviors: [
@@ -85,12 +90,18 @@ They are also registered under two aliases in the Chart core. Other than their d
       ready: function() {
         this._setType('pie');
       },
+      totalScoreChanged: function(totalScore) {
+        console.log("totalScoreChanged: "+this.totalScore);
+      },
       getTitle: function() {
         return this.chartTitle;
       },
       showLegend: function() {
         return this.isLegend;
-      }
+      },
+      getTotalScore: function() {
+        return this.totalScore;
+      },
 
     });
   </script>
