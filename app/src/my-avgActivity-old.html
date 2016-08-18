@@ -1,0 +1,86 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-overlay-behavior/iron-overlay-behavior.html">
+<link rel="import" href="pie-polymer.html">
+<link rel="import" href="donut-polymer.html">
+<link rel="import" href="colors-material.html">
+
+<dom-module id="my-avgActivity">
+
+  <template is="dom-repeat">
+    <firebase-query
+      id="query"
+      app-name="notes"
+      path="/Wed Aug 17 2016"
+      data="{{datadb}}">
+    </firebase-query>
+        <colors-material id="colorSheet"></colors-material>
+
+    <pie-polymer data="[[data]]"></pie-polymer>
+    <donut-polymer data="[[data]]"></donut-polymer>
+
+  </template>
+
+  <script>
+
+    Polymer({
+
+      is: 'my-avgActivity',
+      properties: {
+        datadb: {
+          type: Object,
+          observer: 'dataChanged'
+        },
+        data: {
+          type: Array,
+          value: 
+          [{ "a": 1, "b": 2, "c": 3 }]
+        },
+        dataAster: {
+          type: Array,
+          value: [
+          { "name": "one", "score": 10, "width": 2, "color": "#9E0041"},
+          { "name": "two", "score": 20, "width": 2, "color": "#C32F4B"},
+          { "name": "three", "score": 40, "width": 5, "color": "#E1514B"},
+          { "name": "four", "score": 10, "width": 4, "color": "#F47245"},
+          { "name": "five", "score": 5, "width": 6, "color": "#FB9F59"}],
+        }
+      },
+      ready: function() {
+        console.log("hello");
+        this.dataChart = {
+          labels: [
+            "Red",
+            "Green",
+            "Yellow"
+          ],
+          datasets: [
+              {
+                  data: [300, 50, 100],
+                  backgroundColor: [
+                      "#FF6384",
+                      "#36A2EB",
+                      "#FFCE56"
+                  ],
+                  hoverBackgroundColor: [
+                      "#FF6384",
+                      "#36A2EB",
+                      "#FFCE56"
+                  ]
+              }
+          ]
+        };
+      }
+    });
+  </script>
+
+</dom-module>
