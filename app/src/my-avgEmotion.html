@@ -22,6 +22,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       path="/Wed Aug 17 2016"
       data="{{datadb}}">
     </firebase-query>
+    <app-indexeddb-mirror
+        key="avgEmotion"
+        data="{{datadb}}"
+        persisted-data="{{persistedData}}">
     <firebase-query
       id="query"
       app-name="notes"
@@ -29,6 +33,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       sequentialTransactions=true
       data="{{testdata}}">
     </firebase-query>
+    <app-indexeddb-mirror
+        key="avgEmotionTest"
+        data="{{testdata}}"
+        persisted-data="{{persistedDataTest}}">
         <colors-material id="colorSheet"></colors-material>
   <template is="dom-repeat" items="{{testdata}}">
 
@@ -122,6 +130,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Object,
           observer: 'dataChanged'
         },
+        persistedData: {
+          type: Object,
+          observer: 'dataChanged'
+        },
         data: {
           type: Array,
           value: 
@@ -149,6 +161,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       observers: [
           'dataChanged(datadb.*)',
+          'dataChanged(persistedData.*)',
           'updatedupdateArray(updates.splices)'
       ],
       updated: function() {
