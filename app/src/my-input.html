@@ -192,7 +192,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         on-close="commitChange">
     </na-editor>
 
-    <!-- <my-animatable-triangle id="orangeTriangle" on-tap="_onPressedAnimationTriangle" on-track="_onPressedAnimationTriangle"></my-animatable-triangle> -->
     <colors-material id="colorSheet"></colors-material>
     <menu-overlay id="plain" tabindex="-1" class="with-margin scrollable">
     <div style="padding-bottom: 40px;">    
@@ -244,6 +243,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ],
 
       properties: {
+          user: {
+            type: String,
+            value: '' 
+          },
           periodEndSelected: {
             type: Number,
             value: 0,
@@ -332,7 +335,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       saveEntry: function() {  
         if (this.$.activityFirebase.isNew) {
-          return this.$.activityFirebase.save((new Date()).toDateString()).then(() => {
+          return this.$.activityFirebase.save(this.user+"/"+(new Date()).toDateString()).then(() => {
             this.$.activityFirebase.reset();
           });
         }

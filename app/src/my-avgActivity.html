@@ -19,7 +19,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <firebase-query
       id="query"
       app-name="notes"
-      path="/Wed Aug 17 2016"
+      path="/[[user]]/[[date]]"
       data="{{datadb}}">
     </firebase-query>
     <app-indexeddb-mirror
@@ -57,6 +57,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       is: 'my-avgActivity',
       properties: {
+        user: {
+            type: String,
+            value: '' 
+          },
+        date: {
+          type: String,
+          observer: ''
+        },
         gymTotalEmotion: {
           type: Number,
           value: 0
@@ -307,7 +315,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
       },
       ready: function() {
-        console.log("hello");
+        this.date = (new Date()).toDateString();
         var colorsArray = [];
         var backgroundColorsArray = [];
         var colorSheet = this.$.colorSheet;

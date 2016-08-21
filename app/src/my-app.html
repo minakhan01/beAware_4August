@@ -211,12 +211,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-header>
 
         <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
-          <my-input name="input"></my-input>
-          <my-asterClock name="asterClock"></my-asterClock>
-          <my-avgActivity name="avgActivity"></my-avgActivity>
-          <my-avgEmotion name="avgEmotion"></my-avgEmotion>
-          <my-eventdrops name="eventdrops"></my-eventdrops>
-          <my-calendarview name="calendarview"></my-calendarview>
+          <my-input name="input" user="[[user.uid]]"></my-input>
+          <my-asterClock name="asterClock" user="[[user.uid]]"></my-asterClock>
+          <my-avgActivity name="avgActivity" user="[[user.uid]]"></my-avgActivity>
+          <my-avgEmotion name="avgEmotion" user="[[user.uid]]"></my-avgEmotion>
+          <my-eventdrops name="eventdrops" user="[[user.uid]]"></my-eventdrops>
+          <my-calendarview name="calendarview" user="[[user.uid]]"></my-calendarview>
         </iron-pages>
 
       </app-header-layout>

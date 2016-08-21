@@ -26,7 +26,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <firebase-query
       id="query"
       app-name="notes"
-      path="/Wed Aug 17 2016"
+      path="/[[user]]/[[date]]"
       data="{{datadb}}">
     </firebase-query>
     <app-indexeddb-mirror
@@ -43,6 +43,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       is: 'my-asterClock',
       properties: {
+        user: {
+            type: String,
+            value: '' 
+          },
+        date: {
+          type: String,
+          observer: ''
+        },
         datadb: {
           type: Object,
           observer: 'dataChanged'
@@ -164,6 +172,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ready: function() {
         changeCommits = Promise.resolve();
         console.log("this.$.query.query: "+this.$.query.query);
+        this.date = (new Date()).toDateString();
         // console.log(this.$.query.getStoredValue());
         // if (this.$.query && this.$.query.isNew) {
         //   console.log("this.$.query.refresh");
