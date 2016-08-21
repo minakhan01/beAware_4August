@@ -16,11 +16,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style>
       :host {
         position: absolute;
-        top: 46px;
+        top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: var(--paper-green-500);
+        background-color: var(--paper-green-700);
         transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 1;
         color: var(--paper-purple-50);
@@ -34,15 +34,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         pointer-events: none;
       }
 
-      paper-button > * {
+      .middle {
         vertical-align: middle;
+        text-align: center;
+        text-transform: none;
+      }
+      .middle h2{
+        padding-bottom: 40px;
+/*        text-align: center;
+        text-transform: none;*/
+      }
+      iron-icon {
+        padding: 10px;
+        text-transform: none;
+      }
+      paper-button > * {
         text-transform: none;
       }
     </style>
+    <div class="middle"><h2>BeAware</h2> 
+
     <paper-button on-tap="signIn" disabled="[[disabled]]">
       <iron-icon icon="account-circle"></iron-icon>
       <span>Sign in with Google</span>
     </paper-button>
+    </div>
   </template>
   <script>
     Polymer({
