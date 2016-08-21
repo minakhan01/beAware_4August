@@ -26,17 +26,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="my-login.html">
 <link rel="import" href="colors-material.html">
 <link rel="import" href="toolbar-behavior.html">
-<link rel="import" href="../bower_components/note-app/common/note-app/na-editor.html">
-<link rel="import" href="../bower_components/note-app/common/note-app/na-note.html">
-<link rel="import" href="../bower_components/note-app/common/note-app/shared-styles.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 
 <dom-module id="my-input">
 
   <template>
-
-    <style include="note-app-shared-styles">
+<style>
       :host {
         display: block;
         padding: 10px;
@@ -165,32 +161,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-button class="leisure">Leisure</paper-button>
     </div>
 
-    <paper-fab
-        icon="add"
-        on-tap="create"
-        disabled="[[!online]]"
-        aria-label="Add note">
-    </paper-fab>
-
-    <firebase-document
-        id="document"
-        app-name="notes"
-        path="/"
-        data="[[editableNote]]">
-    </firebase-document>
-
     <firebase-document
         id="activityFirebase"
         app-name="notes"
-        path="/heelo/"
+        path="/"
         data="{{activityDetails}}">
     </firebase-document>
-
-    <na-editor
-        id="editor"
-        note="{{editableNote}}"
-        on-close="commitChange">
-    </na-editor>
 
     <colors-material id="colorSheet"></colors-material>
     <menu-overlay id="plain" tabindex="-1" class="with-margin scrollable">
@@ -343,10 +319,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       _activityChanged: function(activitySelected) {
         console.log("_activityChanged: "+this.activity)
-        },
-      createFabDialog: function() {
-        console.log("createFabDialog");
-        this.$.editor.open();
         },
       _periodEndChanged: function(periodEndSelected) {
         console.log("MY-INPUT _periodEndChanged");
