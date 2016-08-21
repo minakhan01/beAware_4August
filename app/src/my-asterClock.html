@@ -10,11 +10,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../d3/d3.min.js">
-<link rel="import" href="aster-polymer.html">
+<link rel="import" href="elements/aster-polymer.html">
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
-<link rel="import" href="/bower_components/app-storage/app-network-status-behavior.html">
+<link rel="import" href="../bower_components/app-storage/app-network-status-behavior.html">
 <link rel="import" href="colors-material.html">
 
 <dom-module id="my-asterClock">
@@ -66,75 +66,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           { "name": "three", "score": 40, "width": 5, "color": "#E1514B"},
           { "name": "four", "score": 10, "width": 4, "color": "#F47245"},
           { "name": "five", "score": 5, "width": 6, "color": "#FB9F59"}],
-        },
-        colorsA200: {
-          type: Object,
-          value: {
-          "Red": "#FF5252",
-          "Pink": "#FF4081",
-          "Purple": "#E040FB",
-          "DeepPurple": "#7C4DFF",
-          "Indigo": "#536DFE",
-          "Blue": "#448AFF",
-          "LightBlue": "#40C4FF",
-          "Cyan": "#18FFFF",
-          "Teal": "#64FFDA",   
-          "Green": "#69F0AE",   
-          "LightGreen": "#B2FF59",   
-          "Lime": "#EEFF41",   
-          "Yellow": "#FFFF00",   
-          "Amber": "#FFD740",   
-          "Orange": "#FFAB40", 
-          "DeepOrange": "#FF6E40"  
-          //"Brown": "#FF4081",   
-          //"Grey": "#FF4081" 
-          },
-        },
-        colorsA400: {
-          type: Object,
-          value: {
-          "Red": "#FF1744",
-          "Pink": "#F50057",
-          "Purple": "#D500F9",
-          "DeepPurple": "#651FFF",
-          "Indigo": "#3D5AFE",
-          "Blue": "#2979FF",
-          "LightBlue": "#00B0FF",
-          "Cyan": "#00E5FF",
-          "Teal": "#1DE9B6",   
-          "Green": "#00E676",   
-          "LightGreen": "#76FF03",   
-          "Lime": "#C6FF00",   
-          "Yellow": "#FFEA00",   
-          "Amber": "#FFC400",   
-          "Orange": "#FF9100", 
-          "DeepOrange": "#FF3D00"   
-          //"Brown": "#FF4081",   
-          //"Grey": "#FF4081" 
-          },
-        },
-        colorsA700: {
-          type: Object,
-          value: {
-          "Red": "#D50000",
-          "Pink": "#C51162",
-          "Purple": "#AA00FF",
-          "DeepPurple": "#6200EA",
-          "Indigo": "#304FFE",
-          "Blue": "#2962FF",
-          "LightBlue": "#0091EA",
-          "Cyan": "#00B8D4",
-          "Teal": "#00BFA5",   
-          "Green": "#00C853",   
-          "LightGreen": "#64DD17",   
-          "Lime": "#AEEA00",   
-          "Yellow": "#FFD600",   
-          "Amber": "#FFAB00",   
-          "Orange": "#FF6D00", 
-          "DeepOrange": "#DD2C00"   
-          //"Brown": "#FF4081",   
-          //"Grey": "#FF4081" 
-          },
         },
         //A200 list
         activityCategories: {

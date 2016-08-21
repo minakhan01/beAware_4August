@@ -8,20 +8,16 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/iron-menu-behavior/iron-menubar-behavior.html">
-<link rel="import" href="../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-menu-behavior/iron-menu-behavior.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
 
-<dom-module id="simple-menubar">
+<dom-module id="simple-menu">
   <template>
     <style>
       .content ::content > .iron-selected {
         color: white;
-        background-color: var(--google-red-500);
-      }
-
-      .content ::content > * {
-        display: inline-block;
+        background-color: var(--google-blue-500);
       }
     </style>
 
@@ -30,13 +26,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </div>
 
   </template>
+
 <script>
   Polymer({
 
-    is: 'simple-menubar',
+    is: 'simple-menu',
 
     behaviors: [
-      Polymer.IronMenubarBehavior
+      Polymer.IronMenuBehavior
     ]
 
   });
