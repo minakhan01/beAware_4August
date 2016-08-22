@@ -219,6 +219,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ],
 
       properties: {
+          datadb: {
+          type: Object,
+          observer: 'dataChanged'
+          },
           user: {
             type: String,
             value: '' 
@@ -285,6 +289,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             observer: '_angerScoreChanged'
           },
       },
+      observers: [
+           'dataChanged(datadb.*)'
+      ],
+
+      dataChanged: function (datadb) {
+        var activityColors = 
+        { "Sleep": {"colorShade": "Green", "colorType": "A200"},
+          "Work" : {"colorShade": "Blue", "colorType": "A200"},
+          "Gym" : {"colorShade": "Pink", "colorType": "A200"},
+          "Social" : {"colorShade": "Amber", "colorType": "A200"},
+          "Leisure": {"colorShade": "Purple", "colorType": "A200"}
+        };
+        var that = this;
+        // do something when the query returns values
+        console.log("---BEFORE");
+        var data = this.datadb;
+        var localDataAster = [];
+        var colorSheet = this.$.colorSheet;
+        data.forEach(function(childSnapshot) {
+          console.log(childSnapshot);
+          // key will be "fred" the first time and "barney" the second time
+          var activityLabel = childSnapshot.activityType;
+          var startTime = childSnapshot.startTime;
+          var endTime = childSnapshot.endTime;
+          var colorShadeString = activityColors[activityLabel].colorShade;
+          var activitySelectedColor = colorSheet.colors[colorShadeString].a700;
+          that.$.picker.drawArcOnClock(startTime, endTime, activitySelectedColor);
+        });
+        console.log("AFTER");
+      },
+
       _periodStartChanged: function(periodStartSelected) {
         
         },
