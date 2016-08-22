@@ -16,17 +16,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="my-avgActivity">
  <template>
-    <firebase-query
+<!--     <firebase-query
       id="query"
       app-name="notes"
+      sequentialTransactions=true
       path="/[[user]]/[[date]]"
-      data="{{datadb}}">
+      data="{{datadb}}"> -->
     </firebase-query>
-    <app-indexeddb-mirror
+    <app-localstorage-document key="diff" data="{{emotions}}"></app-localstorage-document>
+<!--         <app-localstorage-document key="dataChartLegend" data="{{dataChartLegend}}">
+        <app-localstorage-document key="datadbActivity" data="{{datadbActivity}}">
+        <app-localstorage-document key="dataChartSleep" data="{{dataChartSleep}}">
+        <app-localstorage-document key="dataChartWork" data="{{dataChartWork}}">
+        <app-localstorage-document key="dataChartSocial" data="{{dataChartSocial}}">
+        <app-localstorage-document key="dataChartLeisure" data="{{dataChartLeisure}}">
+        <app-localstorage-document key="dataChartGym" data="{{dataChartGym}}">
+        <app-localstorage-document key="workArray" data="{{workArray}}">
+        <app-localstorage-document key="gymArray" data="{{gymArray}}">
+        <app-localstorage-document key="sleepArray" data="{{sleepArray}}">
+        <app-localstorage-document key="socialArray" data="{{socialArray}}">
+        <app-localstorage-document key="leisureArray" data="{{leisureArray}}"> -->
+        <app-localstorage-document key="colorsArrayA" data="{{colorsArray}}"></app-localstorage-document>
+        <app-localstorage-document key="backgroundColorsArrayA" data="{{backgroundColorsArray}}"></app-localstorage-document>
+<!--     <app-indexeddb-mirror
         key="avgActivity"
         data="{{datadb}}"
         persisted-data="{{persistedData}}">
-    </app-indexeddb-mirror>
+    </app-indexeddb-mirror> -->
+    <firebase-query
+      id="query"
+      app-name="notes"
+      path="/calculated"
+      sequentialTransactions=true
+      data="{{testcalculated}}">
     <firebase-query
       id="query"
       app-name="notes"
@@ -34,21 +56,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       sequentialTransactions=true
       data="{{testdata}}">
     </firebase-query>
-    <app-indexeddb-mirror
+<!--     <app-indexeddb-mirror
         key="avgActivityTest"
         data="{{datadb}}"
-        persisted-data="{{persistedData}}">
+        persisted-data="{{persistedData}}"> -->
   <colors-material id="colorSheet"></colors-material>
 
-  <template is="dom-repeat" items="{{testdata}}">
+  <template is="dom-repeat" items="{{testdata}}" observe="datadb.*">
 <chart-pie id="chartLegend" data="[[dataChartLegend]]" chart-title="Legend" is-legend=1></chart-pie><br>
     <chart-pie id="chartWork" data="[[dataChartWork]]" chart-title="Work" total-score=[[workTotal]]></chart-pie>
     <chart-pie id="chartSleep" class="square-chart" data="[[dataChartSleep]]" chart-title="Sleep" total-score=[[sleepTotalEmotion]]></chart-pie>
     <chart-pie id="chartLeisure" class="square-chart" data="[[dataChartLeisure]]" chart-title="Leisure" total-score=[[leisureTotal]]></chart-pie>
     <chart-pie id="chartSocial" class="square-chart" data="[[dataChartSocial]]" chart-title="Social" total-score=[[socialTotal]]></chart-pie>
     <chart-pie id="chartGym" class="square-chart" data="[[dataChartGym]]" chart-title="Gym" total-score=[[gymTotalEmotion]]></chart-pie>
-
   </template>
+
 </template>
 
   <script>
@@ -138,17 +160,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         leisureArray: {
           type: Array,
           value: 
-          [0, 0, 0, 0, 0, 0]
+          [0, 0, 0, 0, 0, -1]
         },
         datadb: {
           type: Object,
-          observer: 'dataChanged'
+          observer: 'activityDataChanged'
+        },
+        colorsArray: {
+          type: Array
+        },
+        backgroundColorsArray: {
+          type: Array
+        },
+        testcalculated: {
+          type: Object,
+          observer: 'testcalculatedChanged'
         },
         data: {
           type: Array,
           value: 
           [{ "a": 1, "b": 2, "c": 3 }]
         },
+        // testInput: {
+        //   type: Object
+        // },
+        // dataChartSleep: {
+        //   type: Object
+        // },
+        // dataChartWork: {
+        //   type: Object
+        // },
+        // dataChartSocial: {
+        //   type: Object
+        // },
+        // dataChartLeisure: {
+        //   type: Object
+        // },
+        // dataChartGym: {
+        //   type: Object
+        // },
         emotionColors: {
           type: Object,
           value: 
@@ -162,10 +212,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
       },
       observers: [
-          'dataChanged(datadb.*)'
+          'activityDataChanged(datadb.*)',
+          'testcalculatedChanged(testcalculated.*)'
       ],
-      dataChanged: function (datadb) {
+      testcalculatedChanged: function(testcalculated) {
+        console.log("testcalculatedChanged");
+        console.log(this.testcalculated);
+        console.log(this.dataChartWork);
+      },
+      activityDataChanged: function (datadb) {
               // do something when the query returns values
+                      var colorsArray = [];
+        var backgroundColorsArray = [];
+        var colorSheet = this.$.colorSheet;
+        for (var i=0; i<this.emotions.length;i++) {
+          //TODO: WHY IS activity 0
+          console.log(this.emotions[i]);
+          var colorShadeString = this.emotionColors[this.emotions[i]].colorShade;
+          var colorGradientString = this.emotionColors[this.emotions[i]].colorType;
+          var emotionSelectedColor = colorSheet.colors[colorShadeString][colorGradientString];
+          var emotionSelectedBackgroundColor = colorSheet.colors[colorShadeString].a100;
+          colorsArray.push(emotionSelectedColor);
+          backgroundColorsArray.push(emotionSelectedBackgroundColor);
+        }
+        this.colorsArray = colorsArray;
+        this.backgroundColorsArray = backgroundColorsArray;
+
+        
+        console.log("DATA CHANGED");
         this.workArray = [0, 0, 0, 0, 0, 0];
         this.sleepArray = [0, 0, 0, 0, 0, 0];
         this.socialArray = [0, 0, 0, 0, 0, 0];
@@ -183,7 +257,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var emotions = this.emotions;
         var that = this;
         data.forEach(function(childSnapshot) {
-          console.log(childSnapshot);
+          // console.log(childSnapshot);
           // key will be "fred" the first time and "barney" the second time
           var activity = childSnapshot.activityType;
           switch (activity) {
@@ -227,16 +301,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.socialTotalEmotion = this.socialArray.reduce(add, 0);
         this.leisureTotalEmotion = this.leisureArray.reduce(add, 0);
         this.gymTotalEmotion = this.gymArray.reduce(add, 0);
-        console.log("this.gymTotalEmotion: "+this.gymTotalEmotion);
-        console.log("this.socialTotalEmotion: "+this.socialTotalEmotion);
-        console.log("this.workTotalEmotion: "+this.workTotalEmotion);
-        console.log("this.leisureTotalEmotion: "+this.leisureTotalEmotion);
-        console.log("this.sleepTotalEmotion: "+this.sleepTotalEmotion);
-        console.log("this.gymTotalHours: "+this.gymTotalHours);
-        console.log("this.socialTotalHours: "+this.socialTotalHours);
-        console.log("this.workTotalHours: "+this.workTotalHours);
-        console.log("this.leisureTotalHours: "+this.leisureTotalHours);
-        console.log("this.sleepTotalHours: "+this.sleepTotalHours);
+        // console.log("this.gymTotalEmotion: "+this.gymTotalEmotion);
+        // console.log("this.socialTotalEmotion: "+this.socialTotalEmotion);
+        // console.log("this.workTotalEmotion: "+this.workTotalEmotion);
+        // console.log("this.leisureTotalEmotion: "+this.leisureTotalEmotion);
+        // console.log("this.sleepTotalEmotion: "+this.sleepTotalEmotion);
+        // console.log("this.gymTotalHours: "+this.gymTotalHours);
+        // console.log("this.socialTotalHours: "+this.socialTotalHours);
+        // console.log("this.workTotalHours: "+this.workTotalHours);
+        // console.log("this.leisureTotalHours: "+this.leisureTotalHours);
+        // console.log("this.sleepTotalHours: "+this.sleepTotalHours);
         this.dataChartWork = {
           labels: this.emotions,
           datasets: [
@@ -301,6 +375,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               }
           ]
         };
+        // this.testInput = this.testdata;
+        console.log("this.testdata");
+        console.log(this.testdata);
       },
       modifyArray: function(array, childSnapshot) {
           for (var j = 0; j < this.emotions.length; j++) {
@@ -319,8 +396,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var colorsArray = [];
         var backgroundColorsArray = [];
         var colorSheet = this.$.colorSheet;
-        console.log(this.activities);
-        console.log(this.activities[0]);
         for (var i=0; i<this.emotions.length;i++) {
           //TODO: WHY IS activity 0
           console.log(this.emotions[i]);
@@ -339,46 +414,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       }
     });
-  // document.addEventListener('polymer-ready', function() {
-  // window.addEventListener('WebComponentsReady', function() {
-
-    // var scope = document.shadowRoot.querySelector('#chart');
-
-    // scope.data = {
-    // labels: [
-    //   "Red",
-    //   "Green",
-    //   "Yellow"
-    // ],
-    // datasets: [
-    //     {
-    //         data: [300, 50, 100],
-    //         backgroundColor: [
-    //             "#FF6384",
-    //             "#36A2EB",
-    //             "#FFCE56"
-    //         ],
-    //         hoverBackgroundColor: [
-    //             "#FF6384",
-    //             "#36A2EB",
-    //             "#FFCE56"
-    //         ]
-    //     }]
-    // };
-
-    //   scope.addData = function() {
-    //     this.push('data.labels', this.$.newLabel.value);
-    //     this.push('data.datasets.0.hoverBackgroundColor', this.$.newHighlight.value);
-    //     this.push('data.datasets.0.backgroundColor', this.$.newColor.value);
-    //     this.push('data.datasets.0.data', this.$.newValue.value);
-    //   };
-
-    //   scope.resize = function() {
-    //     this.$.chart.style.width = this.$.newWidth.value;
-    //     this.$.chart.style.height = this.$.newHeight.value;
-    //     this.$.chart.resize();
-    //   };
-  // });
     
   </script>
 

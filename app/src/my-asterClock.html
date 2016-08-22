@@ -13,8 +13,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="elements/aster-polymer.html">
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
-<link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
+<!-- <link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html"> -->
 <link rel="import" href="../bower_components/app-storage/app-network-status-behavior.html">
+<link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
 <link rel="import" href="colors-material.html">
 
 <dom-module id="my-asterClock">
@@ -23,17 +24,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style></style>
     <colors-material id="colorSheet"></colors-material>
     <aster-polymer data="[[dataAster]]" query-done="queryDone"></aster-polymer>
-    <firebase-query
+<!--     <firebase-query
       id="query"
       app-name="notes"
       path="/[[user]]/[[date]]"
       data="{{datadb}}">
-    </firebase-query>
-    <app-indexeddb-mirror
+    </firebase-query> -->
+    <!-- <app-localstorage-document key="dataAster" data="{{dataAster}}"> -->
+<!--     <app-indexeddb-mirror
     key="aster"
     data="{{datadb}}"
     persisted-data="{{persistedData}}">
-    </app-indexeddb-mirror>
+    </app-indexeddb-mirror> -->
         
   </template>
 

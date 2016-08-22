@@ -25,12 +25,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="my-icons.html">
 <link rel="import" href="../bower_components/platinum-sw/platinum-sw-elements.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
-<link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
+<!-- <link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html"> -->
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
 <link rel="import" href="my-toolbar.html">
 <link rel="import" href="my-login.html">
 <link rel="import" href="toolbar-behavior.html">
-<link rel="import" href="../bower_components/note-app/common/note-app/na-editor.html">
 <dom-module id="my-app">
 
   <template>
@@ -132,6 +131,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         user="{{user}}">
     </firebase-auth>
 
+    <firebase-query
+      id="query"
+      app-name="notes"
+      sequentialTransactions=true
+      path="/[[user.uid]]/[[date]]"
+      data="{{datadb}}">
+    </firebase-query>
+
     <app-location route="{{route}}"></app-location>
 
     <app-route
@@ -213,9 +220,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
           <my-input name="input" user="[[user.uid]]"></my-input>
-          <my-asterClock name="asterClock" user="[[user.uid]]"></my-asterClock>
-          <my-avgActivity name="avgActivity" user="[[user.uid]]"></my-avgActivity>
-          <my-avgEmotion name="avgEmotion" user="[[user.uid]]"></my-avgEmotion>
+          <my-asterClock name="asterClock" user="[[user.uid]]" datadb="{{datadb}}"></my-asterClock>
+          <my-avgActivity name="avgActivity" user="[[user.uid]]" datadb="{{datadb}}" colors-array="{{activtiyColorsArray}}" background-colors-array="{{activtiyBackgroundColorsArray}}"></my-avgActivity>
+          <my-avgEmotion name="avgEmotion" user="[[user.uid]]" datadb="{{datadb}}"></my-avgEmotion>
           <my-eventdrops name="eventdrops" user="[[user.uid]]"></my-eventdrops>
           <my-calendarview name="calendarview" user="[[user.uid]]"></my-calendarview>
         </iron-pages>
@@ -239,18 +246,76 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           reflectToAttribute: true,
           observer: '_pageChanged'
         },
-
+        date: {
+          type: String,
+          observer: ''
+        },
         toggleMenu: {
           type: String,
           reflectToAttribute: true,
           observer: '_toggleOptionChanged'
         },
-
+        activityColors: {
+          type: Object,
+          value: 
+          { "Sleep": {"colorShade": "Green", "colorType": "A200"},
+          "Work" : {"colorShade": "Blue", "colorType": "A200"},
+          "Gym" : {"colorShade": "Pink", "colorType": "A200"},
+          "Social" : {"colorShade": "Amber", "colorType": "A200"},
+          "Leisure": {"colorShade": "Purple", "colorType": "A200"}
+          }
+        },
+        emotionColors: {
+          type: Object,
+          value: 
+          { "joy": {"colorShade": "Lime", "colorType": "a400"},
+          "calm": {"colorShade": "Cyan", "colorType": "a400"},
+          "fear" : {"colorShade": "Orange", "colorType": "a700"},
+          "anger" : {"colorShade": "Red", "colorType": "a700"},
+          "sorrow" : {"colorShade": "Yellow", "colorType": "a700"},
+          "hope": {"colorShade": "Teal", "colorType": "a400"}
+          }
+        },
+        emotions: {
+          type: Array,
+          value: 
+          ["joy", "calm", "hope", "sorrow", "anger", "fear"]
+        },
+        activities: {
+          type: Array,
+          value: 
+          ["Work", "Sleep", "Leisure", "Social", "Gym"]
+        },
       },
 
       observers: [
         '_routePageChanged(routeData.page)'
       ],
+
+      ready: function() {
+        this.date = (new Date()).toDateString();
+        
+      },
+
+      computeAvgActivityColors: function() {
+        var activtiyColorsArray = [];
+        var activtiyBackgroundColorsArray = [];
+        console.log("READY AVG ACTIVITY");
+        console.log(this.activities);
+        console.log(this.activities[0]);
+        for (var i=0; i<this.emotions.length;i++) {
+          //TODO: WHY IS activity 0
+          console.log(this.emotions[i]);
+          var colorShadeString = this.emotionColors[this.emotions[i]].colorShade;
+          var colorGradientString = this.emotionColors[this.emotions[i]].colorType;
+          var emotionSelectedColor = colorSheet.colors[colorShadeString][colorGradientString];
+          var emotionSelectedBackgroundColor = colorSheet.colors[colorShadeString].a100;
+          activtiyColorsArray.push(emotionSelectedColor);
+          activtiyBackgroundColorsArray.push(emotionSelectedBackgroundColor);
+        }
+        this.activtiyColorsArray = activtiyColorsArray;
+        this.activtiyBackgroundColorsArray = activtiyBackgroundColorsArray;
+      },
 
       _routePageChanged: function(page) {
         this.page = page || 'input';
