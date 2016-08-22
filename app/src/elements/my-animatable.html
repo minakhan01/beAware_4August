@@ -50,10 +50,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         transform: scale(0.1, 0.1);
         opacity: 0.5;
       }
+       /*on-tap="_onPressedAnimation" on-track="_onPressedAnimation"*/
     </style>
     <content></content>
     <p class="center-text">{{emotion}}</p>
-    <section id="shape" class="circle" on-tap="_onPressedAnimation" on-track="_onPressedAnimation"></section>
+    <section id="shape" class="circle" on-down="_onDown" on-up="_onUp"></section>
           
   </template>
   <script>
@@ -67,19 +68,54 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Number,
           notify: true,
         },
+        scale: {
+          type: Number,
+          notify: true,
+          value: 0.1,
+          observer: 'scaleObserver'
+        },
         emotion: {
           type: String,
           notify: true,
           value: 'this'
         },
+        release: {
+          type: Boolean,
+          notify: true,
+          value: 'this'
+        }
     },
-
+    scaleObserver: function(scale) {
+        var node = this.$.shape;
+        node.style.transform = 'scale('+scale+','+scale+')';
+    },
     ready: function() {
-      // this.playAnimation();
+      this.loopthis = {};
+    },
+    _onUp: function() {
+      this.release = true;
+      console.log("up: "+this.release);
+      clearInterval(this.loopthis);
+    },
+    _onDown: function() {
+      console.log("down");
+      this.release = false;
+      var count = 0;
+      var that = this;
+      this.loopthis = setInterval(function(){that.animate();}, 100);
+    },
+    animate: function() {
+      console.log("scale: "+this.scale);
+      var scaleNew = ((this.scale+0.01)*100%100)/100;
+      if (scaleNew < 0.1) {
+        scaleNew = 0.1;
+      }
+      this.scale = scaleNew;
+      this.score = Math.floor(scaleNew*10) - 1;
     },
     _onPressedAnimation: function(event) {
         var node = this.$.shape;
-        console.log("_onPressedAnimation");
+        // console.log("_onPressedAnimation");
         var st = window.getComputedStyle(node, null);
         var transformValues = st.getPropertyValue("-webkit-transform") ||
          st.getPropertyValue("-moz-transform") ||
@@ -87,7 +123,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          st.getPropertyValue("-o-transform") ||
          st.getPropertyValue("transform") ||
          "Either no transform set, or browser doesn't do getComputedStyle";
-        console.log("transformValues: "+transformValues);
+        // console.log("transformValues: "+transformValues);
         var values = transformValues.split('(')[1];
         values = values.split(')')[0];
         values = values.split(',');
@@ -98,11 +134,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         scaleNew += 0.1;
         this.score = Math.floor(scaleNew*10) - 1;
-        console.log('score: '+this.score);
+        // console.log('score: '+this.score);
         node.style.transform = 'scale('+scaleNew+','+scaleNew+')';
         if (node) {
           // node.animate();
-          console.log("animating");
+          // console.log("animating");
         }
       },
 

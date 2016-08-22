@@ -68,7 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
   <div>
     <p class="center-text">{{emotion}}</p>
-    <section id="shape" class="triangle" on-tap="_onPressedAnimation" on-track="_onPressedAnimation"></section>
+    <section id="shape" class="triangle" on-down="_onDown" on-up="_onUp" on-track="_onPressedAnimation"></section>
   </div>
 
   </template>
@@ -83,14 +83,50 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Number,
           notify: true,
         },
+        scale: {
+          type: Number,
+          notify: true,
+          value: 0.1,
+          observer: 'scaleObserver'
+        },
         emotion: {
           type: String,
           notify: true,
           value: 'this'
         },
+        release: {
+          type: Boolean,
+          notify: true,
+          value: 'this'
+        },
     },
-
+    scaleObserver: function(scale) {
+        var node = this.$.shape;
+        node.style.transform = 'translate(-50%, -0%) scale('+scale+','+scale+')';
+    },
     ready: function() {
+      this.loopthis = {};
+    },
+    _onUp: function() {
+      this.release = true;
+      console.log("up: "+this.release);
+      clearInterval(this.loopthis);
+    },
+    _onDown: function() {
+      console.log("down");
+      this.release = false;
+      var count = 0;
+      var that = this;
+      this.loopthis = setInterval(function(){that.animate();}, 100);
+    },
+    animate: function() {
+      console.log("scale: "+this.scale);
+      var scaleNew = ((this.scale+0.01)*100%100)/100;
+      if (scaleNew < 0.1) {
+        scaleNew = 0.1;
+      }
+      this.scale = scaleNew;
+      this.score = Math.floor(scaleNew*10) - 1;
     },
     _onPressedAnimation: function(event) {
         var node = this.$.shape;

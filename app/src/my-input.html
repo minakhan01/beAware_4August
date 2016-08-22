@@ -301,7 +301,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log("joy: "+this.joyScore);
         },
       _calmScoreChanged: function(calmScore) {
-        console.log("calm: "+this.calmScore);
+        // console.log("calm: "+this.calmScore);
         },
       _hopeScoreChanged: function(hopeScore) {
         console.log("hope: "+this.hopeScore);
@@ -362,33 +362,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.picker.drawArcOnClock(this.periodStartSelected, this.periodEndSelected, activitySelectedColor);
         this.saveEntry();
         this._closePopUp();
+        this.joyScore = 0;
+        this.calmScore = 0;
+        this.hopeScore = 0;
+        this.angerScore = 0;
+        this.fearScore = 0;
+        this.sorrowScore = 0;
       },
       printEndValue: function() {
         console.log("printEndValue: "+this.periodEndSelected);
-      },
-      _onPressedAnimationTriangle: function(event) {
-        var node = this.$.orangeTriangle;
-        console.log("_onPressedAnimation");
-        var st = window.getComputedStyle(node, null);
-        var transformValues = st.getPropertyValue("-webkit-transform") ||
-         st.getPropertyValue("-moz-transform") ||
-         st.getPropertyValue("-ms-transform") ||
-         st.getPropertyValue("-o-transform") ||
-         st.getPropertyValue("transform") ||
-         "Either no transform set, or browser doesn't do getComputedStyle";
-        console.log("transformValues: "+transformValues);
-        var values = transformValues.split('(')[1];
-        values = values.split(')')[0];
-        values = values.split(',');
-        var scale = values[0];
-        var scaleNew = ((parseFloat(scale)+0.01)*100%100)/100;
-        scaleNew += 0.3;
-        console.log('scaleNew: '+scaleNew);
-        node.style.transform = 'scale('+scaleNew+','+scaleNew+')';
-        if (node) {
-          // node.animate();
-          console.log("animating");
-        }
       },
       _onCircleButtonClick: function(event) {
         var node = this.$.orangeTriangle;
