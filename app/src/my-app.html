@@ -11,6 +11,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<!-- <link rel="import" href="../bower_components/iron-icons/iron-icons.html"> -->
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
@@ -30,6 +33,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="my-toolbar.html">
 <link rel="import" href="my-login.html">
 <link rel="import" href="toolbar-behavior.html">
+<link rel="import" href="../bower_components/app-storage/app-network-status-behavior.html">
+
 <dom-module id="my-app">
 
   <template>
@@ -48,6 +53,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       app-header paper-icon-button {
         --paper-icon-button-ink-color: white;
+      }
+      h1 {
+        font-size: 14px;
+        flex-grow: 1;
+        margin: 9px 0;
+      }
+
+      iron-icon {
+        margin-right: 0.5em;
       }
       .drawer-options {
         margin: 20px 20px 15px 20px;
@@ -205,13 +219,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <app-header-layout has-scrolling-region>
 
         <app-header condenses reveals effects="waterfall">
+        <div class="layout horizontal center">
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-
-        <my-toolbar
+            <h1>beAware</h1>
+            <iron-icon icon="cloud" hidden$="[[!online]]"></iron-icon>
+            <iron-icon icon="cloud-off" hidden$="[[online]]"></iron-icon>
+            <paper-icon-button
+                icon="[[computeLockIcon(signedIn)]]"
+                disabled="[[!signedIn]]"
+                on-tap="lock">
+            </paper-icon-button>
+        </div>
+<!--         <my-toolbar
         signed-in="[[signedIn]]"
         on-sign-out="signOut">
 
-        </my-toolbar>
+        </my-toolbar> -->
 <!--           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
             <div title>beAware</div>
@@ -286,10 +309,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: 
           ["Work", "Sleep", "Leisure", "Social", "Gym"]
         },
+        signedIn: {
+          type: Boolean,
+          notify: true,
+          value: false
+        }
       },
 
       observers: [
         '_routePageChanged(routeData.page)'
+      ],
+
+      behaviors: [
+        Polymer.AppNetworkStatusBehavior
       ],
 
       ready: function() {
@@ -365,6 +397,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (this.$.auth) {
           this.$.auth.signOut();
         }
+      },
+      computeLockIcon: function(signedIn) {
+        return signedIn ? 'lock-open' : 'lock';
+      },
+
+      lock: function() {
+        this.signOut();
       }
 
     });
