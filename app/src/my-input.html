@@ -22,10 +22,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
 <!-- <link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html"> -->
-<link rel="import" href="my-toolbar.html">
-<link rel="import" href="my-login.html">
+<!-- <link rel="import" href="my-toolbar.html"> -->
+<!-- <link rel="import" href="my-login.html"> -->
 <link rel="import" href="colors-material.html">
-<link rel="import" href="toolbar-behavior.html">
+<!-- <link rel="import" href="toolbar-behavior.html"> -->
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 
@@ -167,6 +167,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         path="/"
         data="{{activityDetails}}">
     </firebase-document>
+    <firebase-document
+        id="deleteActivityFirebase"
+        app-name="notes"
+        path="{{pathDelete}}">
+    </firebase-document>
+    
+    <firebase-document
+        id="editActivity"
+        app-name="notes"
+        path="/"
+        data="{{editedActivityDetails}}">
+    </firebase-document>
 
     <colors-material id="colorSheet"></colors-material>
     <menu-overlay id="plain" tabindex="-1" class="with-margin scrollable">
@@ -248,6 +260,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: Object,
             reflectToAttribute: true
           },
+          editedActivityDetails: {
+            type: Object,
+            reflectToAttribute: true
+          },          
           activityList: {
             type: Array,
             value: [],
@@ -308,6 +324,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var localDataAster = [];
         var colorSheet = this.$.colorSheet;
         data.forEach(function(childSnapshot) {
+          console.log("my input");
           console.log(childSnapshot);
           // key will be "fred" the first time and "barney" the second time
           var activityLabel = childSnapshot.activityType;
@@ -348,6 +365,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (this.$.activityFirebase.isNew) {
           return this.$.activityFirebase.save(this.user+"/"+(new Date()).toDateString()).then(() => {
             this.$.activityFirebase.reset();
+          });
+        }
+        return Promise.resolve();
+      },
+      delete: function(key) {  
+        if (this.$.deleteActivityFirebase.isNew) {
+          this.pathDelete = this.user+"/"+(new Date()).toDateString()+"/"+key;
+          return this.$.deleteActivityFirebase.destroy().then(() => {
+            this.$.deleteActivityFirebase.reset();
+          });
+        }
+        return Promise.resolve();
+      },
+      editOldEntry: function(key) {  
+        if (this.$.editActivity.isNew) {
+          return this.$.editActivity.save(this.user+"/"+(new Date()).toDateString(), key).then(() => {
+            this.$.editActivity.reset();
           });
         }
         return Promise.resolve();
@@ -395,6 +429,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log("colorShadeString: "+colorShadeString);
         var activitySelectedColor = this.$.colorSheet.colors[colorShadeString].a700;
         this.$.picker.drawArcOnClock(this.periodStartSelected, this.periodEndSelected, activitySelectedColor);
+        this.searchDb();
         this.saveEntry();
         this._closePopUp();
         this.joyScore = 0;
@@ -403,6 +438,50 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.angerScore = 0;
         this.fearScore = 0;
         this.sorrowScore = 0;
+      },
+      searchDb: function() {
+        console.log("SEARCH DB");
+        console.log(this.datadb);
+        for (key in this.datadb) {
+          var obj = this.datadb[key];
+          console.log("obj");
+          console.log(obj);
+          var activityStartTime = obj.startTime;
+          var activityEndTime = obj.endTime;
+          var modified = false;
+          if (activityStartTime < this.periodEndSelected && activityEndTime > this.periodEndSelected) {
+            //change start time of the old activity
+            obj.startTime = this.periodEndSelected;
+            console.log("MODIFYING START TIME");
+            modified = true;
+          }
+          else if (activityStartTime < this.periodStartSelected && activityEndTime > this.periodStartSelected) {
+            // change end time of old activity
+            obj.endTime = this.periodStartSelected;
+            console.log("MODIFYING END TIME");
+            modified = true;
+          }
+          else if (activityEndTime <= this.periodEndSelected && activityStartTime >= this.periodStartSelected) {
+            // delete this key
+            var key = obj.$key;
+            this.delete(key);
+            console.log("DELETING");
+          }
+
+          if (modified) {
+            console.log("obj");
+            console.log(obj.emotion);
+            this.editedActivityDetails.activityType = obj.activityType;
+            this.editedActivityDetails.startTime = obj.startTime;
+            this.editedActivityDetails.endTime = obj.endTime;
+            this.editedActivityDetails.duration = obj.endTime - obj.startTime;
+            this.editedActivityDetails.emotion = obj.emotion;
+            console.log("editedActivityDetails");
+            console.log(this.editedActivityDetails);
+            var key = obj.$key;
+            this.editOldEntry(key);
+          }
+        }
       },
       printEndValue: function() {
         console.log("printEndValue: "+this.periodEndSelected);
