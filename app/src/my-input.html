@@ -55,6 +55,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       text-decoration: none;
     }
 
+    paper-time-picker {
+        @apply(--layout-center-justified);
+        /*@apply(--layout-horizontal);*/
+    }
+
     p.heading {
       color: var(--app-primary-color);
       text-decoration: none;
@@ -153,12 +158,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <div id="scope">
-            <paper-time-picker id="picker" period-start-selected="{{periodStartSelected}}" period-end-selected="{{periodEndSelected}}"></paper-time-picker>
+            <paper-time-picker id="picker" class="horizontal layout" period-start-selected="{{periodStartSelected}}" period-end-selected="{{periodEndSelected}}"></paper-time-picker>
+            <div class="horizontal layout center-justified">
             <paper-button class="work">Work</paper-button>
             <paper-button class="sleep">Sleep</paper-button>
             <paper-button class="gym">Gym</paper-button>
             <paper-button class="social">Social</paper-button>
             <paper-button class="leisure">Leisure</paper-button>
+          </div>
     </div>
 
     <firebase-document
