@@ -206,14 +206,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
       <p class="heading">Select Emotion</p><hr style="margin-bottom:20px;">
       <div>
-      <my-animatable class="menuitem-floating" emotion="Joy" score={{joyScore}}></my-animatable>
-      <my-animatable class="menuitem-floating" emotion="Hope" score={{hopeScore}}></my-animatable>
-      <my-animatable class="menuitem-floating" emotion="Calm" score={{calmScore}}></my-animatable>
+      <my-animatable id="joyInput" class="menuitem-floating" emotion="Joy" score={{joyScore}}></my-animatable>
+      <my-animatable id="hopeInput" class="menuitem-floating" emotion="Hope" score={{hopeScore}}></my-animatable>
+      <my-animatable id="calmInput" class="menuitem-floating" emotion="Calm" score={{calmScore}}></my-animatable>
       </div>
       <div>
-      <my-animatable-triangle class="menuitem-floating" emotion="Sorrow" score={{sorrowScore}}></my-animatable-triangle>
-      <my-animatable-triangle class="menuitem-floating" emotion="Fear" score={{fearScore}}></my-animatable-triangle>
-      <my-animatable-triangle id="orange" class="menuitem-floating" emotion="Anger" score={{angerScore}}></my-animatable>
+      <my-animatable-triangle id="sorrowInput" class="menuitem-floating" emotion="Sorrow" score={{sorrowScore}}></my-animatable-triangle>
+      <my-animatable-triangle id="fearInput" class="menuitem-floating" emotion="Fear" score={{fearScore}}></my-animatable-triangle>
+      <my-animatable-triangle id="angerInput" class="menuitem-floating" emotion="Anger" score={{angerScore}}></my-animatable>
       </div>
     </div>
     </menu-overlay>
@@ -399,6 +399,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _closePopUp: function() {
         console.log("close");
         this.$.plain.close();
+        this.$.fearInput.reset();
+        this.$.calmInput.reset();
+        this.$.joyInput.reset();
+        this.$.hopeInput.reset();
+        this.$.angerInput.reset();
+        this.$.sorrowInput.reset();
       },
       _saveSelection: function() {
         var activityColors = 
