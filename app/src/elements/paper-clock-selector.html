@@ -31,12 +31,17 @@
       #clock {
         display: block;
         overflow: visible;
+        fill: var(--primary-background-color);;
       }
       #clock * {
         pointer-events: fill;
       }
       #face {
         fill: var(--divider-color);
+        cursor: default;
+      }
+      #touch-area {
+        fill: var(--primary-background-color);
         cursor: default;
       }
       .line {
@@ -79,7 +84,7 @@
       }
       .select-area {
         cursor: pointer;
-        fill-opacity: 0;
+        fill-opacity: 0.5;
         fill: none;
         stroke: black;
         stroke-opacity: 0.5;
@@ -101,6 +106,7 @@
         </clipPath>
       </defs>
       <!-- <circle id="face" class="bg" r$="{{_selectorInner}}" cx$="{{_radius}}" cy$="{{_radius}}" on-track="_onTouchOut" on-tap="_onTouchOut"></circle> -->
+      <circle id="touch-area" class="bg" r$="{{_selectorOuter}}" cx$="{{_radius}}" cy$="{{_radius}}"></circle>
       <circle id="face" class="bg" r$="{{_selectorInnerInner}}" cx$="{{_radius}}" cy$="{{_radius}}" on-track="_onTouchOut" on-tap="_onTouchOut"></circle>
       <g id="clockHand" class="clock-hand">
         <circle id="dot" class="dot" r="2" cx$="{{_radius}}" cy$="{{_radius}}"></circle>
