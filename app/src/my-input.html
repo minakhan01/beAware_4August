@@ -71,11 +71,47 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       color: var(--google-grey-300);
     }
 
+    a {
+      color: white;
+      border-style: solid;
+      border-width: 1px;
+      font-size: 13px;
+      text-align: center;
+      margin: 2px;
+    }
+
+    a.sleep {
+      border-color: var(--paper-green-500);
+      background-color: var(--paper-green-500);
+    }
+
+    a.gym {
+      background-color: var(--paper-pink-500);
+      border-color: var(--paper-pink-500);
+    }
+
+    a.social {
+      border-color: var(--paper-amber-500);
+      background-color: var(--paper-amber-500);
+    }
+
+    a.leisure {
+      border-color: var(--paper-purple-500);
+      background-color: var(--paper-purple-500);
+    }
+
+    a.work {
+      border-color: var(--paper-blue-500);
+      background-color: var(--paper-blue-500);
+    }
+
     paper-button {
       color: white;
       border-style: solid;
       border-width: 1px;
       font-size: 13px;
+      text-align: center;
+      margin-bottom: 10px;
       --paper-button-raised-keyboard-focus: {
         background-color: var(--paper-pink-a200) !important;
         color: white !important;
@@ -83,31 +119,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     paper-button.sleep {
-      border-color: var(--paper-green-a700);
-      background-color: var(--paper-green-a700);
+      border-color: var(--paper-green-500);
+      background-color: var(--paper-green-500);
     }
 
     paper-button.gym {
-      background-color: var(--paper-pink-a700);
-      border-color: var(--paper-pink-a700);
+      background-color: var(--paper-pink-500);
+      border-color: var(--paper-pink-500);
     }
 
     paper-button.social {
-      border-color: var(--paper-amber-a700);
-      background-color: var(--paper-amber-a700);
+      border-color: var(--paper-amber-500);
+      background-color: var(--paper-amber-500);
     }
 
     paper-button.leisure {
-      border-color: var(--paper-purple-a700);
-      background-color: var(--paper-purple-a700);
+      border-color: var(--paper-purple-500);
+      background-color: var(--paper-purple-500);
     }
 
     paper-button.work {
-      border-color: var(--paper-blue-a700);
-      background-color: var(--paper-blue-a700);
+      border-color: var(--paper-blue-500);
+      background-color: var(--paper-blue-500);
     }
     
-    paper-button.sleep[active] {
+    paper-button.sleep[selected] {
       background-color: var(--paper-red-700);
     }
 
@@ -144,13 +180,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div id="scope">
             <paper-time-picker id="picker" class="horizontal layout" period-start-selected="{{periodStartSelected}}" period-end-selected="{{periodEndSelected}}">
             </paper-time-picker>
-              <div class="white horizontal layout center-justified">
+<!--               <div class="white horizontal layout center-justified">
               <paper-button class="work">Work</paper-button>
               <paper-button class="sleep">Sleep</paper-button>
               <paper-button class="gym">Gym</paper-button>
               <paper-button class="social">Social</paper-button>
               <paper-button class="leisure">Leisure</paper-button>
-              </div>
+              </div> -->
+            <div class="horizontal layout center-justified">
+              <simple-menubar class="horizontal layout center-justified" selected="{{activity}}" id="activitySelection" attr-for-selected="name" fallback-selection="Work">
+              <!-- <div > -->
+                <paper-button class="work" role="menuitem" name="Work">Work</paper-button>
+                <paper-button class="sleep" role="menuitem" name="Sleep">Sleep</paper-button>
+                <paper-button class="gym" role="menuitem" name="Gym">Gym</paper-button>
+                <paper-button class="social" role="menuitem" name="Social">Social</paper-button>
+                <paper-button class="leisure" role="menuitem" name="Leisure">Leisure</paper-button>
+              <!-- </div> -->
+              </simple-menubar>
+            </div>
     </div>
 
     <firebase-document
@@ -184,13 +231,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <!-- <div class="horizontal-section-container"> -->
         <div>
           <!-- <div class="row"> -->
-            <div class="horizontal layout justified">
+            <div class="horizontal layout center-justified wrap">
               <simple-menubar selected="{{activity}}" id="activitySelection" attr-for-selected="name" fallback-selection="Work">
-                <a role="menuitem" name="Work">Work</a>
-                <a role="menuitem" name="Sleep">Sleep</a>
-                <a role="menuitem" name="Gym">Gym</a>
-                <a role="menuitem" name="Social">Social</a>
-                <a role="menuitem" name="Leisure">Leisure</a>
+                <paper-button class="work" role="menuitem" name="Work">Work</paper-button>
+                <paper-button class="sleep" role="menuitem" name="Sleep">Sleep</paper-button>
+                <paper-button class="gym" role="menuitem" name="Gym">Gym</paper-button>
+                <paper-button class="social" role="menuitem" name="Social">Social</paper-button>
+                <paper-button class="leisure" role="menuitem" name="Leisure">Leisure</paper-button>
               </simple-menubar>
             </div>
           <!-- </div> -->
