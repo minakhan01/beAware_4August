@@ -100,7 +100,8 @@
           <circle id="clipCircle" r$="{{_selectorSize}}" cx$="{{_handX}}" cy$="{{_handY}}"></circle>
         </clipPath>
       </defs>
-      <circle id="face" class="bg" r$="{{_selectorInner}}" cx$="{{_radius}}" cy$="{{_radius}}" on-track="_onTouchOut" on-tap="_onTouchOut"></circle>
+      <!-- <circle id="face" class="bg" r$="{{_selectorInner}}" cx$="{{_radius}}" cy$="{{_radius}}" on-track="_onTouchOut" on-tap="_onTouchOut"></circle> -->
+      <circle id="face" class="bg" r$="{{_selectorInnerInner}}" cx$="{{_radius}}" cy$="{{_radius}}" on-track="_onTouchOut" on-tap="_onTouchOut"></circle>
       <g id="clockHand" class="clock-hand">
         <circle id="dot" class="dot" r="2" cx$="{{_radius}}" cy$="{{_radius}}"></circle>
         <line class="line" x1$="{{_radius}}" y1$="{{_radius}}" x2$="{{_handX}}" y2$="{{_handY}}"></line>
@@ -110,6 +111,8 @@
       <g id="numbers"></g>
       <path class="select-area" on-track="_onTouch" on-tap="_onTouch"
         d$="{{_getSelectArea(_radius, _selectorInner, _selectorOuter)}}"></path>
+      <path class="select-area" on-track="_onTouchInner" on-tap="_onTouchInner"
+        d$="{{_getSelectArea(_radius, _selectorInnerInner, _selectorInner)}}"></path>
       <!-- <path class="time-area" on-tap="_onTouch" on-track="_onTouch"
         d$="{{_getSelectArea(_radius, _selectorInner, _selectorOuter)}}"></path> -->
     </svg>
@@ -255,9 +258,10 @@
           var startRadian = (2*pi / this.count) * this.selectedStart;
           var endRadian = (2*pi / this.count) * this.selected;
           if (this.selecting) {
+            // var selectorDiff = this._selectorSize;
             var arc = d3.arc()
-              .innerRadius(this._radius)
-              .outerRadius(this._radius+5)
+              .innerRadius(this._selectorInner) // TODO: flip between selectorOuter andInner depending on which value is selected
+              .outerRadius(this._selectorInner+5)
               .startAngle(startRadian) //converting from degs to radians
               .endAngle(endRadian); //just radians
             
@@ -361,7 +365,7 @@
 
           var numbers = [];
 
-          for (var i=0; i<this.count; i++) {
+          for (var i=0; i<this.count * 2; i++) {
             value = i;
             display = null;
             if (i === 0 && !this.useZero) {
@@ -437,7 +441,7 @@
           this._radius = radius;
           this._selectorSize = 20;
           this._selectorDotSize = 3;
-          this._padding = 2;
+          this._padding = 5;
           this._positionClockPoints();
 
           this._resizedCache = this._radius;
@@ -460,7 +464,9 @@
 
           this._selectorOuter = this._radius - this._padding * 2;
           this._selectorInner = this._selectorOuter - this._selectorSize * 2;
+          this._selectorInnerInner = this._selectorInner - this._selectorSize * 2 - this._padding * 2;
           var selectorCenter = this._selectorOuter - this._selectorSize;
+          var selectorCenterInner = this._selectorInner - this._selectorSize - this._padding;
 
           var numbers = this._numbers;
           var angle = (360 / this.count) * (Math.PI / 180);
@@ -471,6 +477,13 @@
             number = numbers[i];
             number.x = this._radius + (Math.sin(a) * selectorCenter);
             number.y = this._radius - (Math.cos(a) * selectorCenter);
+            this._updateNumber(number);
+          }
+          for (var i=this.count; i<this.count*2; i++) {
+            a = angle * i;
+            number = numbers[i];
+            number.x = this._radius + (Math.sin(a) * selectorCenterInner);
+            number.y = this._radius - (Math.cos(a) * selectorCenterInner);
             this._updateNumber(number);
           }
           this._handX = this._numbers[0].x;
@@ -495,12 +508,14 @@
             'A ' + inner + ' ' + inner + ' 0 0 1 ' + (radius - inner) + ' ' + radius;
         },
         _onTouch: function(event) {
-          var x = event.detail.x - this._bounds.left - this._selectorInner;
-          var y = event.detail.y - this._bounds.top - this._selectorInner;
+          var x = event.detail.x - this._bounds.left - this._selectorInnerInner;
+          var y = event.detail.y - this._bounds.top - this._selectorInnerInner;
           /* only rotate while in the touch area */
           var distance = Math.abs(Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-          // console.log("TOUCHED. distance: "+ distance+", _selectorInner: "+this._selectorInner+", _selectorOuter: "+this._selectorOuter);
-          // console.log("event.detail.x: "+event.detail.x+ " event.detail.y: "+event.detail.y +" x: "+x+" y: "+y+" distance: "+distance+ " _selectorOuter: "+this._selectorOuter);
+          console.log("_onTouch TOUCHED. distance: "+ distance+", _selectorInner: "+this._selectorInner+", _selectorOuter: "+this._selectorOuter+", radius: "+this._radius);
+          console.log("this._bounds.left: "+this._bounds.left+ " this._bounds.top"+this._bounds.top);
+          console.log("event.detail.x: "+event.detail.x+ " event.detail.y: "+event.detail.y +" x: "+x+" y: "+y+" distance: "+distance+ " _selectorOuter: "+this._selectorOuter);
+          console.log(" ");
           if (distance < this._selectorInner || distance > this._selectorOuter) {
             return;
           }
@@ -541,12 +556,78 @@
           //   this.fire('paper-clock-selected', {value: this.selected, animated: this.animated});
           // }
         },
+        _onTouchInner: function(event) {
+          var x = event.detail.x - this._bounds.left - this._selectorInnerInner;
+          var y = event.detail.y - this._bounds.top - this._selectorInnerInner;
+          var distance = Math.abs(Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+
+          console.log("_onTouchInner TOUCHED. distance: "+ distance+", _selectorInner: "+this._selectorInner+", _selectorOuter: "+this._selectorOuter+", radius: "+this._radius);
+          console.log("this._bounds.left: "+this._bounds.left+ " this._bounds.top"+this._bounds.top);
+          console.log("event.detail.x: "+event.detail.x+ " event.detail.y: "+event.detail.y +" x: "+x+" y: "+y+" distance: "+distance+ " _selectorOuter: "+this._selectorOuter);
+          console.log(" ");
+
+          if (distance < this._selectorInnerInner || distance > this._selectorInner) {
+            return;
+          }
+
+          /* don't animate while tracking */
+          this.animated = event.type !== 'track';
+
+          // use coords to find angle from 12 o'clock position
+          var theta = Math.atan(y / x);
+          theta = (Math.PI / 2) + (x < 0 ? theta + Math.PI : theta);
+          var intervalRad = (360 / this.count) * (Math.PI / 180);
+
+          // determine the selected number
+          this.selected = Math.round(theta / intervalRad) + 12;
+
+          console.log("ON TOUCH ontouch: "+ this.selected);
+
+          switch (event.detail.state) {
+            case "start": 
+              this.selectedStart = this.selected + 12;
+              console.log("STARTING selectedStart: "+ this.selectedStart);
+              this.$.clockHand.style.opacity = 1;
+              this.selecting = true;
+              break;
+            case "touchmove":
+              break;
+            case "end":        
+              this.selectedEnd = this.selected + 12;
+              console.log("ENDING selectedEnd: "+ this.selectedEnd);
+              this.selected = 0;
+              this.$.clockHand.style.opacity = 0.1;
+              this.selecting = false;
+              break;
+          }
+          this.setClockHand((360 / this.count) * this.selected, true);
+
+          // switch (event.detail.state) {
+          //   case "end":
+          //     console.log("ENDING selectedEnd: "+ this.selectedEnd);
+          //     if (this.selecting) {
+          //       this.selectedEnd = this.selected;
+          //       this.selected = 0;
+          //       this.$.clockHand.style.opacity = 0.1;
+          //       this.selecting = false;
+          //     }
+          //     break;
+          // }
+          
+          // this.setClockHand((360 / this.count) * this.selected, true);
+          // /* only fire selected when we've tapped or stopped tracking */
+          // if (event.type === 'tap' || event.detail.state === 'end') {
+          //   this.fire('paper-clock-selected', {value: this.selected, animated: this.animated});
+          // }
+        },
         _onTouchOut: function(event) {
           console.log("ON TOUCH OUT: ");
-          var x = event.detail.x - this._bounds.left - this._selectorInner;
-          var y = event.detail.y - this._bounds.top - this._selectorInner;
+          var x = event.detail.x - this._bounds.left - this._selectorInnerInner;
+          var y = event.detail.y - this._bounds.top - this._selectorInnerInner;
           var distance = Math.abs(Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-          // console.log("event.detail.x: "+event.detail.x+ " event.detail.y: "+event.detail.y +" x: "+x+" y: "+y+" distance: "+distance+ " _selectorOuter: "+this._selectorOuter);
+          console.log("_onTouchOut TOUCHED. distance: "+ distance+", _selectorInner: "+this._selectorInner+", _selectorOuter: "+this._selectorOuter+", radius: "+this._radius);
+          console.log("this._bounds.left: "+this._bounds.left+ " this._bounds.top"+this._bounds.top);
+          console.log("event.detail.x: "+event.detail.x+ " event.detail.y: "+event.detail.y +" x: "+x+" y: "+y+" distance: "+distance+ " _selectorOuter: "+this._selectorOuter);
           switch (event.detail.state) {
             case "end":
               console.log("ENDING selectedEnd: "+ this.selectedEnd);
