@@ -424,16 +424,16 @@ If you include this element as part of `paper-dialog`, use the class
         },
         _hour12Changed: function(hour12) {
           var add = (this.period === 'PM' ? 12 : 0);
-          this.hour = ((hour12 % 12) + add) % 24;
+          // this.hour = ((hour12 % 12) + add) % 24;
         },
         _periodStartChanged: function(periodStartSelected) {
           var add = (this.period === 'PM' ? 12 : 0);
-          this.periodStartSelected = ((periodStartSelected % 12) + add) % 24;
+          // this.periodStartSelected = ((periodStartSelected % 12) + add) % 24;
         },
         _periodEndChanged: function(periodEndSelected) {
-          var add = (this.period === 'PM' ? 12 : 0);
+          // var add = (this.period === 'PM' ? 12 : 0);
           console.log("PAPER-TIME period end changed: "+periodEndSelected);
-          this.periodEndSelected = ((periodEndSelected % 12) + add) % 24;
+          // this.periodEndSelected = ((periodEndSelected % 12) + add) % 24;
         },
         _hourChanged: function(hour, oldValue) {
           hour = parseInt(hour);
@@ -450,23 +450,15 @@ If you include this element as part of `paper-dialog`, use the class
           this.hour12 = this._twelveHour(hour);
           this.period = ['PM', 'AM'][+(hour < 12)];
         },
-        _minuteChanged: function(minute) {
-          minute = parseFloat(minute) % 60;
-          this.minute = minute;
-        },
-        _secondChanged: function(second) {
-          second = parseFloat(second) % 60;
-          this.second = second;
-        },
         _periodChanged: function(period) {
           if (isNaN(parseInt(this.hour)) || isNaN(parseInt(this.minute))) {
             return;
           }
-          if (period === 'AM' &&  this.hour >= 12) {
-            this.hour -= 12;
-          } else if (period === 'PM' && this.hour < 12) {
-            this.hour += 12;
-          }
+          // if (period === 'AM' &&  this.hour >= 12) {
+          //   this.hour -= 12;
+          // } else if (period === 'PM' && this.hour < 12) {
+          //   this.hour += 12;
+          // }
         },
         _zeroPad: function(value, length) {
           if (value === undefined || isNaN(value) || isNaN(length)) {

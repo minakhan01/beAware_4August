@@ -155,6 +155,14 @@
             value: -1,
             // observer: '_selectedChanged'
           },
+          selectingInnerZone: {
+            type: Boolean,
+            value: false
+          },
+          selectingOuterZone: {
+            type: Boolean,
+            value: false
+          },
           selecting: {
             type: Boolean,
             // notify: true,
@@ -216,14 +224,21 @@
           // console.log("deg: "+deg);
           // console.log("selectedStart"+ this.selectedStart);
           // console.log("selected"+ this.selected);
-          var startRadian = (2*pi / this.count) * start;
+          var startRadian = (2*pi / this.count) * (start % 12);
           if (end == 0) {
             end = 12;
           }
-          var endRadian = (2*pi / this.count) * end;
+          var endRadian = (2*pi / this.count) * (end % 12);
+          if ((end % 12) == 0) {
+            endRadian = 2*pi;
+          }
+          var arcRadius = this._selectorOuter;
+          if (start >= 12) {
+            arcRadius = this._selectorInner;
+          }
             var arc = d3.arc()
-              .innerRadius(this._radius)
-              .outerRadius(this._radius+5)
+              .innerRadius(arcRadius)
+              .outerRadius(arcRadius+5)
               .startAngle(startRadian) //converting from degs to radians
               .endAngle(endRadian); //just radians
             
@@ -255,13 +270,20 @@
           // console.log("deg: "+deg);
           // console.log("selectedStart"+ this.selectedStart);
           // console.log("selected"+ this.selected);
-          var startRadian = (2*pi / this.count) * this.selectedStart;
-          var endRadian = (2*pi / this.count) * this.selected;
+          var startRadian = (2*pi / this.count) * (this.selectedStart % 12);
+          var endRadian = (2*pi / this.count) * (this.selected % 12);
+          if ((this.selected % 12) == 0) {
+            endRadian = 2*pi;
+          }
           if (this.selecting) {
             // var selectorDiff = this._selectorSize;
+            // this.arcRadius = this._selectorOuter;
+            // if (this.selectingInnerZone) {
+            //   this.arcRadius = this._selectorInner;
+            // }
             var arc = d3.arc()
-              .innerRadius(this._selectorInner) // TODO: flip between selectorOuter andInner depending on which value is selected
-              .outerRadius(this._selectorInner+5)
+              .innerRadius(this.arcRadius) // TODO: flip between selectorOuter andInner depending on which value is selected
+              .outerRadius(this.arcRadius+5)
               .startAngle(startRadian) //converting from degs to radians
               .endAngle(endRadian); //just radians
             
@@ -486,7 +508,7 @@
             number.y = this._radius - (Math.cos(a) * selectorCenterInner);
             this._updateNumber(number);
           }
-          this._handX = this._numbers[0].x;
+          this._handX = this._numbers[0].x; //TODO: make these 12 when switch to pm
           this._handY = this._numbers[0].y;
         },
         _notifyNumberChanged: function(path) {
@@ -507,15 +529,31 @@
             'A ' + inner + ' ' + inner + ' 0 0 1 ' + (radius + inner) + ' ' + radius + '\n'+ 
             'A ' + inner + ' ' + inner + ' 0 0 1 ' + (radius - inner) + ' ' + radius;
         },
+        stopSelectingOuterZone: function(){
+          this.selectedEnd = this.selected;
+          console.log("ENDING selectedEnd: "+ this.selectedEnd);
+          this.selected = 0;
+          this.$.clockHand.style.opacity = 0.1;
+          this.selecting = false;
+        },
+        stopSelectingInnerZone: function() {
+          this.selectedEnd = this.selected;
+          console.log("ENDING selectedEnd: "+ this.selectedEnd);
+          this.selected = 0;
+          this.$.clockHand.style.opacity = 0.1;
+          this.selecting = false;
+          this._handX = this._numbers[0].x; //TODO: make these 12 when switch to pm
+              this._handY = this._numbers[0].y;
+        },
         _onTouch: function(event) {
           var x = event.detail.x - this._bounds.left - this._selectorInnerInner;
           var y = event.detail.y - this._bounds.top - this._selectorInnerInner;
           /* only rotate while in the touch area */
           var distance = Math.abs(Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-          console.log("_onTouch TOUCHED. distance: "+ distance+", _selectorInner: "+this._selectorInner+", _selectorOuter: "+this._selectorOuter+", radius: "+this._radius);
-          console.log("this._bounds.left: "+this._bounds.left+ " this._bounds.top"+this._bounds.top);
-          console.log("event.detail.x: "+event.detail.x+ " event.detail.y: "+event.detail.y +" x: "+x+" y: "+y+" distance: "+distance+ " _selectorOuter: "+this._selectorOuter);
-          console.log(" ");
+          // console.log("_onTouch TOUCHED. distance: "+ distance+", _selectorInner: "+this._selectorInner+", _selectorOuter: "+this._selectorOuter+", radius: "+this._radius);
+          // console.log("this._bounds.left: "+this._bounds.left+ " this._bounds.top"+this._bounds.top);
+          // console.log("event.detail.x: "+event.detail.x+ " event.detail.y: "+event.detail.y +" x: "+x+" y: "+y+" distance: "+distance+ " _selectorOuter: "+this._selectorOuter);
+          // console.log(" ");
           if (distance < this._selectorInner || distance > this._selectorOuter) {
             return;
           }
@@ -531,23 +569,29 @@
           // determine the selected number
           this.selected = Math.round(theta / intervalRad);
 
-          console.log("ON TOUCH ontouch: "+ this.selected);
+          console.log("_onTouch: "+ this.selected);
 
           switch (event.detail.state) {
-            case "start": 
+            case "start":
+              this.arcRadius = this._selectorOuter;
+              this.selectingOuterZone = true;
               this.selectedStart = this.selected;
               console.log("STARTING selectedStart: "+ this.selectedStart);
               this.$.clockHand.style.opacity = 1;
               this.selecting = true;
               break;
             case "touchmove":
+              if (this.selectingInnerZone) {
+                this.stopSelectingInnerZone();
+              }
               break;
-            case "end":        
-              this.selectedEnd = this.selected;
-              console.log("ENDING selectedEnd: "+ this.selectedEnd);
-              this.selected = 0;
-              this.$.clockHand.style.opacity = 0.1;
-              this.selecting = false;
+            case "end":
+              if (this.selectingInnerZone) {
+                this.stopSelectingInnerZone();
+              }
+              else {        
+              this.stopSelectingOuterZone();
+              }
               break;
           }
           this.setClockHand((360 / this.count) * this.selected, true);
@@ -561,10 +605,10 @@
           var y = event.detail.y - this._bounds.top - this._selectorInnerInner;
           var distance = Math.abs(Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
 
-          console.log("_onTouchInner TOUCHED. distance: "+ distance+", _selectorInner: "+this._selectorInner+", _selectorOuter: "+this._selectorOuter+", radius: "+this._radius);
-          console.log("this._bounds.left: "+this._bounds.left+ " this._bounds.top"+this._bounds.top);
-          console.log("event.detail.x: "+event.detail.x+ " event.detail.y: "+event.detail.y +" x: "+x+" y: "+y+" distance: "+distance+ " _selectorOuter: "+this._selectorOuter);
-          console.log(" ");
+          // console.log("_onTouchInner TOUCHED. distance: "+ distance+", _selectorInner: "+this._selectorInner+", _selectorOuter: "+this._selectorOuter+", radius: "+this._radius);
+          // console.log("this._bounds.left: "+this._bounds.left+ " this._bounds.top"+this._bounds.top);
+          // console.log("event.detail.x: "+event.detail.x+ " event.detail.y: "+event.detail.y +" x: "+x+" y: "+y+" distance: "+distance+ " _selectorOuter: "+this._selectorOuter);
+          // console.log(" ");
 
           if (distance < this._selectorInnerInner || distance > this._selectorInner) {
             return;
@@ -581,61 +625,53 @@
           // determine the selected number
           this.selected = Math.round(theta / intervalRad) + 12;
 
-          console.log("ON TOUCH ontouch: "+ this.selected);
+          console.log("_onTouchInner: "+ this.selected);
 
           switch (event.detail.state) {
             case "start": 
-              this.selectedStart = this.selected + 12;
+              this.arcRadius = this._selectorInner;
+              this._handX = this._numbers[12].x; //TODO: make these 12 when switch to pm
+              this._handY = this._numbers[12].y;
+              this.selectingInnerZone = true;
+              this.selectedStart = this.selected;
               console.log("STARTING selectedStart: "+ this.selectedStart);
               this.$.clockHand.style.opacity = 1;
               this.selecting = true;
               break;
             case "touchmove":
+              if (this.selectingOuterZone) {
+                this.stopSelectingOuterZone();
+              }
               break;
-            case "end":        
-              this.selectedEnd = this.selected + 12;
-              console.log("ENDING selectedEnd: "+ this.selectedEnd);
-              this.selected = 0;
-              this.$.clockHand.style.opacity = 0.1;
-              this.selecting = false;
+            case "end":
+              if (this.selectingOuterZone) {
+                this.stopSelectingOuterZone();
+              }
+              else {        
+              this.stopSelectingInnerZone();
+              }
               break;
           }
           this.setClockHand((360 / this.count) * this.selected, true);
-
-          // switch (event.detail.state) {
-          //   case "end":
-          //     console.log("ENDING selectedEnd: "+ this.selectedEnd);
-          //     if (this.selecting) {
-          //       this.selectedEnd = this.selected;
-          //       this.selected = 0;
-          //       this.$.clockHand.style.opacity = 0.1;
-          //       this.selecting = false;
-          //     }
-          //     break;
-          // }
-          
-          // this.setClockHand((360 / this.count) * this.selected, true);
-          // /* only fire selected when we've tapped or stopped tracking */
-          // if (event.type === 'tap' || event.detail.state === 'end') {
-          //   this.fire('paper-clock-selected', {value: this.selected, animated: this.animated});
-          // }
         },
         _onTouchOut: function(event) {
-          console.log("ON TOUCH OUT: ");
           var x = event.detail.x - this._bounds.left - this._selectorInnerInner;
           var y = event.detail.y - this._bounds.top - this._selectorInnerInner;
           var distance = Math.abs(Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-          console.log("_onTouchOut TOUCHED. distance: "+ distance+", _selectorInner: "+this._selectorInner+", _selectorOuter: "+this._selectorOuter+", radius: "+this._radius);
-          console.log("this._bounds.left: "+this._bounds.left+ " this._bounds.top"+this._bounds.top);
-          console.log("event.detail.x: "+event.detail.x+ " event.detail.y: "+event.detail.y +" x: "+x+" y: "+y+" distance: "+distance+ " _selectorOuter: "+this._selectorOuter);
+          console.log("_onTouchOut");
+          // console.log("_onTouchOut TOUCHED. distance: "+ distance+", _selectorInner: "+this._selectorInner+", _selectorOuter: "+this._selectorOuter+", radius: "+this._radius);
+          // console.log("this._bounds.left: "+this._bounds.left+ " this._bounds.top"+this._bounds.top);
+          // console.log("event.detail.x: "+event.detail.x+ " event.detail.y: "+event.detail.y +" x: "+x+" y: "+y+" distance: "+distance+ " _selectorOuter: "+this._selectorOuter);
           switch (event.detail.state) {
             case "end":
               console.log("ENDING selectedEnd: "+ this.selectedEnd);
               if (this.selecting) {
-                this.selectedEnd = this.selected;
-                this.selected = 0;
-                this.$.clockHand.style.opacity = 0.1;
-                this.selecting = false;
+                if (this.selectingOuterZone) {
+                  this.stopSelectingOuterZone();
+                }
+                else if (this.selectingInnerZone) {        
+                this.stopSelectingInnerZone();
+                }
               }
               break;
           }
