@@ -237,8 +237,8 @@
             arcRadius = this._selectorInner;
           }
             var arc = d3.arc()
-              .innerRadius(arcRadius)
-              .outerRadius(arcRadius+5)
+              .innerRadius(arcRadius - 1)
+              .outerRadius(arcRadius - 5)
               .startAngle(startRadian) //converting from degs to radians
               .endAngle(endRadian); //just radians
             
@@ -275,15 +275,15 @@
           if ((this.selected % 12) == 0) {
             endRadian = 2*pi;
           }
-          if (this.selecting) {
+          if (this.selecting && (this.selected != this.selectedStart)) {
             // var selectorDiff = this._selectorSize;
             // this.arcRadius = this._selectorOuter;
             // if (this.selectingInnerZone) {
             //   this.arcRadius = this._selectorInner;
             // }
             var arc = d3.arc()
-              .innerRadius(this.arcRadius) // TODO: flip between selectorOuter andInner depending on which value is selected
-              .outerRadius(this.arcRadius+5)
+              .innerRadius(this.arcRadius - 1) // TODO: flip between selectorOuter andInner depending on which value is selected
+              .outerRadius(this.arcRadius - 5)
               .startAngle(startRadian) //converting from degs to radians
               .endAngle(endRadian); //just radians
             
@@ -461,7 +461,7 @@
             return;
           }
           this._radius = radius;
-          this._selectorSize = 20;
+          this._selectorSize = 25;
           this._selectorDotSize = 3;
           this._padding = 5;
           this._positionClockPoints();
