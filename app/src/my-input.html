@@ -173,7 +173,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </firebase-document>
 
     <colors-material id="colorSheet"></colors-material>
-    <menu-overlay id="plain" tabindex="-1" class="with-margin scrollable">
+    <menu-overlay no-cancel-on-outside-click id="plain" tabindex="-1" class="with-margin scrollable">
     <div style="padding-bottom: 40px;">    
       <paper-icon-button icon="icons:close" style="float: left;" on-tap="_closePopUp"></paper-icon-button>
       <paper-icon-button icon="icons:check" style="float: right;" on-tap="_saveSelection"></paper-icon-button>
@@ -198,14 +198,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <!-- </div> -->
       <p class="heading">Select Emotion</p><hr style="margin-bottom:20px;">
       <div class="horizontal layout justified wrap">
-      <my-animatable id="joyInput" class="menuitem-floating" emotion="Joy" score={{joyScore}}></my-animatable>
-      <my-animatable id="hopeInput" class="menuitem-floating" emotion="Hope" score={{hopeScore}}></my-animatable>
-      <my-animatable id="calmInput" class="menuitem-floating" emotion="Calm" score={{calmScore}}></my-animatable>
-      <!-- </div> -->
-      <!-- <div> -->
-      <my-animatable-triangle id="sorrowInput" class="menuitem-floating" emotion="Sorrow" score={{sorrowScore}}></my-animatable-triangle>
-      <my-animatable-triangle id="fearInput" class="menuitem-floating" emotion="Fear" score={{fearScore}}></my-animatable-triangle>
-      <my-animatable-triangle id="angerInput" class="menuitem-floating" emotion="Anger" score={{angerScore}}></my-animatable>
+      <my-animatable id="joyInput" class="menuitem-floating" emotion="Joy" score={{joyScore}} on-down="_onJoyDown" on-up="_onJoyUp" pressed="{{joyPressed}}"></my-animatable>
+      <my-animatable id="hopeInput" class="menuitem-floating" emotion="Hope" score={{hopeScore}} on-down="_onHopeDown" on-up="_onHopeUp" pressed="{{hopePressed}}"></my-animatable>
+      <my-animatable id="calmInput" class="menuitem-floating" emotion="Calm" score={{calmScore}} on-down="_onCalmDown" on-up="_onCalmUp" pressed="{{calmPressed}}"></my-animatable>
+      <my-animatable-triangle id="sorrowInput" class="menuitem-floating" emotion="Sorrow" score={{sorrowScore}} on-down="_onSorrowDown" on-up="_onSorrowUp"  pressed="{{sorrowPressed}}"></my-animatable-triangle>
+      <my-animatable-triangle id="fearInput" class="menuitem-floating" emotion="Fear" score={{fearScore}} on-down="_onFearDown" on-up="_onFearUp" pressed="{{fearPressed}}"></my-animatable-triangle>
+      <my-animatable-triangle id="angerInput" class="menuitem-floating" emotion="Anger" score={{angerScore}} on-down="_onAngerDown" on-up="_onAngerUp"  pressed="{{angerPressed}}"></my-animatable>
       </div>
     </div>
     </menu-overlay>
@@ -296,11 +294,73 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             value: 0,
             observer: '_angerScoreChanged'
           },
+          angerPressed: {
+            type: Boolean,
+            value: false,
+          },
+          calmPressed: {
+            type: Boolean,
+            value: false,
+          },
+          joyPressed: {
+            type: Boolean,
+            value: false,
+          },
+          sorrowPressed: {
+            type: Boolean,
+            value: false,
+          },
+          fearPressed: {
+            type: Boolean,
+            value: false,
+          },
+          hopePressed: {
+            type: Boolean,
+            value: false,
+          },
       },
       observers: [
            'dataChanged(datadb.*)'
       ],
-
+      _onAngerUp: function(){
+        this.angerPressed = false;
+      },
+      _onCalmUp: function(){
+        this.calmPressed = false;
+      },
+      _onJoyUp: function(){
+        console.log("joy up");
+        this.joyPressed = false;
+        // this.$.joyInput.onUp();
+      },
+      _onFearUp: function(){
+        this.fearPressed = false;
+      },
+      _onHopeUp: function(){
+        this.hopePressed = false;
+      },
+      _onAngerDown: function(){
+        this.angerPressed = true;
+      },
+      _onCalmDown: function(){
+        this.calmPressed = true;
+      },
+      _onJoyDown: function(){
+        console.log("joy down");
+        this.joyPressed = true;
+      },
+      _onFearDown: function(){
+        this.fearPressed = true;
+      },
+      _onHopeDown: function(){
+        this.hopePressed = true;
+      },
+      _onSorrowUp: function(){
+        this.sorrowPressed = false;
+      },
+      _onSorrowDown: function(){
+        this.sorrowPressed = true;
+      },
       dataChanged: function (datadb) {
         var activityColors = 
         { "Sleep": {"colorShade": "Green", "colorType": "A200"},
