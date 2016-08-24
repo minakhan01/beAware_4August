@@ -239,6 +239,7 @@
             var arc = d3.arc()
               .innerRadius(arcRadius - 1)
               .outerRadius(arcRadius - 5)
+              .cornerRadius(3)
               .startAngle(startRadian) //converting from degs to radians
               .endAngle(endRadian); //just radians
             
@@ -284,6 +285,7 @@
             var arc = d3.arc()
               .innerRadius(this.arcRadius - 1) // TODO: flip between selectorOuter andInner depending on which value is selected
               .outerRadius(this.arcRadius - 5)
+              .cornerRadius(3)
               .startAngle(startRadian) //converting from degs to radians
               .endAngle(endRadian); //just radians
             
