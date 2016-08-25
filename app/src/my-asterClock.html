@@ -48,7 +48,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         user: {
             type: String,
             value: '' 
-          },
+        },
+        positiveNegativeEmotion: {
+          type: Object,
+          value: 
+          {"joy": 1, "calm" : 1, "hope": 1, "sorrow": -1, "anger": -1, "fear": -1}
+        },
+        emotions: {
+          type: Array,
+          value: 
+          ["joy", "calm", "hope", "sorrow", "anger", "fear"]
+        },
         date: {
           type: String,
           observer: ''
@@ -157,15 +167,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var data = this.datadb;
         var localDataAster = [];
         var colorSheet = this.$.colorSheet;
+        var that = this;
         data.forEach(function(childSnapshot) {
           console.log(childSnapshot);
           // key will be "fred" the first time and "barney" the second time
           var activityLabel = childSnapshot.activityType;
           var emotionNet = childSnapshot.emotion.total;
+          var emotionList = [];
+          for (var j = 0; j < that.emotions.length; j++) {
+            var emotionName = that.emotions[j];
+            console.log("emotionName: "+ emotionName);
+            var score = childSnapshot.emotion[emotionName];
+            if (score != 0) {
+              emotionList.push(emotionName+": "+that.positiveNegativeEmotion[emotionName] * score);
+            }
+          }
+          console.log("emotionList: "+ emotionList);
           var duration = childSnapshot.duration;
           var colorShadeString = activityColors[activityLabel].colorShade;
           var activitySelectedColor = colorSheet.colors[colorShadeString].a700;
-          var element = {"name" : activityLabel, "score" : emotionNet, "width" : duration, color: activitySelectedColor};
+          var element = {"name" : activityLabel, "score" : emotionNet, "width" : duration, "color": activitySelectedColor, "emotionList": emotionList};
           localDataAster.push(element);
         });
         console.log("AFTER");

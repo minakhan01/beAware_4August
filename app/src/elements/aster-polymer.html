@@ -1,10 +1,11 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <script type="text/javascript" src="../../d3/d3.min.js"></script>
-<!-- <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script> -->
-<script type="text/javascript" src="../tool-tip.js"></script>
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 
 <dom-module id="aster-polymer">
   <template>
+    <style is="custom-style" include="iron-flex iron-flex-alignment">
+
     <style>
       :host {
                 /*display: block;*/
@@ -46,6 +47,11 @@ polyline{
     transition: all 0.3s;
 }
 
+.arcDonutGroup text {
+    color: black;
+    font-size: 8px;
+}
+
 .solidArcDonut:hover {
   fill: greenyellow ;
 }
@@ -57,7 +63,7 @@ polyline{
 .aster-score { 
   line-height: 1;
   font-weight: bold;
-  font-size: 500%;
+  font-size: 200%;
 }
 
 #tooltip {
@@ -79,13 +85,24 @@ polyline{
 #tooltip p {
     margin: 0;
     font-family: sans-serif;
+    text-align: center;
     font-size: 16px;
-    line-height: 14px;
+    line-height: 20px;
+    font-weight: bold;
+}
+#tooltip ul {
+    list-style-type: none;
+    text-align: left;
+    padding: 0px;
+    font-weight: normal;
+    text-transform: capitalize;
+    font-size: 12px;
+    line-height: 15px;
 }
     </style>
-     <div id="full">
+     <div id="full" class="horizontal layout center-justified" >
     <svg id="svg"></svg>
-        <div id="tooltip" style="opacity:0;"><p><span id="valueNode">100</span></p></div>
+        <div id="tooltip" style="opacity:0;"><p id="valueNode"></p></div>
       </div>
   </template>
   <script>
@@ -118,25 +135,18 @@ polyline{
       createElements: function () {
         var svg = d3.select(this.$.svg);
         svg.selectAll("*").remove();
-	var width = 600,
-    height = 600,
-    radius = Math.min(width, height) / 2 - 70,
-    innerRadius = 0.3 * radius;
+      	var width = 500,
+          height = 500,
+          radius = Math.min(width, height) / 2 - 100,
+          innerRadius = 0.3 * radius;
 
-var pie = d3.pie()
-    .sort(null)
-    .value(function(d) { return d.width; });
+        var pie = d3.pie()
+            .sort(null)
+            .value(function(d) { return d.width; });
 
         var tooltipNode = d3.select(this.$.tooltip);
         var valueNode = d3.select(this.$.valueNode);
         var fullNode = d3.select(this.$.full);
-
-var tip = d3tip()
-  .attr('class', 'd3-tip')
-  .offset([0, 0])
-  .html(function(d) {
-    return d.data.name + ": <span style='color:orangered'>" + d.data.score + "</span>";
-  });
 
 var arc = d3.arc()
   .innerRadius(innerRadius)
@@ -158,7 +168,6 @@ var svg = d3.select(this.$.svg)
     .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-svg.call(tip);
   
   var printThis = [{ "name": "one", "score": 40, "width": 2, "color": "#9E0041"},
           { "name": "two", "score": 20, "width": 2, "color": "#C32F4B"},
@@ -166,7 +175,7 @@ svg.call(tip);
           { "name": "four", "score": 10, "width": 4, "color": "#F47245"},
           { "name": "five", "score": 5, "width": 6, "color": "#FB9F59"}];
 
-  data = this.data;
+  var data = this.data;
   console.log("data");
   console.log(data);
   console.log("dummy data");
@@ -174,7 +183,8 @@ svg.call(tip);
 
   var path = svg.selectAll(".solidArc")
       .data(pie(data))
-    .enter().append("path")
+      .enter()
+      .append("path")
       .attr("fill", function(d) { 
         if (d.data.score < 0)
           return "#aa0000";
@@ -193,21 +203,53 @@ svg.call(tip);
         // .style("left", d3.mouse(fullNode)[0] + "px")
         // .style("top", d3.mouse(fullNode)[1] + "px")
         .style("opacity", 1);
-        valueNode
+        valueNode.selectAll("*").remove();
+        var text = valueNode.append("text")
+        .attr('x', 0)
         .text(d.data.score);
+
+        valueNode.append("ul")
+        .attr('x', 0)
+        .selectAll('li')
+        .data(d.data.emotionList)
+        .enter()
+        .append("tspan")
+        .attr('x', 0)
+        .attr('dy', 20)
+        .append("li")
+        .text(function(p){return p;});
       })
       .on('mouseout', function () {
             tooltipNode
         .style("opacity", 0);;
       });
 
-  var pathDonut = svg.selectAll(".solidArcDonut")
+  svg.append("g").attr("class", "arcDonutGroup");
+
+  var pathDonutGroup = svg
+      .selectAll(".solidArcDonut")
       .data(pie(data))
-    .enter().append("path")
+      .enter().append("g");
+      // .attr("");
+
+      pathDonutGroup.append("path")
       .attr("fill", function(d) { return d.data.color; })
       .attr("class", "solidArcDonut")
       .attr("stroke", "gray")
       .attr("d", arcDonut);
+      
+      pathDonutGroup.append("text")
+      .attr("transform", function(d) { 
+        var c = arcDonut.centroid(d);
+        return "translate(" + 1.1*c[0] +"," + 1.1*c[1] + ")"; })
+      // .attr("dy", ".35em")
+      .text(function(d) { return d.data.name; });
+      pathDonutGroup.append("text")
+      .attr("transform", function(d) { 
+        var c = arcDonut.centroid(d);
+        return "translate(" + 1.1*c[0] +"," + c[1]*1.1 + ")"; })
+      .attr("dy", "1.5em")
+      .text(function(d) { return d.data.width+" hours"; });
 
   var outerPath = svg.selectAll(".outlineArc")
       .data(pie(data))
@@ -216,11 +258,6 @@ svg.call(tip);
       .attr("stroke", "gray")
       .attr("class", "outlineArc")
       .attr("d", outlineArc);  
-
-  svg.append("text")
-      .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-      .attr("dy", ".35em")
-      .text(function(d) { return "d.data.name;" });
 
   // calculate the weighted mean score
   var score = 
