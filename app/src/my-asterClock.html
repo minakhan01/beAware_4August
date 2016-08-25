@@ -23,7 +23,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <style></style>
     <colors-material id="colorSheet"></colors-material>
-    <aster-polymer data="[[dataAster]]" query-done="queryDone"></aster-polymer>
+    <aster-polymer data="[[dataAster]]" net="[[totalAster]]" query-done="queryDone"></aster-polymer>
 <!--     <firebase-query
       id="query"
       app-name="notes"
@@ -77,6 +77,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           [{ "a": 1, "b": 2, "c": 3 },
           { "a": 4, "d": 5, "e": 6 },
           { "d": 4, "f": 5, "b": 6 }]
+        },
+        totalAster: {
+          type: Number,
+          value : 0
         },
         dataAster: {
           type: Array,
@@ -168,12 +172,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var localDataAster = [];
         var colorSheet = this.$.colorSheet;
         var that = this;
+        this.totalAster = 0;
         data.forEach(function(childSnapshot) {
           console.log(childSnapshot);
           // key will be "fred" the first time and "barney" the second time
           var activityLabel = childSnapshot.activityType;
           var emotionNet = childSnapshot.emotion.total;
           var emotionList = [];
+          that.totalAster += emotionNet;
           for (var j = 0; j < that.emotions.length; j++) {
             var emotionName = that.emotions[j];
             console.log("emotionName: "+ emotionName);
@@ -191,6 +197,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         });
         console.log("AFTER");
         this.dataAster = localDataAster;
+        console.log("totalAster: "+this.totalAster);
       },
       ready: function() {
         changeCommits = Promise.resolve();

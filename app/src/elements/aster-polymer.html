@@ -34,6 +34,7 @@ polyline{
     -o-transition: all 0.3s;
     -webkit-transition: all 0.3s;
     transition: all 0.3s;
+    opacity: 0.8;
 }
 
 .solidArc:hover {
@@ -100,6 +101,7 @@ polyline{
     line-height: 15px;
 }
     </style>
+    <h3 style="text-align:center;">Net emotion score for activities</h3>
      <div id="full" class="horizontal layout center-justified" >
     <svg id="svg"></svg>
         <div id="tooltip" style="opacity:0;"><p id="valueNode"></p></div>
@@ -124,15 +126,26 @@ polyline{
           type: Boolean,
           value : false
         },
+        net: {
+          type: Number ,
+          observer: 'netScoreChanged'
+        },
       }, 
       observers: [
            'dataChanged(data.splices)'
       ],
+      netScoreChanged : function() {
+        console.log("netScoreChanged");
+        // this.createElements();
+        console.log(this.net+" this.net");
+      },
       dataChanged : function() {
         console.log("data changed in ASTER_POLYMER");
         this.createElements();
+        console.log(this.net+" this.net");
       },
       createElements: function () {
+        console.log(this.net+" this.net");
         var svg = d3.select(this.$.svg);
         svg.selectAll("*").remove();
       	var width = 500,
@@ -187,9 +200,9 @@ var svg = d3.select(this.$.svg)
       .append("path")
       .attr("fill", function(d) { 
         if (d.data.score < 0)
-          return "#aa0000";
+          return "#EF5350";
         else
-          return "#00aa00" })
+          return "#66BB6A" }) //shade 400
       .attr("class", "solidArc")
       .attr("stroke", "gray")
       .attr("d", arc)
@@ -237,7 +250,15 @@ var svg = d3.select(this.$.svg)
       .attr("class", "solidArcDonut")
       .attr("stroke", "gray")
       .attr("d", arcDonut);
-      
+      pathDonutGroup.append('rect').transition().duration(500).attr('width', 70)
+                .attr('height', 60)
+                .attr("transform", function(d) { 
+        var c = arcDonut.centroid(d);
+        return "translate(" + (1.1*c[0]-10) +"," + (1.1*c[1] -20)+ ")"; })
+                // .attr('x', 40)
+                // .attr('y', 100)
+                .style('fill', 'white')
+                .style('opacity', 0.5);
       pathDonutGroup.append("text")
       .attr("transform", function(d) { 
         var c = arcDonut.centroid(d);
@@ -249,7 +270,7 @@ var svg = d3.select(this.$.svg)
         var c = arcDonut.centroid(d);
         return "translate(" + 1.1*c[0] +"," + c[1]*1.1 + ")"; })
       .attr("dy", "1.5em")
-      .text(function(d) { return d.data.width+" hours"; });
+      .text(function(d) { return d.data.width+" hrs"; });
 
   var outerPath = svg.selectAll(".outlineArc")
       .data(pie(data))
@@ -260,20 +281,20 @@ var svg = d3.select(this.$.svg)
       .attr("d", outlineArc);  
 
   // calculate the weighted mean score
-  var score = 
-    data.reduce(function(a, b) {
-      //console.log('a:' + a + ', b.score: ' + b.score + ', b.weight: ' + b.weight);
-      return a + (b.score * b.width); 
-    }, 0) / 
-    data.reduce(function(a, b) { 
-      return a + b.width; 
-    }, 0);
+  // var score = 
+  //   data.reduce(function(a, b) {
+  //     console.log('a:' + a + ', b.score: ' + b.score + ', b.weight: ' + b.weight);
+  //     return a + (b.score * b.width); 
+  //   }, 0) / 
+  //   data.reduce(function(a, b) { 
+  //     return a + b.width; 
+  //   }, 0);
 
   svg.append("svg:text")
     .attr("class", "aster-score")
     .attr("dy", ".35em")
     .attr("text-anchor", "middle") // text-align: right
-    .text(Math.round(score));
+    .text(Math.round(this.net));
 
   // svg.append("text")
   //   .attr("x", radius + 6)
