@@ -153,6 +153,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       data="{{datadb}}">
     </firebase-query>
 
+    <firebase-query
+      id="aggregateQuery"
+      app-name="notes"
+      sequentialTransactions=true
+      path="/[[user.uid]]/aggregate/[[date]]"
+      data="{{aggregatedb}}">
+    </firebase-query>
+
     <app-location route="{{route}}"></app-location>
 
     <app-route
@@ -233,12 +241,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-header>
 
         <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
-          <my-input name="input" user="[[user.uid]]" datadb="{{datadb}}"></my-input>
+          <my-input name="input" user="[[user.uid]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]"></my-input>
           <my-asterClock name="asterClock" user="[[user.uid]]" datadb="{{datadb}}"></my-asterClock>
           <my-avgActivity name="avgActivity" user="[[user.uid]]" datadb="{{datadb}}" colors-array="{{activtiyColorsArray}}" background-colors-array="{{activtiyBackgroundColorsArray}}"></my-avgActivity>
           <my-avgEmotion name="avgEmotion" user="[[user.uid]]" datadb="{{datadb}}"></my-avgEmotion>
-          <my-eventdrops name="eventdrops" user="[[user.uid]]"></my-eventdrops>
-          <my-calendarview name="calendarview" user="[[user.uid]]"></my-calendarview>
+          <my-eventdrops name="eventdrops" user="[[user.uid]]" data="{{aggregatedb}}"></my-eventdrops>
+          <my-calendarview name="calendarview" user="[[user.uid]]" ata="{{aggregatedb}}"></my-calendarview>
         </iron-pages>
 
       </app-header-layout>
@@ -304,11 +312,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Boolean,
           notify: true,
           value: false
-        }
+        },
+        aggregatedb: {
+          type: Object
+        },
+        aggregateDataExists: {
+          type: Boolean,
+          value: false
+        },
       },
 
       observers: [
-        '_routePageChanged(routeData.page)'
+        '_routePageChanged(routeData.page)',
+        'aggregateDataChanged(aggregatedb.splices)'
       ],
 
       behaviors: [
@@ -317,9 +333,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       ready: function() {
         this.date = (new Date()).toDateString();
-        
       },
-
+      aggregateDataChanged: function(aggregatedb) {
+        console.log("aggregate data changed");
+        console.log(aggregatedb);
+        // var aggregateEmotions;
+        // var aggregateActivities;
+        if (aggregatedb) {
+          this.aggregateDataExists = true;
+          // console.log(aggregatedb.activities);
+          // aggregatedb.forEach(function(arrayObject) {
+          //   arrayObject.object.forEach();
+          //   aggregateEmotions = arrayObject.object.emotions;
+          //   aggregateActivities= arrayObject.object.activities;
+          // });
+          // console.log("aggregateEmotions");
+          // console.log(aggregateEmotions);
+          // console.log("aggregateActivities");
+          // console.log(aggregateActivities);
+        }
+      },
       computeAvgActivityColors: function() {
         var activtiyColorsArray = [];
         var activtiyBackgroundColorsArray = [];

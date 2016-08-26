@@ -207,6 +207,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{activityDetails}}">
     </firebase-document>
     <firebase-document
+        id="createAggregateFirebase"
+        app-name="notes"
+        path="/"
+        data="{{newAggregateDetails}}">
+    <firebase-document
+        id="updateAggregateFirebase"
+        app-name="notes"
+        path="/"
+        data="{{updateAggregateDetails}}">
+    </firebase-document>
+    <firebase-document
         id="deleteActivityFirebase"
         app-name="notes"
         path="{{pathDelete}}">
@@ -297,6 +308,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: Object,
             reflectToAttribute: true
           },
+          newAggregateDetails: {
+            type: Object,
+            reflectToAttribute: true
+          }, 
+          tempAggregateDetails: {
+            type: Object,
+            reflectToAttribute: true
+          }, 
+          aggregatedb: {
+            type: Object,
+            observer: 'aggregateDetailsChanged'
+          },
           editedActivityDetails: {
             type: Object,
             reflectToAttribute: true
@@ -365,9 +388,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: Boolean,
             value: false,
           },
+          newDayExists: {
+            type: Boolean,
+            value: false,
+          },
+          emotions: {
+            type: Array,
+            value: 
+            ["joy", "calm", "hope", "sorrow", "anger", "fear"]
+          },
+          positiveNegativeEmotion: {
+            type: Object,
+            value: 
+            {"joy": 1, "calm" : 1, "hope": 1, "sorrow": -1, "anger": -1, "fear": -1}
+          },
+          activities: {
+            type: Array,
+            value: 
+            ["Work", "Sleep", "Leisure", "Social", "Gym"]
+          },
       },
       observers: [
-           'dataChanged(datadb.*)'
+           'dataChanged(datadb.*)',
+           'aggregateDetailsChanged(aggregatedb.*)'
       ],
       _onAngerUp: function(){
         this.angerPressed = false;
@@ -408,6 +451,49 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _onSorrowDown: function(){
         this.sorrowPressed = true;
       },
+      aggregateDetailsChanged: function(aggregatedb) {
+        console.log("aggregatedb: ");
+        console.log(this.aggregatedb);
+        var aggregateData = this.aggregatedb;
+        this.tempAggregateDetails = {}; 
+        var that = this;
+        aggregateData.forEach(function(childSnapshot) {
+          var key = childSnapshot.$key;
+          if (key === "activities") {
+          that.tempAggregateDetails.activities = {};
+            for (var i=0; i<that.activities.length;i++) {
+              var activityName = that.activities[i];
+              that.tempAggregateDetails.activities[activityName] = childSnapshot[activityName];
+            }
+          }
+          else if (key === "emotions") {
+            that.tempAggregateDetails.emotions = {};
+            for (var i=0; i<that.emotions.length;i++) {
+              var emoName = that.emotions[i];
+              that.tempAggregateDetails.emotions[emoName] = childSnapshot[emoName];
+            }
+          }
+        });
+        this.updateAggregateDetails = this.tempAggregateDetails;
+        console.log("updateAggregateDetails");
+        console.log(this.updateAggregateDetails);
+        // console.log(aggregatedb);
+        // var aggregateEmotions;
+        // var aggregateActivities;
+        // if (aggregatedb) {
+        //   this.aggregateDataExists = true;
+        //   console.log(aggregatedb.activities);
+        //   aggregatedb.forEach(function(arrayObject) {
+        //     arrayObject.object.forEach();
+        //     aggregateEmotions = arrayObject.object.emotions;
+        //     aggregateActivities= arrayObject.object.activities;
+        //   });
+        //   console.log("aggregateEmotions");
+        //   console.log(aggregateEmotions);
+        //   console.log("aggregateActivities");
+        //   console.log(aggregateActivities);
+        // }
+      },
       dataChanged: function (datadb) {
         var activityColors = 
         { "Sleep": {"colorShade": "Green", "colorType": "A200"},
@@ -435,7 +521,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         });
         console.log("AFTER");
       },
-
+      createNewAggregateActivity: function() {
+        this.newAggregateDetails = {};
+        this.newAggregateDetails.emotions = {};
+        for (var i=0; i<this.emotions.length;i++) {
+          //TODO: WHY IS activity 0
+          console.log(this.emotions[i]);
+          this.newAggregateDetails.emotions[this.emotions[i]] = 0;
+          // this.newAggregateDetails.emotions.push(emotionSelectedColor);
+        }
+        this.newAggregateDetails.activities = {};
+        for (var i=0; i<this.activities.length;i++) {
+          //TODO: WHY IS activity 0
+          console.log(this.activities[i]);
+          this.newAggregateDetails.activities[this.activities[i]] = 0;
+          // this.newAggregateDetails.emotions.push(emotionSelectedColor);
+        }
+        console.log("createNewAggregateActivity");
+        console.log(this.newAggregateDetails);
+        this.updateAggregateDetails = this.newAggregateDetails;
+        // this.aggregateDetails = this.newAggregateDetails;
+      },
       _periodStartChanged: function(periodStartSelected) {
         
         },
@@ -464,6 +570,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (this.$.activityFirebase.isNew) {
           return this.$.activityFirebase.save(this.user+"/"+(new Date()).toDateString()).then(() => {
             this.$.activityFirebase.reset();
+          });
+        }
+        return Promise.resolve();
+      },
+      createDayAggregate: function() {  
+        console.log("creating new aggregate day");
+        if (this.$.createAggregateFirebase.isNew) {
+          return this.$.createAggregateFirebase.save(this.user+"/aggregate",(new Date()).toDateString()).then(() => {
+            this.$.createAggregateFirebase.reset();
+          });
+        }
+        return Promise.resolve();
+      },
+      updateNewDayAggregate: function() { 
+      console.log("update new aggregate day"); 
+        if (this.$.updateAggregateFirebase.isNew) {
+          return this.$.updateAggregateFirebase.save(this.user+"/aggregate", (new Date()).toDateString()).then(() => {
+            this.$.updateAggregateFirebase.reset();
           });
         }
         return Promise.resolve();
@@ -514,6 +638,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           "Leisure": {"colorShade": "Purple", "colorType": "A200"}
         };
         console.log("activity: " +this.activity);
+        console.log("SAVE SELECTION");
         this.activityDetails.activityType = this.activity;
         this.activityDetails.startTime = this.periodStartSelected;
         this.activityDetails.endTime = this.periodEndSelected;
@@ -535,7 +660,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var activitySelectedColor = this.$.colorSheet.colors[colorShadeString].a700;
         this.$.picker.drawArcOnClock(this.periodStartSelected, this.periodEndSelected, activitySelectedColor);
         this.searchDb();
+        
+        console.log("newDayExists: "+this.newDayExists);
+        if (!this.newDayExists) {
+          this.createNewAggregateActivity();
+        }
+        // else {
+        //   console.log("this.aggregateDetails: "+aggregateDetails);
+        //   this.updateAggregateDetails = this.aggregateDetails;
+        // }
+        //updateAggregateActivity();
+        console.log("BEFORE this.updateAggregateDetails.activities[this.activity]");
+        console.log(this.updateAggregateDetails);
+        console.log("this.updateAggregateDetails.activities[this.activity]");
+        console.log(this.updateAggregateDetails.activities[this.activity]);
+        console.log(parseInt(this.updateAggregateDetails.activities[this.activity]));
+        console.log(this.activityDetails.duration);
+        var newValue = parseInt(this.updateAggregateDetails.activities[this.activity]) + this.activityDetails.duration;
+        console.log("newValue: "+newValue);
+        console.log("updateAggregateDetails: ");
+        console.log(this.updateAggregateDetails);
+        var tempPlaceUpdateAggregateDetails = this.updateAggregateDetails;
+        tempPlaceUpdateAggregateDetails.activities[this.activity] = parseInt(this.updateAggregateDetails.activities[this.activity]) + this.activityDetails.duration;
+        console.log("AFTER this.updateAggregateDetails.activities[this.activity]");
+        console.log(this.updateAggregateDetails.activities[this.activity]);
+        tempPlaceUpdateAggregateDetails.emotions.joy = parseInt(this.updateAggregateDetails.emotions.joy) + this.joyScore;
+        tempPlaceUpdateAggregateDetails.emotions.calm = parseInt(this.updateAggregateDetails.emotions.calm) + this.calmScore;
+        tempPlaceUpdateAggregateDetails.emotions.hope = parseInt(this.updateAggregateDetails.emotions.hope) + this.hopeScore;
+        tempPlaceUpdateAggregateDetails.emotions.anger = parseInt(this.updateAggregateDetails.emotions.anger) + this.angerScore;
+        tempPlaceUpdateAggregateDetails.emotions.fear = parseInt(this.updateAggregateDetails.emotions.fear) + this.fearScore;
+        tempPlaceUpdateAggregateDetails.emotions.sorrow = parseInt(this.updateAggregateDetails.emotions.sorrow) + this.sorrowScore;
+        this.updateAggregateDetails = tempPlaceUpdateAggregateDetails;
         this.saveEntry();
+        this.updateNewDayAggregate();
+
         this._closePopUp();
         this.joyScore = 0;
         this.calmScore = 0;
@@ -543,6 +701,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.angerScore = 0;
         this.fearScore = 0;
         this.sorrowScore = 0;
+      },
+      updateAggregateActivity: function() {
+        this.updateAggregateDetails.activities[this.activity] += this.activityDetails.duration;
+        this.updateAggregateDetails.emotions.joy += this.joyScore;
+        this.updateAggregateDetails.emotions.calm += this.calmScore;
+        this.updateAggregateDetails.emotions.hope += this.hopeScore;
+        this.updateAggregateDetails.emotions.anger += this.angerScore;
+        this.updateAggregateDetails.emotions.fear += this.fearScore;
+        this.updateAggregateDetails.emotions.sorrow += this.sorrowScore;
+        this.updateNewDayAggregate();
       },
       searchDb: function() {
         console.log("SEARCH DB");
