@@ -475,9 +475,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             that.tempAggregateDetails.emotions.total = childSnapshot.total;
           }
         });
-        this.updateAggregateDetails = this.tempAggregateDetails;
+        this.oldAggregateDetails = this.tempAggregateDetails;
         console.log("updateAggregateDetails");
-        console.log(this.updateAggregateDetails);
+        console.log(this.oldAggregateDetails);
         // console.log(aggregatedb);
         // var aggregateEmotions;
         // var aggregateActivities;
@@ -541,7 +541,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         console.log("createNewAggregateActivity");
         console.log(this.newAggregateDetails);
-        this.updateAggregateDetails = this.newAggregateDetails;
+        this.oldAggregateDetails = this.newAggregateDetails;
         // this.aggregateDetails = this.newAggregateDetails;
       },
       _periodStartChanged: function(periodStartSelected) {
@@ -675,29 +675,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log("BEFORE this.updateAggregateDetails.activities[this.activity]");
         console.log(this.updateAggregateDetails);
         console.log("this.updateAggregateDetails.activities[this.activity]");
-        console.log(this.updateAggregateDetails.activities[this.activity]);
-        console.log(parseInt(this.updateAggregateDetails.activities[this.activity]));
-        console.log(this.activityDetails.duration);
-        var newValue = parseInt(this.updateAggregateDetails.activities[this.activity]) + this.activityDetails.duration;
-        console.log("newValue: "+newValue);
-        console.log("updateAggregateDetails: ");
-        console.log(this.updateAggregateDetails);
-        var tempPlaceUpdateAggregateDetails = this.updateAggregateDetails;
-        tempPlaceUpdateAggregateDetails.activities[this.activity] = parseInt(this.updateAggregateDetails.activities[this.activity]) + this.activityDetails.duration;
+        // console.log(this.updateAggregateDetails.activities[this.activity]);
+        // console.log(this.updateAggregateDetails);
+        var tempPlaceUpdateAggregateDetails = this.oldAggregateDetails;
+        tempPlaceUpdateAggregateDetails.activities[this.activity] = parseInt(this.oldAggregateDetails.activities[this.activity]) + this.activityDetails.duration;
         console.log("AFTER this.updateAggregateDetails.activities[this.activity]");
         var total = this.joyScore + this.calmScore + this.hopeScore - this.angerScore - this.sorrowScore - this.fearScore;
-        console.log(this.updateAggregateDetails.activities[this.activity]);
-        tempPlaceUpdateAggregateDetails.emotions.joy = parseInt(this.updateAggregateDetails.emotions.joy) + this.joyScore;
-        tempPlaceUpdateAggregateDetails.emotions.calm = parseInt(this.updateAggregateDetails.emotions.calm) + this.calmScore;
-        tempPlaceUpdateAggregateDetails.emotions.hope = parseInt(this.updateAggregateDetails.emotions.hope) + this.hopeScore;
-        tempPlaceUpdateAggregateDetails.emotions.anger = parseInt(this.updateAggregateDetails.emotions.anger) + this.angerScore;
-        tempPlaceUpdateAggregateDetails.emotions.fear = parseInt(this.updateAggregateDetails.emotions.fear) + this.fearScore;
-        tempPlaceUpdateAggregateDetails.emotions.sorrow = parseInt(this.updateAggregateDetails.emotions.sorrow) + this.sorrowScore;
-        tempPlaceUpdateAggregateDetails.emotions.total = parseInt(this.updateAggregateDetails.emotions.total) + total;
+        console.log(this.oldAggregateDetails.activities[this.activity]);
+        tempPlaceUpdateAggregateDetails.emotions.joy = parseInt(this.oldAggregateDetails.emotions.joy) + this.joyScore;
+        tempPlaceUpdateAggregateDetails.emotions.calm = parseInt(this.oldAggregateDetails.emotions.calm) + this.calmScore;
+        tempPlaceUpdateAggregateDetails.emotions.hope = parseInt(this.oldAggregateDetails.emotions.hope) + this.hopeScore;
+        tempPlaceUpdateAggregateDetails.emotions.anger = parseInt(this.oldAggregateDetails.emotions.anger) + this.angerScore;
+        tempPlaceUpdateAggregateDetails.emotions.fear = parseInt(this.oldAggregateDetails.emotions.fear) + this.fearScore;
+        tempPlaceUpdateAggregateDetails.emotions.sorrow = parseInt(this.oldAggregateDetails.emotions.sorrow) + this.sorrowScore;
+        tempPlaceUpdateAggregateDetails.emotions.total = parseInt(this.oldAggregateDetails.emotions.total) + total;
         this.updateAggregateDetails = tempPlaceUpdateAggregateDetails;
+        this.oldAggregateDetails = this.updateAggregateDetails;
         this.saveEntry();
+        console.log("ENTRY SAVED AND BEFORE UPDATE NEW AGGREGATE");
         this.updateNewDayAggregate();
-
+        console.log("UPDATED NEW AGGREGATE AND BEFORE CLOSING POP UP");
         this._closePopUp();
         this.joyScore = 0;
         this.calmScore = 0;
