@@ -218,6 +218,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{updateAggregateDetails}}">
     </firebase-document>
     <firebase-document
+        id="createTotalFirebase"
+        app-name="notes"
+        path="/"
+        data="{{newTotalData}}">
+    <firebase-document
+        id="updateTotalFirebase"
+        app-name="notes"
+        path="/"
+        data="{{updateTotalDetails}}">
+    </firebase-document>
+    <firebase-document
         id="deleteActivityFirebase"
         app-name="notes"
         path="{{pathDelete}}">
@@ -311,6 +322,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           newAggregateDetails: {
             type: Object,
             reflectToAttribute: true
+          },
+          newTotalData: {
+            type: Object,
+            reflectToAttribute: true
           }, 
           tempAggregateDetails: {
             type: Object,
@@ -392,6 +407,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: Boolean,
             value: false,
           },
+          totalDataExists: {
+            type: Boolean,
+            value: false,
+          },
           emotions: {
             type: Array,
             value: 
@@ -410,7 +429,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       observers: [
            'dataChanged(datadb.*)',
-           'aggregateDetailsChanged(aggregatedb.*)'
+           'aggregateDetailsChanged(aggregatedb.*)',
+           'totalDataChanged(totaldb.*)'
       ],
       _onAngerUp: function(){
         this.angerPressed = false;
@@ -522,6 +542,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         });
         console.log("AFTER");
       },
+      createNewTotalData: function() {
+        this.newTotalData = {};
+        this.newTotalData.numDays = 0;
+        this.newTotalData.emotions = {};
+        for (var i=0; i<this.emotions.length;i++) {
+          console.log(this.emotions[i]);
+          this.newTotalData.emotions[this.emotions[i]] = 0;
+        }
+        this.newTotalData.emotions.total = 0;
+        this.newTotalData.activities = {};
+        for (var i=0; i<this.activities.length;i++) {
+          //TODO: WHY IS activity 0
+          console.log(this.activities[i]);
+          this.newTotalData.activities[this.activities[i]] = 0;
+        }
+        console.log(this.newTotalData);
+        this.oldTotalData = this.newTotalData;
+      },
       createNewAggregateActivity: function() {
         this.newAggregateDetails = {};
         this.newAggregateDetails.emotions = {};
@@ -543,6 +581,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log(this.newAggregateDetails);
         this.oldAggregateDetails = this.newAggregateDetails;
         // this.aggregateDetails = this.newAggregateDetails;
+
+         var tempUpdateTotalDetails = this.oldTotalData;
+        tempUpdateTotalDetails.numDays = parseInt(this.oldTotalData.numDays) + 1;
+        console.log("AFTER this.updateAggregateDetails.activities[this.activity]");
+        this.updateTotalDetails = tempUpdateTotalDetails;
+        this.oldTotalData = this.updateTotalDetails;
       },
       _periodStartChanged: function(periodStartSelected) {
         
@@ -570,8 +614,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       saveEntry: function() {  
         if (this.$.activityFirebase.isNew) {
-          return this.$.activityFirebase.save(this.user+"/"+(new Date()).toDateString()).then(() => {
+          return this.$.activityFirebase.save(this.user+"/daily/"+(new Date()).toDateString()).then(() => {
             this.$.activityFirebase.reset();
+          });
+        }
+        return Promise.resolve();
+      },
+      createTotal: function() {  
+        console.log("creating new aggregate day");
+        if (this.$.createTotalFirebase.isNew) {
+          return this.$.createTotalFirebase.save(this.user,"total").then(() => {
+            this.$.createTotalFirebase.reset();
+          });
+        }
+        return Promise.resolve();
+      },
+      updateTotal: function() { 
+      console.log("update new aggregate day"); 
+        if (this.$.updateTotalFirebase.isNew) {
+          return this.$.updateTotalFirebase.save(this.user, "total").then(() => {
+            this.$.updateTotalFirebase.reset();
           });
         }
         return Promise.resolve();
@@ -596,7 +658,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       delete: function(key) {  
         if (this.$.deleteActivityFirebase.isNew) {
-          this.pathDelete = this.user+"/"+(new Date()).toDateString()+"/"+key;
+          this.pathDelete = this.user+"/daily/"+(new Date()).toDateString()+"/"+key;
           return this.$.deleteActivityFirebase.destroy().then(() => {
             this.$.deleteActivityFirebase.reset();
           });
@@ -605,7 +667,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       editOldEntry: function(key) {  
         if (this.$.editActivity.isNew) {
-          return this.$.editActivity.save(this.user+"/"+(new Date()).toDateString(), key).then(() => {
+          return this.$.editActivity.save(this.user+"/daily/"+(new Date()).toDateString(), key).then(() => {
             this.$.editActivity.reset();
           });
         }
@@ -653,35 +715,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.activityDetails.emotion.fear = this.fearScore;
         this.activityDetails.emotion.sorrow = this.sorrowScore;
         this.activityDetails.emotion.total = this.joyScore + this.calmScore + this.hopeScore - this.angerScore - this.fearScore - this.sorrowScore;
-        console.log("activityDetails: " +this.activityDetails);
+        // console.log("activityDetails: " +this.activityDetails);
         this.activityList.push(this.activityDetails);
         var activitySelected = this.activity;
-        console.log("activitySelected: "+activitySelected);
+        // console.log("activitySelected: "+activitySelected);
         var colorShadeString = activityColors[activitySelected].colorShade;
-        console.log("colorShadeString: "+colorShadeString);
+        // console.log("colorShadeString: "+colorShadeString);
         var activitySelectedColor = this.$.colorSheet.colors[colorShadeString].a700;
         this.$.picker.drawArcOnClock(this.periodStartSelected, this.periodEndSelected, activitySelectedColor);
         this.searchDb();
         
         console.log("newDayExists: "+this.newDayExists);
+
+        if (!this.totalDataExists) {
+          this.createNewTotalData();
+          console.log("creating new total - first time user");
+        }
+
         if (!this.newDayExists) {
           this.createNewAggregateActivity();
         }
-        // else {
-        //   console.log("this.aggregateDetails: "+aggregateDetails);
-        //   this.updateAggregateDetails = this.aggregateDetails;
-        // }
-        //updateAggregateActivity();
-        console.log("BEFORE this.updateAggregateDetails.activities[this.activity]");
-        console.log(this.updateAggregateDetails);
-        console.log("this.updateAggregateDetails.activities[this.activity]");
-        // console.log(this.updateAggregateDetails.activities[this.activity]);
-        // console.log(this.updateAggregateDetails);
+        
         var tempPlaceUpdateAggregateDetails = this.oldAggregateDetails;
         tempPlaceUpdateAggregateDetails.activities[this.activity] = parseInt(this.oldAggregateDetails.activities[this.activity]) + this.activityDetails.duration;
-        console.log("AFTER this.updateAggregateDetails.activities[this.activity]");
+        // console.log("AFTER this.updateAggregateDetails.activities[this.activity]");
         var total = this.joyScore + this.calmScore + this.hopeScore - this.angerScore - this.sorrowScore - this.fearScore;
-        console.log(this.oldAggregateDetails.activities[this.activity]);
+        // console.log(this.oldAggregateDetails.activities[this.activity]);
         tempPlaceUpdateAggregateDetails.emotions.joy = parseInt(this.oldAggregateDetails.emotions.joy) + this.joyScore;
         tempPlaceUpdateAggregateDetails.emotions.calm = parseInt(this.oldAggregateDetails.emotions.calm) + this.calmScore;
         tempPlaceUpdateAggregateDetails.emotions.hope = parseInt(this.oldAggregateDetails.emotions.hope) + this.hopeScore;
@@ -691,10 +750,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         tempPlaceUpdateAggregateDetails.emotions.total = parseInt(this.oldAggregateDetails.emotions.total) + total;
         this.updateAggregateDetails = tempPlaceUpdateAggregateDetails;
         this.oldAggregateDetails = this.updateAggregateDetails;
+
+        var tempUpdateTotalDetails = this.oldTotalData;
+        tempUpdateTotalDetails.activities[this.activity] = parseInt(this.oldTotalData.activities[this.activity]) + this.activityDetails.duration;
+        // console.log("AFTER this.updateAggregateDetails.activities[this.activity]");
+        // console.log(this.oldAggregateDetails.activities[this.activity]);
+        tempUpdateTotalDetails.emotions.joy = parseInt(this.oldTotalData.emotions.joy) + this.joyScore;
+        tempUpdateTotalDetails.emotions.calm = parseInt(this.oldTotalData.emotions.calm) + this.calmScore;
+        tempUpdateTotalDetails.emotions.hope = parseInt(this.oldTotalData.emotions.hope) + this.hopeScore;
+        tempUpdateTotalDetails.emotions.anger = parseInt(this.oldTotalData.emotions.anger) + this.angerScore;
+        tempUpdateTotalDetails.emotions.fear = parseInt(this.oldTotalData.emotions.fear) + this.fearScore;
+        tempUpdateTotalDetails.emotions.sorrow = parseInt(this.oldTotalData.emotions.sorrow) + this.sorrowScore;
+        tempUpdateTotalDetails.emotions.total = parseInt(this.oldTotalData.emotions.total) + total;
+        this.updateTotalDetails = tempUpdateTotalDetails;
+        this.oldTotalData = this.updateTotalDetails;
+        console.log("update total");
+        console.log(this.updateTotalDetails);
+        this.updateTotal();
+
         this.saveEntry();
-        console.log("ENTRY SAVED AND BEFORE UPDATE NEW AGGREGATE");
+        // console.log("ENTRY SAVED AND BEFORE UPDATE NEW AGGREGATE");
         this.updateNewDayAggregate();
-        console.log("UPDATED NEW AGGREGATE AND BEFORE CLOSING POP UP");
+        // console.log("UPDATED NEW AGGREGATE AND BEFORE CLOSING POP UP");
         this._closePopUp();
         this.joyScore = 0;
         this.calmScore = 0;
@@ -714,8 +791,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.updateNewDayAggregate();
       },
       searchDb: function() {
-        console.log("SEARCH DB");
-        console.log(this.datadb);
+        // console.log("SEARCH DB");
+        // console.log(this.datadb);
         for (key in this.datadb) {
           var obj = this.datadb[key];
           console.log("obj");

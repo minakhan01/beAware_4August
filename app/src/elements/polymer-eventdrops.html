@@ -2,11 +2,12 @@
 <link rel="stylesheet" href="../../event-drops/dist/eventDrops.css" />
 <script type="text/javascript" src="../../event-drops/dist/d3.min.js"></script>
 <script type="text/javascript" src="../../event-drops/dist/eventDrops.js"></script>
+<link rel="import" href="../colors-material.html">
 
 <dom-module id="polymer-eventdrops">
 
   <template>
-
+    <colors-material id="colorSheet"></colors-material>
       <div id="chart"></canvas>
 
   </template>
@@ -16,7 +17,46 @@
 
       is: 'polymer-eventdrops',
       properties: {
-
+        emotions: {
+          type: Array,
+          value: 
+          ["joy", "calm", "hope", "sorrow", "anger", "fear"]
+        },
+        positiveNegativeEmotion: {
+          type: Object,
+          value: 
+          {"joy": 1, "calm" : 1, "hope": 1, "sorrow": -1, "anger": -1, "fear": -1}
+        },
+        activities: {
+          type: Array,
+          value: 
+          ["Work", "Sleep", "Leisure", "Social", "Gym"]
+        },
+        aggregatedb: {
+          type: Object,
+          observer: 'aggregateDetailsChanged'
+        },
+        emotionColors: {
+          type: Object,
+          value: 
+          { "joy": {"colorShade": "Lime", "colorType": "a400"},
+          "calm": {"colorShade": "Cyan", "colorType": "a400"},
+          "fear" : {"colorShade": "Orange", "colorType": "a700"},
+          "anger" : {"colorShade": "Red", "colorType": "a700"},
+          "sorrow" : {"colorShade": "Yellow", "colorType": "a700"},
+          "hope": {"colorShade": "Teal", "colorType": "a400"}
+          }
+        },
+        activityColors: {
+          type: Object,
+          value: 
+          { "Sleep": {"colorShade": "Green", "colorType": "a200"},
+          "Work" : {"colorShade": "Blue", "colorType": "a200"},
+          "Gym" : {"colorShade": "Pink", "colorType": "a200"},
+          "Social" : {"colorShade": "Amber", "colorType": "a200"},
+          "Leisure": {"colorShade": "Purple", "colorType": "a200"}
+          }
+        },
       },
 
       ready: function() {
@@ -30,7 +70,7 @@
         var startTime = endTime - 6 * month;
 
         function createEvent (name, maxNbEvents) {
-            maxNbEvents = maxNbEvents | 200;
+            maxNbEvents = maxNbEvents | 20;
             var event = {
                 name: name,
                 dates: []
@@ -60,21 +100,10 @@
 
         // bind data with DOM
         var element = d3.select(this.$.chart).datum(data);
-
+        console.log("EVENT DROPS");
+        console.log(data);
         // draw the chart
         eventDropsChart(element);
-      },
-      totalScoreChanged: function(totalScore) {
-        console.log("totalScoreChanged: "+this.totalScore);
-      },
-      getTitle: function() {
-        return this.chartTitle;
-      },
-      showLegend: function() {
-        return this.isLegend;
-      },
-      getTotalScore: function() {
-        return this.totalScore;
       },
 
     });

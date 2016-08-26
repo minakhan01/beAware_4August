@@ -149,7 +149,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       id="query"
       app-name="notes"
       sequentialTransactions=true
-      path="/[[user.uid]]/[[date]]"
+      path="/[[user.uid]]/daily/[[date]]"
       data="{{datadb}}">
     </firebase-query>
 
@@ -159,6 +159,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       sequentialTransactions=true
       path="/[[user.uid]]/aggregate/[[date]]"
       data="{{aggregatedb}}">
+    </firebase-query>
+
+    <firebase-query
+      id="allTotalQuery"
+      app-name="notes"
+      sequentialTransactions=true
+      path="/[[user.uid]]/total"
+      data="{{totaldb}}">
     </firebase-query>
 
     <app-location route="{{route}}"></app-location>
@@ -241,7 +249,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-header>
 
         <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
-          <my-input name="input" user="[[user.uid]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]"></my-input>
+          <my-input name="input" user="[[user.uid]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{aggregateDataExists}}"></my-input>
           <my-asterClock name="asterClock" user="[[user.uid]]" datadb="{{datadb}}"></my-asterClock>
           <my-avgActivity name="avgActivity" user="[[user.uid]]" datadb="{{datadb}}" colors-array="{{activtiyColorsArray}}" background-colors-array="{{activtiyBackgroundColorsArray}}"></my-avgActivity>
           <my-avgEmotion name="avgEmotion" user="[[user.uid]]" datadb="{{datadb}}"></my-avgEmotion>
@@ -316,7 +324,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         aggregatedb: {
           type: Object
         },
+        totaldb: {
+          type: Object
+        },
         aggregateDataExists: {
+          type: Boolean,
+          value: false
+        },
+        allTotalDataExists: {
           type: Boolean,
           value: false
         },
@@ -324,7 +339,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       observers: [
         '_routePageChanged(routeData.page)',
-        'aggregateDataChanged(aggregatedb.splices)'
+        'aggregateDataChanged(aggregatedb.splices)',
+        'totalDataChanged(totaldb.splices)'
       ],
 
       behaviors: [
@@ -335,22 +351,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.date = (new Date()).toDateString();
       },
       aggregateDataChanged: function(aggregatedb) {
-        console.log("aggregate data changed");
-        console.log(aggregatedb);
-        // var aggregateEmotions;
-        // var aggregateActivities;
         if (aggregatedb) {
           this.aggregateDataExists = true;
-          // console.log(aggregatedb.activities);
-          // aggregatedb.forEach(function(arrayObject) {
-          //   arrayObject.object.forEach();
-          //   aggregateEmotions = arrayObject.object.emotions;
-          //   aggregateActivities= arrayObject.object.activities;
-          // });
-          // console.log("aggregateEmotions");
-          // console.log(aggregateEmotions);
-          // console.log("aggregateActivities");
-          // console.log(aggregateActivities);
+        }
+      },
+      totalDataChanged: function(totaldb) {
+        if (totaldb) {
+          this.allTotalDataExists = true;
         }
       },
       computeAvgActivityColors: function() {
