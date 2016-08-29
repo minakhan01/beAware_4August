@@ -57,17 +57,50 @@
           "Leisure": {"colorShade": "Purple", "colorType": "a200"}
           }
         },
+        data: {
+          type: Array,
+          value: []
+        }
       },
-
-      ready: function() {
+      getActivityColor: function(activityName) {
+          var colorSheet = this.$.colorSheet;
+          var colorShadeString = this.activityColors[activityName].colorShade;
+          var colorGradientString = this.activityColors[activityName].colorType;
+          var selectedColor = colorSheet.colors[colorShadeString][colorGradientString];
+          return selectedColor;        
+      },
+      getEmotionColor: function(emotionName){
+          var colorSheet = this.$.colorSheet;
+          var colorShadeString = this.emotionColors[emotionName].colorShade;
+          var colorGradientString = this.emotionColors[emotionName].colorType;
+          var selectedColor = colorSheet.colors[colorShadeString][colorGradientString];
+          return selectedColor;
+      },
+      readyProduce: function() {
         /*eslint-disable */
 
         // create dataset
         var data = [];
-        var names = ["Lorem", "Ipsum", "Dolor", "Sit", "Amet", "Consectetur", "Adipisicing", "elit", "Eiusmod tempor", "Incididunt"];
+        var names = (this.activities).concat(this.emotions);
         var endTime = Date.now();
         var month = 30 * 24 * 60 * 60 * 1000;
-        var startTime = endTime - 6 * month;
+        var week = 7 * 24 * 60 * 60 * 1000;
+        var day = 24 * 60 * 60 * 1000;
+        var startTime = endTime - day;
+        var activityColorsList = [];
+        for (var i = 0; i < this.activities.length; i++) {
+          activityColorsList.push(this.getActivityColor(this.activities[i]));
+        }
+        var emotionColorsList = [];
+        for (var i = 0; i < this.emotions.length; i++) {
+          emotionColorsList.push(this.getEmotionColor(this.emotions[i]));
+        }
+        var color  = (activityColorsList).concat(emotionColorsList);
+        // for (var i = 0; i < names.length; i++) {
+        //     data.push(createEmptyEvent(names[i]));
+        // }
+        console.log("DEFINING COLOR");
+        console.log(color);
 
         function createEvent (name, maxNbEvents) {
             maxNbEvents = maxNbEvents | 20;
@@ -84,24 +117,32 @@
 
             return event;
         }
-        for (var i = 0; i < 10; i++) {
+        function createEmptyEvent (name) {
+            var event = {
+                name: name,
+                dates: []
+            };
+
+            return event;
+        }
+        for (var i = 0; i < names.length; i++) {
             data.push(createEvent(names[i]));
         }
 
-        var color = d3.scale.category20();
+        // var color = d3.scale.category20();
 
         // create chart function
         var eventDropsChart = d3.chart.eventDrops()
             .eventLineColor(function (datum, index) {
-                return color(index);
+                return color[index];
             })
             .start(new Date(startTime))
             .end(new Date(endTime));
 
         // bind data with DOM
-        var element = d3.select(this.$.chart).datum(data);
+        var element = d3.select(this.$.chart).datum(this.data);
         console.log("EVENT DROPS");
-        console.log(data);
+        console.log(this.data);
         // draw the chart
         eventDropsChart(element);
       },

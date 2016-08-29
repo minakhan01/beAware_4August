@@ -169,6 +169,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       data="{{totaldb}}">
     </firebase-query>
 
+    <firebase-query
+      id="dailyAllQuery"
+      app-name="notes"
+      sequentialTransactions=true
+      path="/[[user.uid]]/daily"
+      data="{{dailydb}}">
+    </firebase-query>
+
     <app-location route="{{route}}"></app-location>
 
     <app-route
@@ -249,11 +257,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-header>
 
         <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
-          <my-input name="input" user="[[user.uid]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{aggregateDataExists}}"></my-input>
+          <my-input name="input" user="[[user.uid]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-input>
           <my-asterClock name="asterClock" user="[[user.uid]]" datadb="{{datadb}}"></my-asterClock>
           <my-avgActivity name="avgActivity" user="[[user.uid]]" datadb="{{datadb}}" colors-array="{{activtiyColorsArray}}" background-colors-array="{{activtiyBackgroundColorsArray}}"></my-avgActivity>
           <my-avgEmotion name="avgEmotion" user="[[user.uid]]" datadb="{{datadb}}"></my-avgEmotion>
-          <my-eventdrops name="eventdrops" user="[[user.uid]]" data="{{aggregatedb}}"></my-eventdrops>
+          <my-eventdrops name="eventdrops" user="[[user.uid]]" dailydb="{{dailydb}}"></my-eventdrops>
           <my-calendarview name="calendarview" user="[[user.uid]]" ata="{{aggregatedb}}"></my-calendarview>
         </iron-pages>
 
@@ -331,7 +339,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Boolean,
           value: false
         },
-        allTotalDataExists: {
+        totalDataExists: {
           type: Boolean,
           value: false
         },
@@ -357,7 +365,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       totalDataChanged: function(totaldb) {
         if (totaldb) {
-          this.allTotalDataExists = true;
+          this.totalDataExists = true;
         }
       },
       computeAvgActivityColors: function() {
