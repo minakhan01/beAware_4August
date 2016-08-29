@@ -331,6 +331,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: Object,
             reflectToAttribute: true
           }, 
+          tempTotalDetails: {
+            type: Object,
+            reflectToAttribute: true
+          }, 
           aggregatedb: {
             type: Object,
             observer: 'aggregateDetailsChanged'
@@ -498,22 +502,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.oldAggregateDetails = this.tempAggregateDetails;
         console.log("updateAggregateDetails");
         console.log(this.oldAggregateDetails);
-        // console.log(aggregatedb);
-        // var aggregateEmotions;
-        // var aggregateActivities;
-        // if (aggregatedb) {
-        //   this.aggregateDataExists = true;
-        //   console.log(aggregatedb.activities);
-        //   aggregatedb.forEach(function(arrayObject) {
-        //     arrayObject.object.forEach();
-        //     aggregateEmotions = arrayObject.object.emotions;
-        //     aggregateActivities= arrayObject.object.activities;
-        //   });
-        //   console.log("aggregateEmotions");
-        //   console.log(aggregateEmotions);
-        //   console.log("aggregateActivities");
-        //   console.log(aggregateActivities);
-        // }
+      },
+      totalDataChanged: function(totaldb) {
+        console.log("totaldb: ");
+        console.log(this.totaldb);
+        var totalData = this.totaldb;
+        this.tempTotalDetails = {}; 
+        var that = this;
+        totalData.forEach(function(childSnapshot) {
+          var key = childSnapshot.$key;
+          if (key === "activities") {
+          that.tempTotalDetails.activities = {};
+            for (var i=0; i<that.activities.length;i++) {
+              var activityName = that.activities[i];
+              that.tempTotalDetails.activities[activityName] = childSnapshot[activityName];
+            }
+          }
+          else if (key === "emotions") {
+            that.tempTotalDetails.emotions = {};
+            for (var i=0; i<that.emotions.length;i++) {
+              var emoName = that.emotions[i];
+              that.tempTotalDetails.emotions[emoName] = childSnapshot[emoName];
+            }
+            that.tempTotalDetails.emotions.total = childSnapshot.total;
+          }
+        });
+        this.oldTotalData = this.tempTotalDetails;
+        console.log("updateAggregateDetails");
+        console.log(this.oldTotalData);
       },
       dataChanged: function (datadb) {
         var activityColors = 
@@ -582,11 +598,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.oldAggregateDetails = this.newAggregateDetails;
         // this.aggregateDetails = this.newAggregateDetails;
 
-         var tempUpdateTotalDetails = this.oldTotalData;
+        var tempUpdateTotalDetails = this.oldTotalData;
         tempUpdateTotalDetails.numDays = parseInt(this.oldTotalData.numDays) + 1;
         console.log("AFTER this.updateAggregateDetails.activities[this.activity]");
         this.updateTotalDetails = tempUpdateTotalDetails;
         this.oldTotalData = this.updateTotalDetails;
+        this.updateTotal();
       },
       _periodStartChanged: function(periodStartSelected) {
         
@@ -750,11 +767,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         tempPlaceUpdateAggregateDetails.emotions.total = parseInt(this.oldAggregateDetails.emotions.total) + total;
         this.updateAggregateDetails = tempPlaceUpdateAggregateDetails;
         this.oldAggregateDetails = this.updateAggregateDetails;
+        console.log("tempPlaceUpdateAggregateDetails");
+        console.log(this.tempPlaceUpdateAggregateDetails);
+        this.updateNewDayAggregate();
 
         var tempUpdateTotalDetails = this.oldTotalData;
-        tempUpdateTotalDetails.activities[this.activity] = parseInt(this.oldTotalData.activities[this.activity]) + this.activityDetails.duration;
-        // console.log("AFTER this.updateAggregateDetails.activities[this.activity]");
-        // console.log(this.oldAggregateDetails.activities[this.activity]);
+        tempUpdateTotalDetails.activities[this.activity] = parseInt(this.oldTotalData.activities[this.activity]) + this.activityDetails.duration;        
         tempUpdateTotalDetails.emotions.joy = parseInt(this.oldTotalData.emotions.joy) + this.joyScore;
         tempUpdateTotalDetails.emotions.calm = parseInt(this.oldTotalData.emotions.calm) + this.calmScore;
         tempUpdateTotalDetails.emotions.hope = parseInt(this.oldTotalData.emotions.hope) + this.hopeScore;
@@ -766,11 +784,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.oldTotalData = this.updateTotalDetails;
         console.log("update total");
         console.log(this.updateTotalDetails);
+        console.log("tempUpdateTotalDetails");
+        console.log(this.tempUpdateTotalDetails);
         this.updateTotal();
 
         this.saveEntry();
+
         // console.log("ENTRY SAVED AND BEFORE UPDATE NEW AGGREGATE");
-        this.updateNewDayAggregate();
+        // this.updateNewDayAggregate();
         // console.log("UPDATED NEW AGGREGATE AND BEFORE CLOSING POP UP");
         this._closePopUp();
         this.joyScore = 0;
@@ -790,32 +811,95 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.updateAggregateDetails.emotions.sorrow += this.sorrowScore;
         this.updateNewDayAggregate();
       },
+      editTotal: function (diffDuration, diffJoy, diffSorrow, diffCalm, diffAnger, diffHope, diffFear, diffTotalEmotion, diffActivityName) {
+        var tempUpdateTotalDetails = this.oldTotalData;
+        tempUpdateTotalDetails.activities[diffActivityName] = parseInt(this.oldTotalData.activities[diffActivityName]) + diffDuration;
+        // console.log("AFTER this.updateAggregateDetails.activities[this.activity]");
+        // console.log(this.oldAggregateDetails.activities[this.activity]);
+        tempUpdateTotalDetails.emotions.joy = parseInt(this.oldTotalData.emotions.joy) + diffJoy;
+        tempUpdateTotalDetails.emotions.calm = parseInt(this.oldTotalData.emotions.calm) + diffCalm;
+        tempUpdateTotalDetails.emotions.hope = parseInt(this.oldTotalData.emotions.hope) + diffHope;
+        tempUpdateTotalDetails.emotions.anger = parseInt(this.oldTotalData.emotions.anger) + diffAnger;
+        tempUpdateTotalDetails.emotions.fear = parseInt(this.oldTotalData.emotions.fear) + diffFear;
+        tempUpdateTotalDetails.emotions.sorrow = parseInt(this.oldTotalData.emotions.sorrow) + diffSorrow;
+        tempUpdateTotalDetails.emotions.total = parseInt(this.oldTotalData.emotions.total) + diffTotalEmotion;
+        this.updateTotalDetails = tempUpdateTotalDetails;
+        this.oldTotalData = this.updateTotalDetails;
+        console.log("update total");
+        console.log(this.updateTotalDetails);
+        this.updateTotal();
+      },
+      editAggregate: function (diffDuration, diffJoy, diffSorrow, diffCalm, diffAnger, diffHope, diffFear, diffTotalEmotion, diffActivityName) {
+        var tempPlaceUpdateAggregateDetails = this.oldAggregateDetails;
+        tempPlaceUpdateAggregateDetails.activities[diffActivityName] = parseInt(this.oldAggregateDetails.activities[diffActivityName]) + diffDuration;
+
+        // console.log(this.oldAggregateDetails.activities[this.activity]);
+        tempPlaceUpdateAggregateDetails.emotions.joy = parseInt(this.oldAggregateDetails.emotions.joy) + diffJoy;
+        tempPlaceUpdateAggregateDetails.emotions.calm = parseInt(this.oldAggregateDetails.emotions.calm) + diffCalm;
+        tempPlaceUpdateAggregateDetails.emotions.hope = parseInt(this.oldAggregateDetails.emotions.hope) + diffHope;
+        tempPlaceUpdateAggregateDetails.emotions.anger = parseInt(this.oldAggregateDetails.emotions.anger) + diffAnger;
+        tempPlaceUpdateAggregateDetails.emotions.fear = parseInt(this.oldAggregateDetails.emotions.fear) + diffFear;
+        tempPlaceUpdateAggregateDetails.emotions.sorrow = parseInt(this.oldAggregateDetails.emotions.sorrow) + diffSorrow;
+        tempPlaceUpdateAggregateDetails.emotions.total = parseInt(this.oldAggregateDetails.emotions.total) + diffTotalEmotion;
+        this.updateAggregateDetails = tempPlaceUpdateAggregateDetails;
+        this.oldAggregateDetails = this.updateAggregateDetails;
+        this.updateNewDayAggregate();
+      },
       searchDb: function() {
         // console.log("SEARCH DB");
         // console.log(this.datadb);
+
         for (key in this.datadb) {
           var obj = this.datadb[key];
           console.log("obj");
           console.log(obj);
+
           var activityStartTime = obj.startTime;
           var activityEndTime = obj.endTime;
+          var oldDuration = obj.endTime - obj.startTime;
+          var newDuration = oldDuration;
+
+          var diffDuration = 0;
+          var diffJoy = 0;
+          var diffSorrow = 0;
+          var diffCalm = 0;
+          var diffAnger = 0;
+          var diffHope = 0;
+          var diffFear = 0;
+          var diffTotalEmotion = 0;
+          var diffActivityName = obj.activityType;
+
           var modified = false;
+          var deleted = false;
           if (activityStartTime < this.periodEndSelected && activityEndTime > this.periodEndSelected) {
             //change start time of the old activity
             obj.startTime = this.periodEndSelected;
+            newDuration = obj.endTime - obj.startTime;
+            diffDuration = newDuration - oldDuration;
             console.log("MODIFYING START TIME");
             modified = true;
           }
           else if (activityStartTime < this.periodStartSelected && activityEndTime > this.periodStartSelected) {
             // change end time of old activity
             obj.endTime = this.periodStartSelected;
+            newDuration = obj.endTime - obj.startTime;
+            diffDuration = newDuration - oldDuration;
             console.log("MODIFYING END TIME");
             modified = true;
           }
           else if (activityEndTime <= this.periodEndSelected && activityStartTime >= this.periodStartSelected) {
             // delete this key
             var key = obj.$key;
+            diffDuration = - oldDuration;
+            diffJoy = -1 * obj.emotion.joy;
+            diffCalm = -1 * obj.emotion.calm;
+            diffHope = -1 * obj.emotion.hope;
+            diffFear = -1 * obj.emotion.fear;
+            diffAnger = -1 * obj.emotion.anger;
+            diffSorrow = -1 * obj.emotion.sorrow;
+            diffTotalEmotion = - diffFear - diffAnger - diffSorrow + diffJoy + diffHope + diffCalm;
             this.delete(key);
+            deleted = true;
             console.log("DELETING");
           }
 
@@ -831,6 +915,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             console.log(this.editedActivityDetails);
             var key = obj.$key;
             this.editOldEntry(key);
+          }
+          if (modified || deleted) {
+            this.editAggregate(diffDuration, diffJoy, diffSorrow, diffCalm, diffAnger, diffHope, diffFear, diffTotalEmotion, diffActivityName); //TODO
+            this.editTotal(diffDuration, diffJoy, diffSorrow, diffCalm, diffAnger, diffHope, diffFear, diffTotalEmotion, diffActivityName); //TODO
           }
         }
       },
