@@ -92,7 +92,7 @@
             format = d3.time.format("%a %b %d %Y");
 
         var color = d3.scale.quantize()
-            .domain([0, 20])
+            .domain([-20, 20])
             .range(d3.range(11).map(function(d) { return "q" + d + "-11"; }));
 
         var chart = d3.select(this.$.chart);
