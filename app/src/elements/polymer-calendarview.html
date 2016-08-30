@@ -68,8 +68,8 @@
       is: 'polymer-calendarview',
       properties: {
         data: {
-          type: Array,
-          value: []
+          type: Object,
+          value: {}
         },
       },
 
@@ -88,12 +88,15 @@
             week = d3.time.format("%U"), // week number of the year
             month = d3.time.format("%m"), // month number
             year = d3.time.format("%Y"),
-            percent = d3.format(".1%"),
-            format = d3.time.format("%Y-%m-%d");
+            percent = d3.format(".1"),
+            format = d3.time.format("%a %b %d %Y");
 
         var color = d3.scale.quantize()
-            .domain([-.05, .05])
+            .domain([0, 20])
             .range(d3.range(11).map(function(d) { return "q" + d + "-11"; }));
+
+        var chart = d3.select(this.$.chart);
+        chart.selectAll("*").remove();
 
         var svg = d3.select(this.$.chart).selectAll("svg")
             .data(d3.range(2016, 2017))
@@ -161,25 +164,35 @@
         // d3.csv("dji.csv", function(error, csv) {
           // console.log(csv);
           // var data = {
-          //   "2008-10-01":0.24,
-          //   "2008-09-30":0.75,
-          //   "2009-08-01":0.03,
-          //   "2010-08-02":0.1,
-          //   "2010-01-01":0.05
+          //   "Wed Oct 29 2016":0.24,
+          //   "Thu Feb 19 2016":0.75
+          //   // ,
+          //   // "Wed Oct 29 2008":0.03,
+          //   // "Wed Oct 29 2008":0.1,
+          //   // "Wed Oct 29 2008":0.05
           // }
+          var data = this.data;
           var that = this;
+          console.log("polymer-calendarview");
 
-          rect.filter(function(d) { return d in that.data; })
-              .attr("class", function(d) { return "day " + color(that.data[d]); })
+          console.log(data);
+
+          rect.filter(function(d) { 
+            console.log("d: "+d);
+            return d in data; 
+          }).attr("class", function(d) { 
+                console.log("color: "+color(data[d]));
+                return "day " + color(data[d]); 
+              })
             .select("title")
-              .text(function(d) { return d + ": " + percent(that.data[d]); });
+              .text(function(d) { return d + ": " + percent(data[d]); });
 
           //  Tooltip
           rect.on("mouseover", mouseover);
           rect.on("mouseout", mouseout);
           function mouseover(d) {
             tooltip.style("visibility", "visible");
-            var percent_data = (that.data[d] !== undefined) ? percent(that.data[d]) : percent(0);
+            var percent_data = (data[d] !== undefined) ? percent(data[d]) : percent(0);
             var purchase_text = d + ": " + percent_data;
 
             tooltip.transition()        
