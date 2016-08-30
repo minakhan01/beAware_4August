@@ -430,6 +430,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             value: 
             ["Work", "Sleep", "Leisure", "Social", "Gym"]
           },
+          firstTime: {
+            type: Boolean,
+            value: true
+          }
       },
       observers: [
            'dataChanged(datadb.*)',
@@ -691,11 +695,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         return Promise.resolve();
       },
       _activityChanged: function(activitySelected) {
-        console.log("_activityChanged: "+this.activity)
+        console.log("_activityChanged: "+this.activity);
         },
       _periodEndChanged: function(periodEndSelected) {
-        console.log("MY-INPUT _periodEndChanged");
-        this.createPopUp();
+        console.log("_periodEndChanged");
+        console.log("this.firstTime: "+this.firstTime);
+        
+        if (this.firstTime) {
+          this.createPopUp();
+        }
+        
+        
         },
       createPopUp: function() {
         this.$.plain.open();
