@@ -1,0 +1,220 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../d3/d3.min.js">
+<link rel="import" href="elements/aster-polymer.html">
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-app.html">
+<!-- <link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html"> -->
+<link rel="import" href="../bower_components/app-storage/app-network-status-behavior.html">
+<link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+<link rel="import" href="colors-material.html">
+
+<dom-module id="my-asterAllClock">
+
+  <template>
+    <style></style>
+    hello
+    <colors-material id="colorSheet"></colors-material>
+    <aster-polymer data="[[dataAster]]" net="[[totalAster]]" query-done="queryDone"></aster-polymer>
+<!--     <firebase-query
+      id="query"
+      app-name="notes"
+      path="/[[user]]/[[date]]"
+      data="{{datadb}}">
+    </firebase-query> -->
+    <!-- <app-localstorage-document key="dataAster" data="{{dataAster}}"> -->
+<!--     <app-indexeddb-mirror
+    key="aster"
+    data="{{datadb}}"
+    persisted-data="{{persistedData}}">
+    </app-indexeddb-mirror> -->
+        
+  </template>
+
+  <script>
+
+    Polymer({
+
+      is: 'my-asterAllClock',
+      properties: {
+        user: {
+            type: String,
+            value: '' 
+        },
+        positiveNegativeEmotion: {
+          type: Object,
+          value: 
+          {"joy": 1, "calm" : 1, "hope": 1, "sorrow": -1, "anger": -1, "fear": -1}
+        },
+        emotions: {
+          type: Array,
+          value: 
+          ["joy", "calm", "hope", "sorrow", "anger", "fear"]
+        },
+        date: {
+          type: String,
+          observer: ''
+        },
+        datadb: {
+          type: Object,
+          observer: 'dataChanged'
+        },
+        queryDone: {
+          type: Boolean,
+          value : false
+        },
+        data: {
+          type: Array,
+          value: 
+          [{ "a": 1, "b": 2, "c": 3 },
+          { "a": 4, "d": 5, "e": 6 },
+          { "d": 4, "f": 5, "b": 6 }]
+        },
+        totalAster: {
+          type: Number,
+          value : 0
+        },
+        dataAster: {
+          type: Array,
+          value: [
+          { "name": "one", "score": 10, "width": 2, "color": "#9E0041"},
+          { "name": "two", "score": 20, "width": 2, "color": "#C32F4B"},
+          { "name": "three", "score": 40, "width": 5, "color": "#E1514B"},
+          { "name": "four", "score": 10, "width": 4, "color": "#F47245"},
+          { "name": "five", "score": 5, "width": 6, "color": "#FB9F59"}],
+        },
+        //A200 list
+        activityCategories: {
+          type: Array,
+          value: [
+          { "name": "Sleep", "color": "Green", "colorType": "A200"},
+          { "name": "Work", "color": "Blue", "colorType": "A200"},
+          { "name": "Gym", "color": "Pink", "colorType": "A200"},
+          { "name": "Social", "color": "Amber", "colorType": "A200"},
+          { "name": "Leisure", "color": "Purple", "colorType": "A200"},
+          ],
+        },
+        //positive : A400 list
+        //negative: A700 list
+        emotionCategories: {
+          type: Array,
+          value: [
+          { "name": "Joy", "isPositive": true, "color": "Lime", "colorType": "A400"},
+          { "name": "Calm", "isPositive": true, "color": "Cyan", "colorType": "A400"},
+          { "name": "Creativity", "isPositive": true, "color": "DeepPurple", "colorType": "A400"},
+          { "name": "Gratitude", "isPositive": true, "color": "Teal", "colorType": "A400"},
+          { "name": "Pride", "isPositive": true, "color": "Indigo", "colorType": "A400"},
+          { "name": "Fear", "isPositive": false, "color": "Orange", "colorType": "A700"},
+          { "name": "Stress", "isPositive": false, "color": "Pink", "colorType": "A700"},
+          { "name": "Sadness", "isPositive": false, "color": "Yellow", "colorType": "A700"},
+          { "name": "Anger", "isPositive": false, "color": "Red", "colorType": "A700"},
+          { "name": "Guilt", "isPositive": false, "color": "Amber", "colorType": "A700"},
+          ],
+        },
+        exampleDay: {
+          type: Array,
+          value: 
+          [
+          { "startTime": 0, "endTime": 7, "activityName":  "Sleep", "emotionsList" : [
+                {"name": "Calm", "intensity": 3}
+              ]
+          },
+          { "startTime": 7, "endTime": 15, "activityName":  "Work", "emotionsList" : [
+              {"name": "Stress", "intensity": 1},
+              {"name": "Joy", "intensity": 2},
+              {"name": "Fear", "intensity": 1},
+              {"name": "Gratitude", "intensity": 1}
+              ]
+          },
+          { "startTime": 15, "endTime": 18, "activityName":  "Gym", "emotionsList" : [
+              {"name": "Joy", "intensity": 1},
+              {"name": "Creativity", "intensity": 1},
+              {"name": "Calm", "intensity": 1}
+              ]
+          },
+          { "startTime": 18, "endTime": 20, "activityName":  "Social", "emotionsList" : [
+              {"name": "Sad", "intensity": 1},
+              {"name": "Calm", "intensity": 1}
+              ]
+          },
+          { "startTime": 20, "endTime": 23, "activityName":  "Leisure", "emotionsList" : []
+          },
+          { "startTime": 23, "endTime": 24, "activityName":  "Sleep", "emotionsList" : [
+              {"name": "Stress", "intensity": 1}
+              ]
+          },
+          ]
+        }
+      },
+      observers: [
+           'dataChanged(datadb.*)'
+      ],
+
+      dataChanged: function (datadb) {
+        var activityColors = 
+        { "Sleep": {"colorShade": "Green", "colorType": "A200"},
+          "Work" : {"colorShade": "Blue", "colorType": "A200"},
+          "Gym" : {"colorShade": "Pink", "colorType": "A200"},
+          "Social" : {"colorShade": "Amber", "colorType": "A200"},
+          "Leisure": {"colorShade": "Purple", "colorType": "A200"}
+        };
+      // do something when the query returns values
+      console.log("---BEFORE in DATACHANGED ASTERCLOCK");
+        var data = this.datadb;
+        var localDataAster = [];
+        var colorSheet = this.$.colorSheet;
+        var that = this;
+        this.totalAster = 0;
+        data.forEach(function(childSnapshot) {
+          console.log(childSnapshot);
+          // key will be "fred" the first time and "barney" the second time
+          var activityLabel = childSnapshot.activityType;
+          var emotionNet = childSnapshot.emotion.total;
+          var emotionList = [];
+          that.totalAster += emotionNet;
+          for (var j = 0; j < that.emotions.length; j++) {
+            var emotionName = that.emotions[j];
+            console.log("emotionName: "+ emotionName);
+            var score = childSnapshot.emotion[emotionName];
+            if (score != 0) {
+              emotionList.push(emotionName+": "+that.positiveNegativeEmotion[emotionName] * score);
+            }
+          }
+          console.log("emotionList: "+ emotionList);
+          var duration = childSnapshot.duration;
+          var colorShadeString = activityColors[activityLabel].colorShade;
+          var activitySelectedColor = colorSheet.colors[colorShadeString].a700;
+          var element = {"name" : activityLabel, "score" : emotionNet, "width" : duration, "color": activitySelectedColor, "emotionList": emotionList};
+          localDataAster.push(element);
+        });
+        console.log("AFTER");
+        this.dataAster = localDataAster;
+        console.log("totalAster: "+this.totalAster);
+      },
+      ready: function() {
+        changeCommits = Promise.resolve();
+        console.log("this.$.query.query: "+this.$.query.query);
+        this.date = (new Date()).toDateString();
+        // console.log(this.$.query.getStoredValue());
+        // if (this.$.query && this.$.query.isNew) {
+        //   console.log("this.$.query.refresh");
+        //     changeCommits.then(() => {
+        //       console.log(this.$.query.getStoredValue());
+        //     });
+        // }
+      }
+
+    });
+
+  </script>
+
+</dom-module>

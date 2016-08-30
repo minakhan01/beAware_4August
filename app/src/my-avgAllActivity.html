@@ -1,0 +1,425 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-overlay-behavior/iron-overlay-behavior.html">
+<link rel="import" href="elements/chart-elements.html">
+<link rel="stylesheet" href="demo.css">
+<link rel="import" href="colors-material.html">
+
+<dom-module id="my-avgAllActivity">
+ <template>
+<!--     <firebase-query
+      id="query"
+      app-name="notes"
+      sequentialTransactions=true
+      path="/[[user]]/[[date]]"
+      data="{{datadb}}"> -->
+    </firebase-query>
+    <app-localstorage-document key="diff" data="{{emotions}}"></app-localstorage-document>
+<!--         <app-localstorage-document key="dataChartLegend" data="{{dataChartLegend}}">
+        <app-localstorage-document key="datadbActivity" data="{{datadbActivity}}">
+        <app-localstorage-document key="dataChartSleep" data="{{dataChartSleep}}">
+        <app-localstorage-document key="dataChartWork" data="{{dataChartWork}}">
+        <app-localstorage-document key="dataChartSocial" data="{{dataChartSocial}}">
+        <app-localstorage-document key="dataChartLeisure" data="{{dataChartLeisure}}">
+        <app-localstorage-document key="dataChartGym" data="{{dataChartGym}}">
+        <app-localstorage-document key="workArray" data="{{workArray}}">
+        <app-localstorage-document key="gymArray" data="{{gymArray}}">
+        <app-localstorage-document key="sleepArray" data="{{sleepArray}}">
+        <app-localstorage-document key="socialArray" data="{{socialArray}}">
+        <app-localstorage-document key="leisureArray" data="{{leisureArray}}"> -->
+        <app-localstorage-document key="colorsArrayA" data="{{colorsArray}}"></app-localstorage-document>
+        <app-localstorage-document key="backgroundColorsArrayA" data="{{backgroundColorsArray}}"></app-localstorage-document>
+<!--     <app-indexeddb-mirror
+        key="avgActivity"
+        data="{{datadb}}"
+        persisted-data="{{persistedData}}">
+    </app-indexeddb-mirror> -->
+    <firebase-query
+      id="query"
+      app-name="notes"
+      path="/calculated"
+      sequentialTransactions=true
+      data="{{testcalculated}}">
+    <firebase-query
+      id="query"
+      app-name="notes"
+      path="/test"
+      sequentialTransactions=true
+      data="{{testdata}}">
+    </firebase-query>
+<!--     <app-indexeddb-mirror
+        key="avgActivityTest"
+        data="{{datadb}}"
+        persisted-data="{{persistedData}}"> -->
+  <colors-material id="colorSheet"></colors-material>
+
+  <template is="dom-repeat" items="{{testdata}}" observe="datadb.*">
+<chart-pie id="chartLegend" data="[[dataChartLegend]]" chart-title="Legend" is-legend=1></chart-pie><br>
+    <chart-pie id="chartWork" data="[[dataChartWork]]" chart-title="Work" total-score=[[workTotal]]></chart-pie>
+    <chart-pie id="chartSleep" class="square-chart" data="[[dataChartSleep]]" chart-title="Sleep" total-score=[[sleepTotalEmotion]]></chart-pie>
+    <chart-pie id="chartLeisure" class="square-chart" data="[[dataChartLeisure]]" chart-title="Leisure" total-score=[[leisureTotal]]></chart-pie>
+    <chart-pie id="chartSocial" class="square-chart" data="[[dataChartSocial]]" chart-title="Social" total-score=[[socialTotal]]></chart-pie>
+    <chart-pie id="chartGym" class="square-chart" data="[[dataChartGym]]" chart-title="Gym" total-score=[[gymTotalEmotion]]></chart-pie>
+  </template>
+
+</template>
+
+  <script>
+
+    Polymer({
+
+      is: 'my-avgAllActivity',
+      properties: {
+        user: {
+            type: String,
+            value: '' 
+          },
+        date: {
+          type: String,
+          observer: ''
+        },
+        gymTotalEmotion: {
+          type: Number,
+          value: 0
+        },
+        leisureTotalEmotion: {
+          type: Number,
+          value: 0
+        },
+        socialTotalEmotion: {
+          type: Number,
+          value: 0
+        },
+        sleepTotalEmotion: {
+          type: Number,
+          value: 0
+        },
+        workTotalEmotion: {
+          type: Number,
+          value: 0
+        },
+        gymTotalHours: {
+          type: Number,
+          value: 0
+        },
+        leisureTotalHours: {
+          type: Number,
+          value: 0
+        },
+        socialTotalHours: {
+          type: Number,
+          value: 0
+        },
+        sleepTotalHours: {
+          type: Number,
+          value: 0
+        },
+        workTotalHours: {
+          type: Number,
+          value: 0
+        },
+        emotions: {
+          type: Array,
+          value: 
+          ["joy", "calm", "hope", "sorrow", "anger", "fear"]
+        },
+        positiveNegativeEmotion: {
+          type: Object,
+          value: 
+          {"joy": 1, "calm" : 1, "hope": 1, "sorrow": -1, "anger": -1, "fear": -1}
+        },
+        activities: {
+          type: Array,
+          value: 
+          ["Work", "Sleep", "Leisure", "Social", "Gym"]
+        },
+        workArray: {
+          type: Array,
+          value: 
+          [0, 0, 0, 0, 0, 0]
+        },
+        sleepArray: {
+          type: Array,
+          value: 
+          [0, 0, 0, 0, 0, 0]
+        },
+        socialArray: {
+          type: Array,
+          value: 
+          [0, 0, 0, 0, 0, 0]
+        },
+        gymArray: {
+          type: Array,
+          value: 
+          [0, 0, 0, 0, 0, 0]
+        },
+        leisureArray: {
+          type: Array,
+          value: 
+          [0, 0, 0, 0, 0, -1]
+        },
+        datadb: {
+          type: Object,
+          observer: 'activityDataChanged'
+        },
+        colorsArray: {
+          type: Array
+        },
+        backgroundColorsArray: {
+          type: Array
+        },
+        testcalculated: {
+          type: Object,
+          observer: 'testcalculatedChanged'
+        },
+        data: {
+          type: Array,
+          value: 
+          [{ "a": 1, "b": 2, "c": 3 }]
+        },
+        // testInput: {
+        //   type: Object
+        // },
+        // dataChartSleep: {
+        //   type: Object
+        // },
+        // dataChartWork: {
+        //   type: Object
+        // },
+        // dataChartSocial: {
+        //   type: Object
+        // },
+        // dataChartLeisure: {
+        //   type: Object
+        // },
+        // dataChartGym: {
+        //   type: Object
+        // },
+        emotionColors: {
+          type: Object,
+          value: 
+          { "joy": {"colorShade": "Lime", "colorType": "a400"},
+          "calm": {"colorShade": "Cyan", "colorType": "a400"},
+          "fear" : {"colorShade": "Orange", "colorType": "a700"},
+          "anger" : {"colorShade": "Red", "colorType": "a700"},
+          "sorrow" : {"colorShade": "Yellow", "colorType": "a700"},
+          "hope": {"colorShade": "Teal", "colorType": "a400"}
+          }
+        },
+      },
+      observers: [
+          'activityDataChanged(datadb.*)',
+          'testcalculatedChanged(testcalculated.*)'
+      ],
+      testcalculatedChanged: function(testcalculated) {
+        console.log("testcalculatedChanged");
+        console.log(this.testcalculated);
+        console.log(this.dataChartWork);
+      },
+      activityDataChanged: function (datadb) {
+              // do something when the query returns values
+                      var colorsArray = [];
+        var backgroundColorsArray = [];
+        var colorSheet = this.$.colorSheet;
+        for (var i=0; i<this.emotions.length;i++) {
+          //TODO: WHY IS activity 0
+          console.log(this.emotions[i]);
+          var colorShadeString = this.emotionColors[this.emotions[i]].colorShade;
+          var colorGradientString = this.emotionColors[this.emotions[i]].colorType;
+          var emotionSelectedColor = colorSheet.colors[colorShadeString][colorGradientString];
+          var emotionSelectedBackgroundColor = colorSheet.colors[colorShadeString].a100;
+          colorsArray.push(emotionSelectedColor);
+          backgroundColorsArray.push(emotionSelectedBackgroundColor);
+        }
+        this.colorsArray = colorsArray;
+        this.backgroundColorsArray = backgroundColorsArray;
+
+        
+        console.log("DATA CHANGED");
+        this.workArray = [0, 0, 0, 0, 0, 0];
+        this.sleepArray = [0, 0, 0, 0, 0, 0];
+        this.socialArray = [0, 0, 0, 0, 0, 0];
+        this.gymArray = [0, 0, 0, 0, 0, 0];
+        this.leisureArray = [0, 0, 0, 0, 0, 0];
+        this.workTotalHours = 0;
+        this.sleepTotalHours = 0;
+        this.gymTotalHours = 0;
+        this.leisureTotalHours = 0;
+        this.socialTotalHours = 0;
+        var data = this.datadb;
+        var localDataAster = [];
+        var colorSheet = this.$.colorSheet;
+        var activities = this.activities;
+        var emotions = this.emotions;
+        var that = this;
+        data.forEach(function(childSnapshot) {
+          // console.log(childSnapshot);
+          // key will be "fred" the first time and "barney" the second time
+          var activity = childSnapshot.activityType;
+          switch (activity) {
+                case "Work":
+                  that.modifyArray(that.workArray, childSnapshot);
+                  that.workTotalHours += childSnapshot.duration;
+                  break;
+
+                case "Sleep":
+                  that.modifyArray(that.sleepArray, childSnapshot);
+                  that.sleepTotalHours += childSnapshot.duration;
+                  break;
+
+                case "Social":
+                  that.modifyArray(that.socialArray, childSnapshot);
+                  that.socialTotalHours += childSnapshot.duration;
+                  break;
+
+                case "Leisure":
+                  that.modifyArray(that.leisureArray, childSnapshot);
+                  that.leisureTotalHours += childSnapshot.duration;
+                  break;
+
+                case "Gym":
+                  that.modifyArray(that.gymArray, childSnapshot);
+                  that.gymTotalHours += childSnapshot.duration;
+                  break;
+              }          
+        });
+        console.log(this.workArray);
+        console.log(this.sleepArray);
+        console.log(this.socialArray);
+        console.log(this.gymArray);
+        console.log(this.leisureArray);
+
+        function add(a, b) {
+            return a + b;
+        }
+        this.workTotalEmotion = this.workArray.reduce(add, 0);
+        this.sleepTotalEmotion = this.sleepArray.reduce(add, 0);
+        this.socialTotalEmotion = this.socialArray.reduce(add, 0);
+        this.leisureTotalEmotion = this.leisureArray.reduce(add, 0);
+        this.gymTotalEmotion = this.gymArray.reduce(add, 0);
+        // console.log("this.gymTotalEmotion: "+this.gymTotalEmotion);
+        // console.log("this.socialTotalEmotion: "+this.socialTotalEmotion);
+        // console.log("this.workTotalEmotion: "+this.workTotalEmotion);
+        // console.log("this.leisureTotalEmotion: "+this.leisureTotalEmotion);
+        // console.log("this.sleepTotalEmotion: "+this.sleepTotalEmotion);
+        // console.log("this.gymTotalHours: "+this.gymTotalHours);
+        // console.log("this.socialTotalHours: "+this.socialTotalHours);
+        // console.log("this.workTotalHours: "+this.workTotalHours);
+        // console.log("this.leisureTotalHours: "+this.leisureTotalHours);
+        // console.log("this.sleepTotalHours: "+this.sleepTotalHours);
+        this.dataChartWork = {
+          labels: this.emotions,
+          datasets: [
+              {
+                  data: this.workArray,
+                  backgroundColor: 
+                      this.colorsArray,
+                  hoverBackgroundColor: this.backgroundColorsArray
+              }
+          ]
+        };
+        this.dataChartSleep = {
+          labels: this.emotions,
+          datasets: [
+              {
+                  data: this.sleepArray,
+                  backgroundColor: 
+                      this.colorsArray,
+                  hoverBackgroundColor: this.backgroundColorsArray
+              }
+          ]
+        };
+        this.dataChartGym = {
+          labels: this.emotions,
+          datasets: [
+              {
+                  data: this.gymArray,
+                  backgroundColor: 
+                      this.colorsArray,
+                  hoverBackgroundColor: this.backgroundColorsArray
+              }
+          ]
+        };
+        this.dataChartLeisure = {
+          labels: this.emotions,
+          datasets: [
+              {
+                  data: this.leisureArray,
+                  backgroundColor: 
+                      this.colorsArray,
+                  hoverBackgroundColor: this.backgroundColorsArray
+              }
+          ]
+        };
+        this.dataChartSocial = {
+          labels: this.emotions,
+          datasets: [
+              {
+                  data: this.socialArray,
+                  backgroundColor: 
+                      this.colorsArray,
+                  hoverBackgroundColor: this.backgroundColorsArray
+              }
+          ]
+        };
+        this.dataChartLegend = {
+          labels: this.emotions,
+          datasets: [
+              {
+                  data: [0, 0, 0, 0, 0, 0],
+                  backgroundColor: this.colorsArray
+              }
+          ]
+        };
+        // this.testInput = this.testdata;
+        console.log("this.testdata");
+        console.log(this.testdata);
+      },
+      modifyArray: function(array, childSnapshot) {
+          for (var j = 0; j < this.emotions.length; j++) {
+            var emotionName = this.emotions[j];
+            var emotionIndex = this.emotions.indexOf(emotionName);
+            console.log("emotionName: "+ emotionName);
+            var score = childSnapshot.emotion[emotionName];
+            console.log("score: "+ score);
+            if (score > 0) {
+              array[emotionIndex] += score;
+            }
+          }
+      },
+      ready: function() {
+        this.date = (new Date()).toDateString();
+        var colorsArray = [];
+        var backgroundColorsArray = [];
+        var colorSheet = this.$.colorSheet;
+        for (var i=0; i<this.emotions.length;i++) {
+          //TODO: WHY IS activity 0
+          console.log(this.emotions[i]);
+          var colorShadeString = this.emotionColors[this.emotions[i]].colorShade;
+          var colorGradientString = this.emotionColors[this.emotions[i]].colorType;
+          var emotionSelectedColor = colorSheet.colors[colorShadeString][colorGradientString];
+          var emotionSelectedBackgroundColor = colorSheet.colors[colorShadeString].a100;
+          colorsArray.push(emotionSelectedColor);
+          backgroundColorsArray.push(emotionSelectedBackgroundColor);
+        }
+        this.colorsArray = colorsArray;
+        this.backgroundColorsArray = backgroundColorsArray;
+        console.log("colorsArray");
+        console.log(colorsArray);
+        
+
+      }
+    });
+    
+  </script>
+
+</dom-module>

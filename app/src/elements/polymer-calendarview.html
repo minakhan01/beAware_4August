@@ -178,10 +178,10 @@
           console.log(data);
 
           rect.filter(function(d) { 
-            console.log("d: "+d);
+            // console.log("d: "+d);
             return d in data; 
           }).attr("class", function(d) { 
-                console.log("color: "+color(data[d]));
+                // console.log("color: "+color(data[d]));
                 return "day " + color(data[d]); 
               })
             .select("title")
