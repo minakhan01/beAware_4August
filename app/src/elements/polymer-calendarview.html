@@ -67,10 +67,13 @@
 
       is: 'polymer-calendarview',
       properties: {
-
+        data: {
+          type: Array,
+          value: []
+        },
       },
 
-      ready: function() {
+      readyProduce: function() {
         console.log("in ready");
         var width = 960,
         height = 750,
@@ -93,7 +96,7 @@
             .range(d3.range(11).map(function(d) { return "q" + d + "-11"; }));
 
         var svg = d3.select(this.$.chart).selectAll("svg")
-            .data(d3.range(2008, 2011))
+            .data(d3.range(2016, 2017))
           .enter().append("svg")
             .attr("width", width)
             .attr("height", height)
@@ -157,25 +160,26 @@
 
         // d3.csv("dji.csv", function(error, csv) {
           // console.log(csv);
-          var data = {
-            "2008-10-01":0.24,
-            "2008-09-30":0.75,
-            "2009-08-01":0.03,
-            "2010-08-02":0.1,
-            "2010-01-01":0.05
-          }
+          // var data = {
+          //   "2008-10-01":0.24,
+          //   "2008-09-30":0.75,
+          //   "2009-08-01":0.03,
+          //   "2010-08-02":0.1,
+          //   "2010-01-01":0.05
+          // }
+          var that = this;
 
-          rect.filter(function(d) { return d in data; })
-              .attr("class", function(d) { return "day " + color(data[d]); })
+          rect.filter(function(d) { return d in that.data; })
+              .attr("class", function(d) { return "day " + color(that.data[d]); })
             .select("title")
-              .text(function(d) { return d + ": " + percent(data[d]); });
+              .text(function(d) { return d + ": " + percent(that.data[d]); });
 
           //  Tooltip
           rect.on("mouseover", mouseover);
           rect.on("mouseout", mouseout);
           function mouseover(d) {
             tooltip.style("visibility", "visible");
-            var percent_data = (data[d] !== undefined) ? percent(data[d]) : percent(0);
+            var percent_data = (that.data[d] !== undefined) ? percent(that.data[d]) : percent(0);
             var purchase_text = d + ": " + percent_data;
 
             tooltip.transition()        

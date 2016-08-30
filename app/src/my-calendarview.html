@@ -21,13 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <style></style>
     <colors-material id="colorSheet"></colors-material>
-    <polymer-calendarview></polymer-calendarview>
-    <firebase-query
-      id="query"
-      app-name="notes"
-      path="/Wed Aug 17 2016"
-      data="{{datadb}}">
-    </firebase-query>
+    <polymer-calendarview id="view" data="[[data]]"></polymer-calendarview>
         
   </template>
 
@@ -40,37 +34,50 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         user: {
             type: String,
             value: '' 
+          },
+        data: {
+          type: Object,
+          value: {
+            "2008-10-01":0.24,
+            "2008-09-30":0.75,
+            "2009-08-01":0.03,
+            "2010-08-02":0.1,
+            "2010-01-01":0.05
           }
+        },
+        datadb: {
+          type: Object,
+          observer: 'dataChanged'
+        },
       },
       observers: [
+      'dataChanged(datadb.*)',
       ],
 
       dataChanged: function (datadb) {
-        var activityColors = 
-        { "Sleep": {"colorShade": "Green", "colorType": "A200"},
-          "Work" : {"colorShade": "Blue", "colorType": "A200"},
-          "Gym" : {"colorShade": "Pink", "colorType": "A200"},
-          "Social" : {"colorShade": "Amber", "colorType": "A200"},
-          "Leisure": {"colorShade": "Purple", "colorType": "A200"}
-        };
-      // do something when the query returns values
-      // console.log("---BEFORE in DATACHANGED ASTERCLOCK");
-      //   var data = this.datadb;
-      //   var localDataAster = [];
-      //   var colorSheet = this.$.colorSheet;
-      //   data.forEach(function(childSnapshot) {
-      //     console.log(childSnapshot);
-      //     // key will be "fred" the first time and "barney" the second time
-      //     var activityLabel = childSnapshot.activityType;
-      //     var emotionNet = childSnapshot.emotion.total;
-      //     var duration = childSnapshot.duration;
-      //     var colorShadeString = activityColors[activityLabel].colorShade;
-      //     var activitySelectedColor = colorSheet.colors[colorShadeString].a700;
-      //     var element = {"name" : activityLabel, "score" : emotionNet, "width" : duration, color: activitySelectedColor};
-      //     localDataAster.push(element);
-      //   });
-      //   console.log("AFTER");
-      //   this.dataAster = localDataAster;
+        var aggregateData = this.datadb;
+        this.data = {}; 
+        var that = this;
+        aggregateData.forEach(function(childSnapshot) {
+          var dateString = childSnapshot.$key;
+          var date = new Date(Date.parse(dateString)).toDateString();
+          console.log("date");
+          console.log(date);
+          for (var key in childSnapshot) {
+            console.log("key");
+            console.log(key);
+            var childChildSnapshot = childSnapshot[key];
+            // var key = childChildSnapshot.$key;
+            if (key === "emotions") {
+              that.data[dateString] = parseInt(childChildSnapshot.total);
+              console.log("that.data");
+              console.log(that.data);
+            }
+          }
+        });
+        console.log("DATA on polymer-calendarview");
+        console.log(this.data);
+        this.$.view.readyProduce();
       }
     });
 

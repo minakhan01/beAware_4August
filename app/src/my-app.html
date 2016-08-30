@@ -162,6 +162,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </firebase-query>
 
     <firebase-query
+      id="aggregateQuery"
+      app-name="notes"
+      sequentialTransactions=true
+      path="/[[user.uid]]/aggregate"
+      data="{{aggregatedball}}">
+    </firebase-query>
+
+    <firebase-query
       id="allTotalQuery"
       app-name="notes"
       sequentialTransactions=true
@@ -262,7 +270,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <my-avgActivity name="avgActivity" user="[[user.uid]]" datadb="{{datadb}}" colors-array="{{activtiyColorsArray}}" background-colors-array="{{activtiyBackgroundColorsArray}}"></my-avgActivity>
           <my-avgEmotion name="avgEmotion" user="[[user.uid]]" datadb="{{datadb}}"></my-avgEmotion>
           <my-eventdrops name="eventdrops" user="[[user.uid]]" dailydb="{{dailydb}}"></my-eventdrops>
-          <my-calendarview name="calendarview" user="[[user.uid]]" ata="{{aggregatedb}}"></my-calendarview>
+          <my-calendarview name="calendarview" user="[[user.uid]]" datadb="{{aggregatedball}}"></my-calendarview>
         </iron-pages>
 
       </app-header-layout>
