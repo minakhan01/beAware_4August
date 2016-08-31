@@ -178,6 +178,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </firebase-query>
 
     <firebase-query
+      id="catActivityQuery"
+      app-name="notes"
+      sequentialTransactions=true
+      path="/[[user.uid]]/catActivity"
+      data="{{catactivitydb}}">
+    </firebase-query>
+
+    <firebase-query
+      id="catEmotionQuery"
+      app-name="notes"
+      sequentialTransactions=true
+      path="/[[user.uid]]/catEmotion"
+      data="{{catemotiondb}}">
+    </firebase-query>
+
+    <firebase-query
       id="dailyAllQuery"
       app-name="notes"
       sequentialTransactions=true
@@ -265,7 +281,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-header>
 
         <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
-          <my-input name="input" user="[[user.uid]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-input>
+          <my-input name="input" user="[[user.uid]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}" catactivitydb="{{catactivitydb}}" catemotiondb="{{catemotiondb}}"></my-input>
           <my-asterClock name="asterClock" user="[[user.uid]]" datadb="{{datadb}}"></my-asterClock>
           <my-avgActivity name="avgActivity" user="[[user.uid]]" datadb="{{datadb}}" colors-array="{{activtiyColorsArray}}" background-colors-array="{{activtiyBackgroundColorsArray}}"></my-avgActivity>
           <my-avgEmotion name="avgEmotion" user="[[user.uid]]" datadb="{{datadb}}"></my-avgEmotion>
@@ -375,6 +391,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       },
       totalDataChanged: function(totaldb) {
+        console.log("MY-APP this.totalDataExists");
+        console.log(this.totalDataExists);
         if (totaldb) {
           this.totalDataExists = true;
         }

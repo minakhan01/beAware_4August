@@ -223,6 +223,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         path="/"
         data="{{newTotalData}}">
     <firebase-document
+        id="createCategoricalActivityFirebase"
+        app-name="notes"
+        path="/"
+        data="{{newCategoricalActivityData}}">
+    <firebase-document
+        id="createCategoricalEmotionFirebase"
+        app-name="notes"
+        path="/"
+        data="{{newCategoricalEmotionData}}">
+    <firebase-document
+        id="updateCategoricalActivityFirebase"
+        app-name="notes"
+        path="/"
+        data="{{updateCategoricalActivityData}}">
+    <firebase-document
+        id="updateCategoricalEmotionFirebase"
+        app-name="notes"
+        path="/"
+        data="{{updateCategoricalEmotionData}}">
+    <firebase-document
         id="updateTotalFirebase"
         app-name="notes"
         path="/"
@@ -339,6 +359,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: Object,
             observer: 'aggregateDetailsChanged'
           },
+          catemotiondb: {
+            type: Object,
+            observer: 'categoricalEmotionsChanged'
+          },
+          catactivitydb: {
+            type: Object,
+            observer: 'categoricalActivityChanged'
+          },
+          aggregatedb: {
+            type: Object,
+            observer: 'aggregateDetailsChanged'
+          },
           editedActivityDetails: {
             type: Object,
             reflectToAttribute: true
@@ -438,7 +470,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       observers: [
            'dataChanged(datadb.*)',
            'aggregateDetailsChanged(aggregatedb.*)',
-           'totalDataChanged(totaldb.*)'
+           'totalDataChanged(totaldb.*)',
+           'categoricalActivityChanged(catactivitydb.*)',
+           'categoricalEmotionsChanged(catemotiondb.*)'
       ],
       _onAngerUp: function(){
         this.angerPressed = false;
@@ -507,6 +541,56 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log("updateAggregateDetails");
         console.log(this.oldAggregateDetails);
       },
+      categoricalActivityChanged: function(catactivitydb) {
+        console.log("catactivitydb: ");
+        console.log(this.catactivitydb);
+        var catActivityData = this.catactivitydb;
+        this.tempCatActivityData = {}; 
+        var that = this;
+        catActivityData.forEach(function(childSnapshot) {
+          var key = childSnapshot.$key;
+          console.log("key");
+          console.log(key);
+          console.log("childSnapshot");
+          console.log(childSnapshot);
+              that.tempCatActivityData[key] = {};
+              console.log("that.tempCatActivityData[activityName]");
+              console.log(that.tempCatEmotionData[key]);
+              for (var j=0; j<that.emotions.length; j++) {
+                that.tempCatActivityData[key][that.emotions[j]] = childSnapshot[that.emotions[j]];
+              }
+                      
+        });
+        this.oldCatActivityData = this.tempCatActivityData;
+        console.log("updateAggregateDetails");
+        console.log(this.oldCatActivityData);
+      },
+      categoricalEmotionsChanged: function(catemotiondb) {
+        console.log("catemotiondb: ");
+        console.log(this.catemotiondb);
+        var catEmotionData = this.catemotiondb;
+        this.tempCatEmotionData = {}; 
+        var that = this;
+        catEmotionData.forEach(function(childSnapshot) {
+          var key = childSnapshot.$key;
+          console.log("key");
+          console.log(key);
+          console.log("childSnapshot");
+          console.log(childSnapshot);
+              that.tempCatEmotionData[key] = {};
+              console.log("that.tempCatEmotionData[emoName]");
+              console.log(that.tempCatEmotionData[key]);
+              for (var j=0; j<that.activities.length; j++) {
+                that.tempCatEmotionData[key][that.activities[j]] = childSnapshot[that.activities[j]];
+              }
+            
+            // that.tempCatEmotionData.total = childSnapshot.total;
+          
+        });
+        this.oldCatEmotionData = this.tempCatEmotionData;
+        console.log("updateAggregateDetails");
+        console.log(this.oldCatEmotionData);
+      },
       totalDataChanged: function(totaldb) {
         console.log("totaldb: ");
         console.log(this.totaldb);
@@ -563,6 +647,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log("AFTER");
       },
       createNewTotalData: function() {
+        console.log("createNewTotalData");
         this.newTotalData = {};
         this.newTotalData.numDays = 0;
         this.newTotalData.emotions = {};
@@ -579,6 +664,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         console.log(this.newTotalData);
         this.oldTotalData = this.newTotalData;
+      },
+      createNewCategoricalActivityData: function() {
+        console.log("createNewCategoricalActivityData");
+        this.newCategoricalActivityData = {};
+        this.newCategoricalActivityData.numDays = 0;
+        for (var i=0; i<this.activities.length;i++) {
+          //TODO: WHY IS activity 0
+          this.newCategoricalActivityData[this.activities[i]] = {};
+          for (var j=0; j<this.emotions.length; j++) {
+            this.newCategoricalActivityData[this.activities[i]][this.emotions[j]] = 0;
+          }
+        }
+        this.oldCatActivityData = this.newCategoricalActivityData;
+        console.log(this.oldCatActivityData);
+      },
+      createNewCategoricalEmotionData: function() {
+        console.log("createNewCategoricalEmotionData");
+        this.newCategoricalEmotionData = {};
+        this.newCategoricalEmotionData.numDays = 0;
+        for (var i=0; i<this.emotions.length;i++) {
+          this.newCategoricalEmotionData[this.emotions[i]] = {};
+          for (var j=0; j<this.activities.length;j++) {
+            //TODO: WHY IS activity 0
+            this.newCategoricalEmotionData[this.emotions[i]][this.activities[j]] = 0;
+          }
+          
+        }
+        this.oldCatEmotionData = this.newCategoricalEmotionData;
+        console.log(this.oldCatEmotionData);
       },
       createNewAggregateActivity: function() {
         this.newAggregateDetails = {};
@@ -608,6 +722,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.updateTotalDetails = tempUpdateTotalDetails;
         this.oldTotalData = this.updateTotalDetails;
         this.updateTotal();
+
+        var tempUpdateCatActivityData = this.oldCatActivityData;
+        tempUpdateCatActivityData.numDays = parseInt(this.oldCatActivityData.numDays) + 1;
+        this.updateCategoricalActivityData = tempUpdateCatActivityData;
+        this.oldCatActivityData = this.updateCategoricalActivityData;
+        this.updateCategoricalActivity();
+
+        var tempUpdateCatEmotionData = this.oldCatEmotionData;
+        tempUpdateCatEmotionData.numDays = parseInt(this.oldCatEmotionData.numDays) + 1;
+        this.updateCategoricalEmotionData = tempUpdateCatEmotionData;
+        this.oldCatEmotionData = this.updateCategoricalEmotionData;
+        this.updateCategoricalEmotion();
       },
       _periodStartChanged: function(periodStartSelected) {
         
@@ -646,6 +772,42 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (this.$.createTotalFirebase.isNew) {
           return this.$.createTotalFirebase.save(this.user,"total").then(() => {
             this.$.createTotalFirebase.reset();
+          });
+        }
+        return Promise.resolve();
+      },
+      createCategoricalActivity: function() {  
+        console.log("creating new aggregate day");
+        if (this.$.createCategoricalActivityFirebase.isNew) {
+          return this.$.createCategoricalActivityFirebase.save(this.user,"catActivity").then(() => {
+            this.$.createCategoricalActivityFirebase.reset();
+          });
+        }
+        return Promise.resolve();
+      },
+      createCategoricalEmotion: function() {  
+        console.log("creating new aggregate day");
+        if (this.$.createCategoricalEmotionFirebase.isNew) {
+          return this.$.createCategoricalEmotionFirebase.save(this.user,"catEmotion").then(() => {
+            this.$.createCategoricalEmotionFirebase.reset();
+          });
+        }
+        return Promise.resolve();
+      },
+      updateCategoricalActivity: function() {  
+        console.log("creating new aggregate day");
+        if (this.$.updateCategoricalActivityFirebase.isNew) {
+          return this.$.updateCategoricalActivityFirebase.save(this.user,"catActivity").then(() => {
+            this.$.updateCategoricalActivityFirebase.reset();
+          });
+        }
+        return Promise.resolve();
+      },
+      updateCategoricalEmotion: function() {  
+        console.log("creating new aggregate day");
+        if (this.$.updateCategoricalEmotionFirebase.isNew) {
+          return this.$.updateCategoricalEmotionFirebase.save(this.user,"catEmotion").then(() => {
+            this.$.updateCategoricalEmotionFirebase.reset();
           });
         }
         return Promise.resolve();
@@ -756,6 +918,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         if (!this.totalDataExists) {
           this.createNewTotalData();
+          this.createNewCategoricalActivityData();
+          this.createNewCategoricalEmotionData();
           console.log("creating new total - first time user");
         }
 
@@ -764,6 +928,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         
         var tempPlaceUpdateAggregateDetails = this.oldAggregateDetails;
+        console.log("this.oldAggregateDetails");
+        console.log(this.oldAggregateDetails);
         tempPlaceUpdateAggregateDetails.activities[this.activity] = parseInt(this.oldAggregateDetails.activities[this.activity]) + this.activityDetails.duration;
         // console.log("AFTER this.updateAggregateDetails.activities[this.activity]");
         var total = this.joyScore + this.calmScore + this.hopeScore - this.angerScore - this.sorrowScore - this.fearScore;
@@ -782,6 +948,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.updateNewDayAggregate();
 
         var tempUpdateTotalDetails = this.oldTotalData;
+        console.log("oldTotalData");
+        console.log(this.oldTotalData);
         tempUpdateTotalDetails.activities[this.activity] = parseInt(this.oldTotalData.activities[this.activity]) + this.activityDetails.duration;        
         tempUpdateTotalDetails.emotions.joy = parseInt(this.oldTotalData.emotions.joy) + this.joyScore;
         tempUpdateTotalDetails.emotions.calm = parseInt(this.oldTotalData.emotions.calm) + this.calmScore;
@@ -797,6 +965,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log("tempUpdateTotalDetails");
         console.log(this.tempUpdateTotalDetails);
         this.updateTotal();
+
+        var tempUpdateCatActivityData = this.oldCatActivityData;
+        console.log("this.oldCatActivityData");
+        console.log(this.oldCatActivityData);
+        console.log("this.activity");
+        console.log(this.activity)
+        tempUpdateCatActivityData[this.activity].joy = parseInt(this.oldCatActivityData[this.activity].joy) + this.joyScore;
+        tempUpdateCatActivityData[this.activity].calm = parseInt(this.oldCatActivityData[this.activity].calm) + this.calmScore;
+        tempUpdateCatActivityData[this.activity].hope = parseInt(this.oldCatActivityData[this.activity].hope) + this.hopeScore;
+        tempUpdateCatActivityData[this.activity].anger = parseInt(this.oldCatActivityData[this.activity].anger) + this.angerScore;
+        tempUpdateCatActivityData[this.activity].fear = parseInt(this.oldCatActivityData[this.activity].fear) + this.fearScore;
+        tempUpdateCatActivityData[this.activity].sorrow = parseInt(this.oldCatActivityData[this.activity].sorrow) + this.sorrowScore;
+        // tempUpdateCatActivityData[this.activity].total = parseInt(this.oldCatActivityData[this.activity].total) + total;
+        this.updateCategoricalActivityData = tempUpdateCatActivityData;
+        this.oldCatActivityData = this.updateCategoricalActivityData;
+        this.updateCategoricalActivity();
+
+        var tempUpdateCatEmotionData = this.oldCatEmotionData;
+        if (this.joyScore > 0) {
+        tempUpdateCatEmotionData.joy[this.activity] = parseInt(this.oldCatEmotionData.joy[this.activity]) + this.activityDetails.duration;
+        }
+        if (this.calmScore > 0) {
+        tempUpdateCatEmotionData.calm[this.activity] = parseInt(this.oldCatEmotionData.calm[this.activity]) + this.activityDetails.duration;
+        }
+        if (this.hopeScore > 0) {
+        tempUpdateCatEmotionData.hope[this.activity] = parseInt(this.oldCatEmotionData.hope[this.activity]) + this.activityDetails.duration;
+        }
+        if (this.angerScore > 0) {
+        tempUpdateCatEmotionData.anger[this.activity] = parseInt(this.oldCatEmotionData.anger[this.activity]) + this.activityDetails.duration;
+        }
+        if (this.fearScore > 0) {
+        tempUpdateCatEmotionData.fear[this.activity] = parseInt(this.oldCatEmotionData.fear[this.activity]) + this.activityDetails.duration;
+        }
+        if (this.sorrowScore > 0) {
+        tempUpdateCatEmotionData.sorrow[this.activity] = parseInt(this.oldCatEmotionData.sorrow[this.activity]) + this.activityDetails.duration;
+        }
+        this.updateCategoricalEmotionData = tempUpdateCatEmotionData;
+        this.oldCatEmotionData = this.updateCategoricalEmotionData;
+        this.updateCategoricalEmotion();
 
         this.saveEntry();
 
@@ -824,8 +1031,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       editTotal: function (diffDuration, diffJoy, diffSorrow, diffCalm, diffAnger, diffHope, diffFear, diffTotalEmotion, diffActivityName) {
         var tempUpdateTotalDetails = this.oldTotalData;
         tempUpdateTotalDetails.activities[diffActivityName] = parseInt(this.oldTotalData.activities[diffActivityName]) + diffDuration;
-        // console.log("AFTER this.updateAggregateDetails.activities[this.activity]");
-        // console.log(this.oldAggregateDetails.activities[this.activity]);
         tempUpdateTotalDetails.emotions.joy = parseInt(this.oldTotalData.emotions.joy) + diffJoy;
         tempUpdateTotalDetails.emotions.calm = parseInt(this.oldTotalData.emotions.calm) + diffCalm;
         tempUpdateTotalDetails.emotions.hope = parseInt(this.oldTotalData.emotions.hope) + diffHope;
@@ -838,6 +1043,48 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log("update total");
         console.log(this.updateTotalDetails);
         this.updateTotal();
+      },
+      editCatEmotion: function (diffDuration, diffJoy, diffSorrow, diffCalm, diffAnger, diffHope, diffFear, diffTotalEmotion, diffActivityName, joyScore, calmScore, hopeScore, sorrowScore, angerScore, fearScore) {
+        var tempUpdateCatEmotionData = this.oldCatEmotionData;
+        if (joyScore > 0) {
+        tempUpdateCatEmotionData.joy[diffActivityName] = parseInt(this.oldCatEmotionData.joy[diffActivityName]) + diffDuration;
+        }
+        if (calmScore > 0) {
+        tempUpdateCatEmotionData.calm[diffActivityName] = parseInt(this.oldCatEmotionData.calm[diffActivityName]) + diffDuration;
+        }
+        if (hopeScore > 0) {
+        tempUpdateCatEmotionData.hope[diffActivityName] = parseInt(this.oldCatEmotionData.hope[diffActivityName]) + diffDuration;
+        }
+        if (angerScore > 0) {
+        tempUpdateCatEmotionData.anger[diffActivityName] = parseInt(this.oldCatEmotionData.anger[diffActivityName]) + diffDuration;
+        }
+        if (fearScore > 0) {
+        tempUpdateCatEmotionData.fear[diffActivityName] = parseInt(this.oldCatEmotionData.fear[diffActivityNames]) + diffDuration;
+        }
+        if (sorrowScore > 0) {
+        tempUpdateCatEmotionData.sorrow[this.activity] = parseInt(this.oldCatEmotionData.sorrow[this.activity]) + diffDurations;
+        }
+
+        this.updateCategoricalEmotionData = tempUpdateCatEmotionData;
+        this.oldCatEmotionData = this.updateCategoricalEmotionData;
+        console.log("update total");
+        console.log(this.updateCategoricalEmotionData);
+        this.updateCategoricalEmotion();
+      },
+      editCatActivity: function (diffDuration, diffJoy, diffSorrow, diffCalm, diffAnger, diffHope, diffFear, diffTotalEmotion, diffActivityName) {
+        var tempUpdateCatActivityData = this.oldCatActivityData;
+        // console.log("AFTER this.updateAggregateDetails.activities[this.activity]");
+        // console.log(this.oldAggregateDetails.activities[this.activity]);
+        tempUpdateCatActivityData[diffActivityName].joy = parseInt(this.oldCatActivityData[diffActivityName].joy) + diffJoy;
+        tempUpdateCatActivityData[diffActivityName].calm = parseInt(this.oldCatActivityData[diffActivityName].calm) + diffCalm;
+        tempUpdateCatActivityData[diffActivityName].hope = parseInt(this.oldCatActivityData[diffActivityName].hope) + diffHope;
+        tempUpdateCatActivityData[diffActivityName].sorrow = parseInt(this.oldCatActivityData[diffActivityName].sorrow) + diffSorrow;
+        tempUpdateCatActivityData[diffActivityName].anger = parseInt(this.oldCatActivityData[diffActivityName].anger) + diffAnger;
+        tempUpdateCatActivityData[diffActivityName].fear = parseInt(this.oldCatActivityData[diffActivityName].fear) + diffFear;
+        // tempUpdateCatActivityData[diffActivityName].total = parseInt(this.oldCatActivityData[diffActivityName].total) + diffTotalEmotion;
+        this.updateCategoricalActivityData = tempUpdateCatActivityData;
+        this.oldCatActivityData = this.updateCategoricalActivityData;
+        this.updateCategoricalActivity();
       },
       editAggregate: function (diffDuration, diffJoy, diffSorrow, diffCalm, diffAnger, diffHope, diffFear, diffTotalEmotion, diffActivityName) {
         var tempPlaceUpdateAggregateDetails = this.oldAggregateDetails;
@@ -929,6 +1176,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           if (modified || deleted) {
             this.editAggregate(diffDuration, diffJoy, diffSorrow, diffCalm, diffAnger, diffHope, diffFear, diffTotalEmotion, diffActivityName); //TODO
             this.editTotal(diffDuration, diffJoy, diffSorrow, diffCalm, diffAnger, diffHope, diffFear, diffTotalEmotion, diffActivityName); //TODO
+            this.editCatActivity(diffDuration, diffJoy, diffSorrow, diffCalm, diffAnger, diffHope, diffFear, diffTotalEmotion, diffActivityName);
+            this.editCatEmotion(diffDuration, diffJoy, diffSorrow, diffCalm, diffAnger, diffHope, diffFear, diffTotalEmotion, diffActivityName, obj.emotion.joy, obj.emotion.calm, obj.emotion.hope, obj.emotion.sorrow, obj.emotion.anger, obj.emotion.fear);
           }
         }
       },
