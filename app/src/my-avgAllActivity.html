@@ -22,6 +22,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       sequentialTransactions=true
       path="/[[user]]/[[date]]"
       data="{{datadb}}"> -->
+    <!-- </firebase-query> -->
+        <firebase-query
+      id="query"
+      app-name="notes"
+      path="/test"
+      sequentialTransactions=true
+      data="{{testdata}}">
     </firebase-query>
     <app-localstorage-document key="diff" data="{{emotions}}"></app-localstorage-document>
 <!--         <app-localstorage-document key="dataChartLegend" data="{{dataChartLegend}}">
@@ -38,28 +45,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-localstorage-document key="leisureArray" data="{{leisureArray}}"> -->
         <app-localstorage-document key="colorsArrayA" data="{{colorsArray}}"></app-localstorage-document>
         <app-localstorage-document key="backgroundColorsArrayA" data="{{backgroundColorsArray}}"></app-localstorage-document>
-<!--     <app-indexeddb-mirror
-        key="avgActivity"
-        data="{{datadb}}"
-        persisted-data="{{persistedData}}">
-    </app-indexeddb-mirror> -->
-    <firebase-query
-      id="query"
-      app-name="notes"
-      path="/calculated"
-      sequentialTransactions=true
-      data="{{testcalculated}}">
-    <firebase-query
-      id="query"
-      app-name="notes"
-      path="/test"
-      sequentialTransactions=true
-      data="{{testdata}}">
-    </firebase-query>
-<!--     <app-indexeddb-mirror
-        key="avgActivityTest"
-        data="{{datadb}}"
-        persisted-data="{{persistedData}}"> -->
   <colors-material id="colorSheet"></colors-material>
 
   <template is="dom-repeat" items="{{testdata}}" observe="datadb.*">
@@ -109,23 +94,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         gymTotalHours: {
           type: Number,
-          value: 0
+          value: 5
         },
         leisureTotalHours: {
           type: Number,
-          value: 0
+          value: 5
         },
         socialTotalHours: {
           type: Number,
-          value: 0
+          value: 5
         },
         sleepTotalHours: {
           type: Number,
-          value: 0
+          value: 5
         },
         workTotalHours: {
           type: Number,
-          value: 0
+          value: 5
         },
         emotions: {
           type: Array,
@@ -167,9 +152,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: 
           [0, 0, 0, 0, 0, -1]
         },
-        datadb: {
+        catactivitydb: {
           type: Object,
-          observer: 'activityDataChanged'
+          observer: 'categoricalActivityChanged'
         },
         colorsArray: {
           type: Array
@@ -186,24 +171,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: 
           [{ "a": 1, "b": 2, "c": 3 }]
         },
-        // testInput: {
-        //   type: Object
-        // },
-        // dataChartSleep: {
-        //   type: Object
-        // },
-        // dataChartWork: {
-        //   type: Object
-        // },
-        // dataChartSocial: {
-        //   type: Object
-        // },
-        // dataChartLeisure: {
-        //   type: Object
-        // },
-        // dataChartGym: {
-        //   type: Object
-        // },
         emotionColors: {
           type: Object,
           value: 
@@ -217,7 +184,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
       },
       observers: [
-          'activityDataChanged(datadb.*)',
+          'categoricalActivityChanged(catactivitydb.*)',
           'testcalculatedChanged(testcalculated.*)'
       ],
       testcalculatedChanged: function(testcalculated) {
@@ -225,9 +192,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log(this.testcalculated);
         console.log(this.dataChartWork);
       },
-      activityDataChanged: function (datadb) {
+      categoricalActivityChanged: function (catactivitydb) {
+
               // do something when the query returns values
-                      var colorsArray = [];
+        var colorsArray = [];
         var backgroundColorsArray = [];
         var colorSheet = this.$.colorSheet;
         for (var i=0; i<this.emotions.length;i++) {
@@ -255,40 +223,46 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.gymTotalHours = 0;
         this.leisureTotalHours = 0;
         this.socialTotalHours = 0;
-        var data = this.datadb;
+        var data = this.catactivitydb;
         var localDataAster = [];
         var colorSheet = this.$.colorSheet;
         var activities = this.activities;
         var emotions = this.emotions;
         var that = this;
         data.forEach(function(childSnapshot) {
+          // var key = childSnapshot.$key;
+              // for (var j=0; j<that.emotions.length; j++) {
+              //   that.tempCatActivityData[key][that.emotions[j]] = childSnapshot[that.emotions[j]];
+              // }
           // console.log(childSnapshot);
           // key will be "fred" the first time and "barney" the second time
-          var activity = childSnapshot.activityType;
+          var activity = childSnapshot.$key;
+          console.log("childSnapshot");
+          console.log(childSnapshot);
           switch (activity) {
                 case "Work":
                   that.modifyArray(that.workArray, childSnapshot);
-                  that.workTotalHours += childSnapshot.duration;
+                  // that.workTotalHours += childSnapshot.duration;
                   break;
 
                 case "Sleep":
                   that.modifyArray(that.sleepArray, childSnapshot);
-                  that.sleepTotalHours += childSnapshot.duration;
+                  // that.sleepTotalHours += childSnapshot.duration;
                   break;
 
                 case "Social":
                   that.modifyArray(that.socialArray, childSnapshot);
-                  that.socialTotalHours += childSnapshot.duration;
+                  // that.socialTotalHours += childSnapshot.duration;
                   break;
 
                 case "Leisure":
                   that.modifyArray(that.leisureArray, childSnapshot);
-                  that.leisureTotalHours += childSnapshot.duration;
+                  // that.leisureTotalHours += childSnapshot.duration;
                   break;
 
                 case "Gym":
                   that.modifyArray(that.gymArray, childSnapshot);
-                  that.gymTotalHours += childSnapshot.duration;
+                  // that.gymTotalHours += childSnapshot.duration;
                   break;
               }          
         });
@@ -306,16 +280,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.socialTotalEmotion = this.socialArray.reduce(add, 0);
         this.leisureTotalEmotion = this.leisureArray.reduce(add, 0);
         this.gymTotalEmotion = this.gymArray.reduce(add, 0);
-        // console.log("this.gymTotalEmotion: "+this.gymTotalEmotion);
-        // console.log("this.socialTotalEmotion: "+this.socialTotalEmotion);
-        // console.log("this.workTotalEmotion: "+this.workTotalEmotion);
-        // console.log("this.leisureTotalEmotion: "+this.leisureTotalEmotion);
-        // console.log("this.sleepTotalEmotion: "+this.sleepTotalEmotion);
-        // console.log("this.gymTotalHours: "+this.gymTotalHours);
-        // console.log("this.socialTotalHours: "+this.socialTotalHours);
-        // console.log("this.workTotalHours: "+this.workTotalHours);
-        // console.log("this.leisureTotalHours: "+this.leisureTotalHours);
-        // console.log("this.sleepTotalHours: "+this.sleepTotalHours);
+
         this.dataChartWork = {
           labels: this.emotions,
           datasets: [
@@ -382,14 +347,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         };
         // this.testInput = this.testdata;
         console.log("this.testdata");
-        console.log(this.testdata);
+        console.log("this.dataChartSocial");
+        console.log(this.dataChartSocial);
+        console.log("this.dataChartLeisure");
+        console.log(this.dataChartLeisure);
+        console.log("this.dataChartGym");
+        console.log(this.dataChartGym);
+        console.log("this.dataChartWork");
+        console.log(this.dataChartWork);
+        console.log("this.dataChartSleep");
+        console.log(this.dataChartSleep);
       },
       modifyArray: function(array, childSnapshot) {
+        console.log("childSnapshot: "+childSnapshot);
           for (var j = 0; j < this.emotions.length; j++) {
             var emotionName = this.emotions[j];
             var emotionIndex = this.emotions.indexOf(emotionName);
             console.log("emotionName: "+ emotionName);
-            var score = childSnapshot.emotion[emotionName];
+            var score = childSnapshot[emotionName];
             console.log("score: "+ score);
             if (score > 0) {
               array[emotionIndex] += score;

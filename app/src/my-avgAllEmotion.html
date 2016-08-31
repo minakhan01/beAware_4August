@@ -16,35 +16,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="my-avgAllEmotion">
 <template>
-<!--       <firebase-query
-      id="query"
-      app-name="notes"
-      path="/[[user]]/[[date]]"
-      data="{{datadb}}">
-    </firebase-query> -->
-<!--             <app-localstorage-document key="dataChartLegend" data="{{dataChartLegend}}">
-        <app-localstorage-document key="dataChartCalm" data="{{dataChartCalm}}">
-        <app-localstorage-document key="dataChartJoy" data="{{dataChartJoy}}">
-        <app-localstorage-document key="dataChartSorrow" data="{{dataChartSorrow}}">
-        <app-localstorage-document key="dataChartFear" data="{{dataChartFear}}">
-        <app-localstorage-document key="dataChartHope" data="{{dataChartHope}}">
-        <app-localstorage-document key="dataChartAnger" data="{{dataChartAnger}}"> -->
-<!--     <app-indexeddb-mirror
-        key="avgEmotion"
-        data="{{datadb}}"
-        persisted-data="{{persistedData}}"> -->
-    <firebase-query
+<firebase-query
       id="query"
       app-name="notes"
       path="/test"
       sequentialTransactions=true
       data="{{testdata}}">
     </firebase-query>
-<!--     <app-indexeddb-mirror
-        key="avgEmotionTest"
-        data="{{testdata}}"
-        persisted-data="{{persistedDataTest}}"> -->
-
     <colors-material id="colorSheet"></colors-material>
   <template is="dom-repeat" items="{{testdata}}">
 
@@ -142,9 +120,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: 
           [0, 0, 0, 0, 0]
         },
-        datadb: {
+        catemotiondb: {
           type: Object,
-          observer: 'dataChanged'
+          observer: 'categoricalEmotionsChanged'
         },
         persistedData: {
           type: Object,
@@ -167,8 +145,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       },
       observers: [
-          'dataChanged(datadb.*)',
-          'dataChanged(persistedData.*)',
+          'categoricalEmotionsChanged(catemotiondb.*)',
           'updatedupdateArray(updates.splices)'
       ],
       updated: function() {
@@ -177,8 +154,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       joyTotalChanged: function (datadb) {
         console.log("joyTotalChanged: "+this.joyTotal);
       },
-      dataChanged: function (datadb) {
-                var colorsArray = [];
+      categoricalEmotionsChanged: function (catemotiondb) {
+
+        var colorsArray = [];
         var backgroundColorsArray = [];
         var colorSheet = this.$.colorSheet;
         console.log("READY AVG EMOTION");
@@ -202,7 +180,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.joyArray = [0, 0, 0, 0, 0];
         this.calmArray = [0, 0, 0, 0, 0];
         this.angerArray = [0, 0, 0, 0, 0];
-        var data = this.datadb;
+        var data = this.catemotiondb;
         var localDataAster = [];
         var colorSheet = this.$.colorSheet;
         var activities = this.activities;
@@ -211,46 +189,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data.forEach(function(childSnapshot) {
           console.log(childSnapshot);
           // key will be "fred" the first time and "barney" the second time
-          var activityLabel = childSnapshot.activityType;
-          var activityIndex = activities.indexOf(activityLabel);
-          for (var j = 0; j < emotions.length; j++) {
-            var emotionName = emotions[j];
-            console.log("emotionName: "+ emotionName);
-            var score = childSnapshot.emotion[emotionName];
-            console.log("score: "+ score);
-            if (score > 0) {
-              switch (emotionName) {
-                case "joy":
-                  that.joyArray[activityIndex] += score;
-                  console.log("joy: "+that.joyArray[activityIndex]);
-                  break;
+          var emotionName = childSnapshot.$key;
+          console.log("childSnapshot");
+          console.log(childSnapshot);
+          switch (emotionName) {
+            case "joy":
+              that.modifyArray(that.joyArray, childSnapshot);
+              break;
 
-                case "sorrow":
-                  that.sorrowArray[activityIndex] += score;
-                  console.log("sorrow: "+that.sorrowArray[activityIndex]);
-                  break;
+            case "sorrow":
+              that.modifyArray(that.sorrowArray, childSnapshot);
+              break;
 
-                case "calm":
-                  that.calmArray[activityIndex] += score;
-                  console.log("calm: "+that.calmArray[activityIndex]);
-                  break;
+            case "calm":
+              that.modifyArray(that.calmArray, childSnapshot);
+              break;
 
-                case "anger":
-                  that.angerArray[activityIndex] += score;
-                  console.log("anger: "+that.angerArray[activityIndex]);
-                  break;
+            case "anger":
+              that.modifyArray(that.angerArray, childSnapshot);
+              break;
 
-                case "hope":
-                  that.hopeArray[activityIndex] += score;
-                  console.log("hope: "+that.hopeArray[activityIndex]);
-                  break;
+            case "hope":
+              that.modifyArray(that.hopeArray, childSnapshot);
+              break;
 
-                case "fear":
-                  that.fearArray[activityIndex] += score;
-                  console.log("fear: "+ that.fearArray[activityIndex]);
-                  break;
-              }
-            }
+            case "fear":
+              that.modifyArray(that.fearArray, childSnapshot);
+              break;
           }
 
         });
@@ -354,6 +319,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.updates.pop();
         this.updates.push(0);
         this.updates = ["new array"];
+      },
+      modifyArray: function(array, childSnapshot) {
+        console.log("childSnapshot: "+childSnapshot);
+          for (var j = 0; j < this.activities.length; j++) {
+            var activityName = this.activities[j];
+            var activityIndex = this.activities.indexOf(activityName);
+            var score = childSnapshot[activityName];
+            console.log("score: "+ score);
+            if (score > 0) {
+              array[activityIndex] += score;
+            }
+          }
       },
       ready: function() {
         this.date = (new Date()).toDateString();
