@@ -562,7 +562,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       
         });
         this.oldCatActivityData = this.tempCatActivityData;
-        console.log("updateAggregateDetails");
+        console.log("categoricalActivityChanged");
         console.log(this.oldCatActivityData);
       },
       categoricalEmotionsChanged: function(catemotiondb) {
@@ -761,8 +761,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       saveEntry: function() {  
         if (this.$.activityFirebase.isNew) {
-          return this.$.activityFirebase.save(this.user+"/daily/"+(new Date()).toDateString()).then(() => {
-            this.$.activityFirebase.reset();
+          var that = this;
+          return this.$.activityFirebase.save(this.user+"/daily/"+(new Date()).toDateString()).then(function() {
+            that.$.activityFirebase.reset();
           });
         }
         return Promise.resolve();
@@ -770,8 +771,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       createTotal: function() {  
         console.log("creating new aggregate day");
         if (this.$.createTotalFirebase.isNew) {
-          return this.$.createTotalFirebase.save(this.user,"total").then(() => {
-            this.$.createTotalFirebase.reset();
+          var that = this;
+          return this.$.createTotalFirebase.save(this.user,"total").then(function() {
+            that.$.createTotalFirebase.reset();
           });
         }
         return Promise.resolve();
@@ -779,8 +781,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       createCategoricalActivity: function() {  
         console.log("creating new aggregate day");
         if (this.$.createCategoricalActivityFirebase.isNew) {
-          return this.$.createCategoricalActivityFirebase.save(this.user,"catActivity").then(() => {
-            this.$.createCategoricalActivityFirebase.reset();
+          var that = this;
+          return this.$.createCategoricalActivityFirebase.save(this.user,"catActivity").then(function() {
+            that.$.createCategoricalActivityFirebase.reset();
           });
         }
         return Promise.resolve();
@@ -788,8 +791,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       createCategoricalEmotion: function() {  
         console.log("creating new aggregate day");
         if (this.$.createCategoricalEmotionFirebase.isNew) {
-          return this.$.createCategoricalEmotionFirebase.save(this.user,"catEmotion").then(() => {
-            this.$.createCategoricalEmotionFirebase.reset();
+          var that = this;
+          return this.$.createCategoricalEmotionFirebase.save(this.user,"catEmotion").then(function() {
+            that.$.createCategoricalEmotionFirebase.reset();
           });
         }
         return Promise.resolve();
@@ -797,8 +801,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       updateCategoricalActivity: function() {  
         console.log("creating new aggregate day");
         if (this.$.updateCategoricalActivityFirebase.isNew) {
-          return this.$.updateCategoricalActivityFirebase.save(this.user,"catActivity").then(() => {
-            this.$.updateCategoricalActivityFirebase.reset();
+          var that = this;
+          return this.$.updateCategoricalActivityFirebase.save(this.user,"catActivity").then(function() {
+            that.$.updateCategoricalActivityFirebase.reset();
           });
         }
         return Promise.resolve();
@@ -806,8 +811,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       updateCategoricalEmotion: function() {  
         console.log("creating new aggregate day");
         if (this.$.updateCategoricalEmotionFirebase.isNew) {
-          return this.$.updateCategoricalEmotionFirebase.save(this.user,"catEmotion").then(() => {
-            this.$.updateCategoricalEmotionFirebase.reset();
+          var that = this;
+          return this.$.updateCategoricalEmotionFirebase.save(this.user,"catEmotion").then(function() {
+            that.$.updateCategoricalEmotionFirebase.reset();
           });
         }
         return Promise.resolve();
@@ -815,8 +821,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       updateTotal: function() { 
       console.log("update new aggregate day"); 
         if (this.$.updateTotalFirebase.isNew) {
-          return this.$.updateTotalFirebase.save(this.user, "total").then(() => {
-            this.$.updateTotalFirebase.reset();
+          var that = this;
+          return this.$.updateTotalFirebase.save(this.user, "total").then(function() {
+            that.$.updateTotalFirebase.reset();
           });
         }
         return Promise.resolve();
@@ -824,8 +831,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       createDayAggregate: function() {  
         console.log("creating new aggregate day");
         if (this.$.createAggregateFirebase.isNew) {
-          return this.$.createAggregateFirebase.save(this.user+"/aggregate",(new Date()).toDateString()).then(() => {
-            this.$.createAggregateFirebase.reset();
+          var that = this;
+          return this.$.createAggregateFirebase.save(this.user+"/aggregate",(new Date()).toDateString()).then(function() {
+            that.$.createAggregateFirebase.reset();
           });
         }
         return Promise.resolve();
@@ -833,8 +841,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       updateNewDayAggregate: function() { 
       console.log("update new aggregate day"); 
         if (this.$.updateAggregateFirebase.isNew) {
-          return this.$.updateAggregateFirebase.save(this.user+"/aggregate", (new Date()).toDateString()).then(() => {
-            this.$.updateAggregateFirebase.reset();
+          var that = this;
+          return this.$.updateAggregateFirebase.save(this.user+"/aggregate", (new Date()).toDateString()).then(function() {
+            that.$.updateAggregateFirebase.reset();
           });
         }
         return Promise.resolve();
@@ -842,16 +851,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       delete: function(key) {  
         if (this.$.deleteActivityFirebase.isNew) {
           this.pathDelete = this.user+"/daily/"+(new Date()).toDateString()+"/"+key;
-          return this.$.deleteActivityFirebase.destroy().then(() => {
-            this.$.deleteActivityFirebase.reset();
+          var that = this;
+          return this.$.deleteActivityFirebase.destroy().then(function() {
+            that.$.deleteActivityFirebase.reset();
           });
         }
         return Promise.resolve();
       },
       editOldEntry: function(key) {  
         if (this.$.editActivity.isNew) {
-          return this.$.editActivity.save(this.user+"/daily/"+(new Date()).toDateString(), key).then(() => {
-            this.$.editActivity.reset();
+          var that = this;
+          return this.$.editActivity.save(this.user+"/daily/"+(new Date()).toDateString(), key).then(function() {
+            that.$.editActivity.reset();
           });
         }
         return Promise.resolve();
@@ -970,7 +981,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log("this.oldCatActivityData");
         console.log(this.oldCatActivityData);
         console.log("this.activity");
-        console.log(this.activity)
+        console.log(this.activity);
         tempUpdateCatActivityData[this.activity].joy = parseInt(this.oldCatActivityData[this.activity].joy) + this.joyScore;
         tempUpdateCatActivityData[this.activity].calm = parseInt(this.oldCatActivityData[this.activity].calm) + this.calmScore;
         tempUpdateCatActivityData[this.activity].hope = parseInt(this.oldCatActivityData[this.activity].hope) + this.hopeScore;

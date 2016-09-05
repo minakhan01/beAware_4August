@@ -114,12 +114,7 @@ polyline{
       properties: {
         data: {
           type: Array,
-          value: [
-          { "name": "one", "score": 10, "width": 2, "color": "#9E0041"},
-          { "name": "two", "score": 20, "width": 2, "color": "#C32F4B"},
-          { "name": "three", "score": 40, "width": 5, "color": "#E1514B"},
-          { "name": "four", "score": 10, "width": 4, "color": "#F47245"},
-          { "name": "five", "score": 5, "width": 6, "color": "#FB9F59"}],
+          value: [],
           observer: 'dataChanged'
         },
         queryDone: {
@@ -132,20 +127,26 @@ polyline{
         },
       }, 
       observers: [
-           'dataChanged(data.splices)'
+           'dataChanged(data.*)'
       ],
       netScoreChanged : function() {
         console.log("netScoreChanged");
         // this.createElements();
         console.log(this.net+" this.net");
       },
-      dataChanged : function() {
+      dataChanged : function(data) {
         console.log("data changed in ASTER_POLYMER");
-        this.createElements();
         console.log(this.net+" this.net");
+        console.log("polymer aster this.data");
+        console.log(this.data);
+        this.createElements();
       },
       createElements: function () {
-        console.log(this.net+" this.net");
+          var data = this.data;
+
+        console.log("createElements");
+        console.log("this.data");
+        console.log(this.data);
         var svg = d3.select(this.$.svg);
         svg.selectAll("*").remove();
       	var width = 500,
@@ -155,7 +156,9 @@ polyline{
 
         var pie = d3.pie()
             .sort(null)
-            .value(function(d) { return d.width; });
+            .value(function(d) { 
+              console.log("d.width: "+d.width);
+              return d.width; });
 
         var tooltipNode = d3.select(this.$.tooltip);
         var valueNode = d3.select(this.$.valueNode);
@@ -164,6 +167,7 @@ polyline{
 var arc = d3.arc()
   .innerRadius(innerRadius)
   .outerRadius(function (d) { 
+    console.log("d.data.score: "+d.data.score);
     return (radius - innerRadius) * (Math.abs(d.data.score) / 10.0) + innerRadius; 
   });
 
@@ -188,9 +192,9 @@ var svg = d3.select(this.$.svg)
           { "name": "four", "score": 10, "width": 4, "color": "#F47245"},
           { "name": "five", "score": 5, "width": 6, "color": "#FB9F59"}];
 
-  var data = this.data;
+  // var data = this.data;
   console.log("data");
-  console.log(data);
+  console.log(this.data);
   console.log("dummy data");
   console.log(printThis);
 
@@ -207,9 +211,6 @@ var svg = d3.select(this.$.svg)
       .attr("stroke", "gray")
       .attr("d", arc)
       .on('mouseover', function (d) {
-        console.log("d3.event.pageX: "+d3.event.pageX);
-        console.log("d3.mouse(this): "+d3.mouse(this));
-        console.log("d3.event.pageY: "+d3.event.pageY);
         tooltipNode
         .style("left", d3.event.pageX + "px")
         .style("top", d3.event.pageY + "px")        
@@ -305,7 +306,7 @@ var svg = d3.select(this.$.svg)
 
       },
       ready: function () {
-              this.createElements();
+              // this.createElements();
             },
 
     });
