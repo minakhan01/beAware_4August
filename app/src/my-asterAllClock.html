@@ -79,7 +79,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Number,
           value : 0
         },
-        dataAster: {
+        tempAster: {
           type: Array,
           value: [
           { "name": "Work", "score": 10, "width": 2, "color": "#9E0041"},
@@ -87,6 +87,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           { "name": "Social", "score": 40, "width": 5, "color": "#E1514B"},
           { "name": "Gym", "score": 10, "width": 4, "color": "#F47245"},
           { "name": "Leisure", "score": 5, "width": 6, "color": "#FB9F59"}],
+        },
+        dataAster: {
+          type: Array,
+          value: [],
         },
         activities: {
           type: Array,
@@ -172,51 +176,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           'categoricalActivityChanged(catactivitydb.*)',
           'totalDataChanged(totaldb.*)'
       ],
-
-      // totalDataChanged: function (totaldb) {
-      //   var activityColors = 
-      //   { "Sleep": {"colorShade": "Green", "colorType": "A200"},
-      //     "Work" : {"colorShade": "Blue", "colorType": "A200"},
-      //     "Gym" : {"colorShade": "Pink", "colorType": "A200"},
-      //     "Social" : {"colorShade": "Amber", "colorType": "A200"},
-      //     "Leisure": {"colorShade": "Purple", "colorType": "A200"}
-      //   };
-      // // do something when the query returns values
-      // console.log("---BEFORE in DATACHANGED ASTERCLOCK");
-      //   var data = this.totaldb;
-      //   var localDataAster = [];
-      //   var colorSheet = this.$.colorSheet;
-      //   var that = this;
-      //   this.totalAster = 0;
-      //   data.forEach(function(childSnapshot) {
-      //     console.log(childSnapshot);
-      //     // key will be "fred" the first time and "barney" the second time
-      //     var activityLabel = childSnapshot.activityType;
-      //     var emotionNet = childSnapshot.emotion.total;
-      //     var emotionList = [];
-      //     that.totalAster += emotionNet;
-      //     for (var j = 0; j < that.emotions.length; j++) {
-      //       var emotionName = that.emotions[j];
-      //       console.log("emotionName: "+ emotionName);
-      //       var score = childSnapshot.emotion[emotionName];
-      //       if (score != 0) {
-      //         emotionList.push(emotionName+": "+that.positiveNegativeEmotion[emotionName] * score);
-      //       }
-      //     }
-      //     console.log("emotionList: "+ emotionList);
-      //     var duration = childSnapshot.duration;
-      //     var colorShadeString = activityColors[activityLabel].colorShade;
-      //     var activitySelectedColor = colorSheet.colors[colorShadeString].a700;
-      //     var element = {"name" : activityLabel, "score" : emotionNet, "width" : duration, "color": activitySelectedColor, "emotionList": emotionList};
-      //     localDataAster.push(element);
-      //   });
-      //   console.log("AFTER");
-      //   this.dataAster = localDataAster;
-      //   console.log("totalAster: "+this.totalAster);
-      // },
       categoricalActivityChanged: function (catactivitydb) {
         var that = this;
         var data = this.catactivitydb;
+        var localDataAster = this.tempAster;
           data.forEach(function(childSnapshot) {
           // var key = childSnapshot.$key;
               // for (var j=0; j<that.emotions.length; j++) {
@@ -230,60 +193,68 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           switch (activity) {
                 case "Work":
                   var score = 0;
-                  that.dataAster[0].emotionList = [];
+                  localDataAster[0].emotionList = [];
                   for (var j = 0; j < that.emotions.length; j++) {
                     score += that.emotionSigns[that.emotions[j]] * childSnapshot[that.emotions[j]];
-                    that.dataAster[0].emotionList.push(that.emotions[j] +" : "+that.emotionSigns[that.emotions[j]] * childSnapshot[that.emotions[j]]);
+                    localDataAster[0].emotionList.push(that.emotions[j] +" : "+that.emotionSigns[that.emotions[j]] * childSnapshot[that.emotions[j]]);
                   }
-                  that.dataAster[0].score = score;
+                  localDataAster[0].score = score;
                   
                   // that.workTotalHours += childSnapshot.duration;
                   break;
 
                 case "Sleep":
                   var score = 0;
-                  that.dataAster[1].emotionList = [];
+                  localDataAster[1].emotionList = [];
                   for (var j = 0; j < that.emotions.length; j++) {
                     score += that.emotionSigns[that.emotions[j]] * childSnapshot[that.emotions[j]];
-                    that.dataAster[1].emotionList.push(that.emotions[j] +" : "+that.emotionSigns[that.emotions[j]] * childSnapshot[that.emotions[j]]);
+                    localDataAster[1].emotionList.push(that.emotions[j] +" : "+that.emotionSigns[that.emotions[j]] * childSnapshot[that.emotions[j]]);
                   }
-                  that.dataAster[1].score = score;
+                  localDataAster[1].score = score;
                   // that.sleepTotalHours += childSnapshot.duration;
                   break;
 
                 case "Social":
                   var score = 0;
-                  that.dataAster[2].emotionList = [];
+                  localDataAster[2].emotionList = [];
                   for (var j = 0; j < that.emotions.length; j++) {
                     score += that.emotionSigns[that.emotions[j]] * childSnapshot[that.emotions[j]];
-                    that.dataAster[2].emotionList.push(that.emotions[j] +" : "+that.emotionSigns[that.emotions[j]] * childSnapshot[that.emotions[j]]);
+                    localDataAster[2].emotionList.push(that.emotions[j] +" : "+that.emotionSigns[that.emotions[j]] * childSnapshot[that.emotions[j]]);
                   }
-                  that.dataAster[2].score = score;
+                  localDataAster[2].score = score;
                   break;
 
                 case "Leisure":
                   var score = 0;
-                  that.dataAster[4].emotionList = [];
+                  localDataAster[4].emotionList = [];
                   for (var j = 0; j < that.emotions.length; j++) {
                     score += that.emotionSigns[that.emotions[j]] * childSnapshot[that.emotions[j]];
-                    that.dataAster[4].emotionList.push(that.emotions[j] +" : "+that.emotionSigns[that.emotions[j]] * childSnapshot[that.emotions[j]]);
+                    localDataAster[4].emotionList.push(that.emotions[j] +" : "+that.emotionSigns[that.emotions[j]] * childSnapshot[that.emotions[j]]);
                   }
-                  that.dataAster[4].score = score;
+                  localDataAster[4].score = score;
                   // that.leisureTotalHours += childSnapshot.duration;
                   break;
 
                 case "Gym":
                   var score = 0;
-                  that.dataAster[3].emotionList = [];
+                  localDataAster[3].emotionList = [];
                   for (var j = 0; j < that.emotions.length; j++) {
                     score += that.emotionSigns[that.emotions[j]] * childSnapshot[that.emotions[j]];
-                    that.dataAster[3].emotionList.push(that.emotions[j] +" : "+that.emotionSigns[that.emotions[j]] * childSnapshot[that.emotions[j]]);
+                    localDataAster[3].emotionList.push(that.emotions[j] +" : "+that.emotionSigns[that.emotions[j]] * childSnapshot[that.emotions[j]]);
                   }
-                  that.dataAster[3].score = score;
+                  localDataAster[3].score = score;
                   // that.gymTotalHours += childSnapshot.duration;
                   break;
               }          
         });
+        var tempEmpty = [];
+        for (var i=0; i<localDataAster.length; i++) {
+          if (localDataAster[i].width > 0) {
+            tempEmpty.push(localDataAster[i]);
+          }
+        }
+        this.dataAster = tempEmpty;
+        this.tempAster = localDataAster;
       },
       totalDataChanged: function (totaldb) {
         var activityColors = 
@@ -295,8 +266,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         };
       // do something when the query returns values
         var data = this.totaldb;
-
-        var localDataAster = [];
+        var localDataAster = this.tempAster;
         var colorSheet = this.$.colorSheet;
         var that = this;
         this.totalAster = 0;
@@ -311,33 +281,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var activitySelectedColor = colorSheet.colors[colorShadeString].a700;
               switch (activityName) {
                 case "Work":
-                  that.dataAster[0].width = childSnapshot[activityName];
-                  that.dataAster[0].color = activitySelectedColor;
+                  localDataAster[0].width = childSnapshot[activityName];
+                  localDataAster[0].color = activitySelectedColor;
                   break;
 
                 case "Sleep":
-                  that.dataAster[1].width = childSnapshot[activityName];
-                  that.dataAster[1].color = activitySelectedColor;
+                  localDataAster[1].width = childSnapshot[activityName];
+                  localDataAster[1].color = activitySelectedColor;
                   break;
 
                 case "Social":
-                  that.dataAster[2].width = childSnapshot[activityName];
-                  that.dataAster[2].color = activitySelectedColor;
+                  localDataAster[2].width = childSnapshot[activityName];
+                  localDataAster[2].color = activitySelectedColor;
                   break;
 
                 case "Leisure":
-                  that.dataAster[4].width = childSnapshot[activityName];
-                  that.dataAster[4].color = activitySelectedColor;
+                  localDataAster[4].width = childSnapshot[activityName];
+                  localDataAster[4].color = activitySelectedColor;
                   break;
 
                 case "Gym":
-                  that.dataAster[3].width = childSnapshot[activityName];
-                  that.dataAster[3].color = activitySelectedColor;
+                  localDataAster[3].width = childSnapshot[activityName];
+                  localDataAster[3].color = activitySelectedColor;
                   break;
               } 
             }
           }
         });
+        var tempEmpty = [];
+        for (var i=0; i<localDataAster.length; i++) {
+          if (localDataAster[i].width > 0) {
+            tempEmpty.push(localDataAster[i]);
+          }
+        }
+        this.dataAster = tempEmpty;
+        this.tempAster = localDataAster;
       },
       ready: function() {
         changeCommits = Promise.resolve();
