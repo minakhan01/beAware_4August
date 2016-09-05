@@ -140,6 +140,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var dataRaw = this.dailydb;
         console.log("dailydb");
         console.log(dataRaw);
+        console.log("this.data");
+        console.log(this.data);
+        
+        this.names = (this.activities).concat(this.emotions);
+        var endTime = Date.now();
+        var month = 30 * 24 * 60 * 60 * 1000;
+        var week = 7 * 24 * 60 * 60 * 1000;
+        var startTime = endTime - week;
+        var activityColorsList = [];
+        for (var i = 0; i < this.activities.length; i++) {
+          activityColorsList.push(this.getActivityColor(this.activities[i]));
+        }
+        var emotionColorsList = [];
+        for (var i = 0; i < this.emotions.length; i++) {
+          emotionColorsList.push(this.getEmotionColor(this.emotions[i]));
+        }
+        var color  = (activityColorsList).concat(emotionColorsList);
+        for (var i = 0; i < this.names.length; i++) {
+            this.data.push(this.createEmptyEvent(this.names[i]));
+        }
         this.data = [];
         for (var i = 0; i < this.names.length; i++) {
             this.data.push(this.createEmptyEvent(this.names[i]));
