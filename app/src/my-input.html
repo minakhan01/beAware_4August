@@ -36,6 +36,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host {
         display: block;
         padding: 10px;
+        overflow: hidden;
+        font-size: 14px;
+        height:100%;
       }
 
     simple-menu,
@@ -69,6 +72,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     simple-menu a[disabled],
     simple-menubar a[disabled] {
       color: var(--google-grey-300);
+    }
+
+    #rectangle{
+    width:10px;
+    height:10px;
+    }
+
+    .work {
+      border-color: var(--paper-blue-500);
+      background-color: var(--paper-blue-500);
+    }
+
+    .sleep {
+      border-color: var(--paper-green-500);
+      background-color: var(--paper-green-500);
+    }
+
+    .gym {
+      background-color: var(--paper-pink-500);
+      border-color: var(--paper-pink-500);
+    }
+
+    .social {
+      border-color: var(--paper-amber-500);
+      background-color: var(--paper-amber-500);
+    }
+
+    .leisure {
+      border-color: var(--paper-purple-500);
+      background-color: var(--paper-purple-500);
     }
 
     a {
@@ -177,7 +210,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
     </style>
 
-    <div id="scope">
+    <div id="scope" style="overflow: hidden;
+        font-size: 14px;
+        height:100%;">
             <paper-time-picker id="picker" class="horizontal layout" period-start-selected="{{periodStartSelected}}" period-end-selected="{{periodEndSelected}}">
             </paper-time-picker>
 <!--               <div class="white horizontal layout center-justified">
@@ -187,17 +222,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <paper-button class="social">Social</paper-button>
               <paper-button class="leisure">Leisure</paper-button>
               </div> -->
-            <div class="horizontal layout center-justified">
+<!--             <div class="horizontal layout center-justified">
               <simple-menubar class="horizontal layout center-justified" selected="{{activity}}" id="activitySelection" attr-for-selected="name" fallback-selection="Work">
-              <!-- <div > -->
                 <paper-button class="work" role="menuitem" name="Work">Work</paper-button>
                 <paper-button class="sleep" role="menuitem" name="Sleep">Sleep</paper-button>
                 <paper-button class="gym" role="menuitem" name="Gym">Gym</paper-button>
                 <paper-button class="social" role="menuitem" name="Social">Social</paper-button>
                 <paper-button class="leisure" role="menuitem" name="Leisure">Leisure</paper-button>
-              <!-- </div> -->
               </simple-menubar>
+            </div> -->
+            <div class="horizontal layout center-justified wrap" style="padding:0px; margin: 0px;">
+              <div style="padding-right: 35px;"><div id="rectangle" class="work"></div> <div style="position: relative; top:-15px;left: 15px; font-size: 14px;">Work </div></div>
+
+              <div style="padding-right: 35px;"><div id="rectangle" class="sleep"></div> <div style="position: relative; top:-15px;left: 15px;font-size: 14px;">Sleep </div></div>
+
+              <div style="padding-right: 35px;"><div id="rectangle" class="gym"></div> <div style="position: relative; top:-15px;left: 15px; font-size: 14px;">Gym </div></div>
+
+              <div style="padding-right: 35px;"><div id="rectangle" class="social"></div> <div style="position: relative; top:-15px;left: 15px; font-size: 14px;">Social </div></div>
+
+              <div style="padding-right: 20px;"><div id="rectangle" class="leisure"></div> <div style="position: relative; top:-15px;left: 15px; font-size: 14px;">Leisure </div></div> 
+              
             </div>
+            
+
     </div>
 
     <firebase-document
