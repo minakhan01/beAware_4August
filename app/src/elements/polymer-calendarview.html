@@ -75,8 +75,8 @@
 
       readyProduce: function() {
         console.log("in ready");
-        var width = 960,
-        height = 750,
+        var width = 0.9 * this.getBoundingClientRect().width,
+        height = 750 * (960/width) * 1.3,
         cellSize = 25; // cell size
 
         var no_months_in_a_row = Math.floor(width / (cellSize * 7 + 50));
