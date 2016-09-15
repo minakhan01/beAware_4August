@@ -7,12 +7,11 @@
     <style is="custom-style" include="iron-flex iron-flex-alignment">
 
     <style>
-      :host {
-                /*display: block;*/
+/*      :host {
                 height: 1000px;
                 width: 1000px;
                 font: 10px sans-serif;
-            }
+            }*/
 .axis path,
 .axis line {
   fill: none;
@@ -144,14 +143,19 @@ polyline{
       createElements: function () {
           var data = this.data;
 
+          var diameterFull = 500;
+          diameterFull = 0.9 * this.getBoundingClientRect().width;
+          if (diameterFull > 500) {
+            diameterFull = 500;
+          }
         console.log("createElements");
         console.log("this.data");
         console.log(this.data);
         var svg = d3.select(this.$.svg);
         svg.selectAll("*").remove();
-      	var width = 500,
-          height = 500,
-          radius = Math.min(width, height) / 2 - 100,
+      	var width = diameterFull,
+          height = diameterFull,
+          radius = Math.min(width, height) / 2 - 80,
           innerRadius = 0.3 * radius;
 
         var pie = d3.pie()
@@ -173,7 +177,7 @@ var arc = d3.arc()
 
 var arcDonut = d3.arc()
   .innerRadius(radius)
-  .outerRadius(radius+50);
+  .outerRadius(radius+radius*0.2);
 
 var outlineArc = d3.arc()
         .innerRadius(innerRadius)
