@@ -1,0 +1,29 @@
+{
+  "name": "be-aware",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "postinstall": "bower install",
+    "start": "node server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/minakhan01/beAware_4August.git"
+  },
+  "dependencies": {
+    "body-parser": "^1.8.1",
+    "bower": "^1.3.0",
+    "es6-promise": "^2.3.0",
+    "express": "^4.12.4",
+    "firebase": "^3.4.0",
+    "mongodb": "^2.0.35",
+    "request": "^2.58.0"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/minakhan01/beAware_4August/issues"
+  },
+  "homepage": "https://github.com/minakhan01/beAware_4August#readme"
+}
