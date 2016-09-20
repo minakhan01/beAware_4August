@@ -107,11 +107,12 @@ app.post('/subscription_change', function (req, res) {
   var enabled = req.body.enabled;
   var id = req.body.id;
   var index = activeSubscriptionIds.indexOf(id);
-
+  console.log("index: "+ index+ ", id:"+id);
   if (enabled == 'true') {
     if (index == -1) {
       databasePromise.then(function(db) {
         db.collection('subscriptions').insert([{id: id}]);
+        console.log("inserting");
       });
       activeSubscriptionIds.push(id);
     }
@@ -143,7 +144,7 @@ app.get('/push_cats', function (req, res) {
   }
 
   var headers = {
-    'Authorization' : 'key=' + process.env.API_KEY,
+    'Authorization' : 'key= AIzaSyA6ILSdTifHdrWDpzpnqkkGRXoT9nk1O_w',
     'Content-Type' : 'application/json'
   };
 
@@ -194,7 +195,7 @@ app.get('/push_cats', function (req, res) {
     req.on('error', function(e) {
       console.log('error : ' + e.message + e.code);
     });
-
+    console.log(req);
     req.write(dataString);
     req.end();
   }
@@ -216,6 +217,10 @@ var gracefulShutdown = function() {
     });
   });
 }
+
+setInterval(function(){
+  console.log('test');
+}, 2* 60 * 60 * 1000); 
 
 // listen for TERM signal .e.g. kill
 process.on ('SIGTERM', gracefulShutdown);
