@@ -5,6 +5,16 @@
     "src/my-input.html",
     "src/my-asterClock.html",
     "src/my-avgActivity.html",
-    "src/my-avgEmotion.html"
+    "src/my-avgEmotion.html",
+    "src/*",
+    "src/elements/*"
+  ],
+  "sources": [
+    "src/**/*",
+    "images/**/*",
+    "bower.json"
+  ],
+  "includeDependencies": [
+    "bower_components/webcomponentsjs/webcomponents-lite.min.js"
   ]
 }
