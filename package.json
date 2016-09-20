@@ -7,6 +7,9 @@
     "postinstall": "bower install",
     "start": "node server"
   },
+  "engines": {
+    "node": "6.2.2"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/minakhan01/beAware_4August.git"
