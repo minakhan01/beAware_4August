@@ -6,13 +6,19 @@
     "src/my-asterClock.html",
     "src/my-avgActivity.html",
     "src/my-avgEmotion.html",
-    "src/*",
+    "src/my-avgAllEmotion.html",
+    "src/my-my-asterAllClock.html",
+    "src/my-login.html",
+    "src/toolbar-behavior.html",
+    "src/my-eventdrops.html",
+    "src/calendarview.html"
     "src/elements/*"
   ],
   "sources": [
     "src/**/*",
     "images/**/*",
-    "bower.json"
+    "bower.json",
+    "bower_components/**/*"
   ],
   "includeDependencies": [
     "bower_components/webcomponentsjs/webcomponents-lite.min.js"
