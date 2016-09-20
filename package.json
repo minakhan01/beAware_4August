@@ -18,7 +18,8 @@
     "express": "^4.12.4",
     "firebase": "^3.4.0",
     "mongodb": "^2.0.35",
-    "request": "^2.58.0"
+    "request": "^2.58.0",
+    "w3c-xmlhttprequest": "^2.1.0"
   },
   "author": "",
   "license": "ISC",

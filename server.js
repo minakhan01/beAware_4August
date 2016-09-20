@@ -6,6 +6,7 @@ var request    = require("request");
 
 // Save the subscriptions since heroku kills free dynos like the ice age.
 var mongodb = require('mongodb');
+var XMLHttpRequest = require('w3c-xmlhttprequest').XMLHttpRequest;
 
 var activeSubscriptionIds = [];
 var previousRequestTime = 0;
@@ -213,14 +214,72 @@ var gracefulShutdown = function() {
   }).then(function() {
     server.close(function() {
       console.log("Closed out remaining connections.");
-      process.exit()
+      process.exit();
     });
   });
 }
 
 setInterval(function(){
   console.log('test');
-}, 2* 60 * 60 * 1000); 
+var headers = {
+    'Authorization' : 'key= AIzaSyA6ILSdTifHdrWDpzpnqkkGRXoT9nk1O_w',
+    'Content-Type' : 'application/json'
+  };
+
+  var options = {
+    host: 'android.googleapis.com',
+    port: 80,
+    path: '/gcm/send',
+    method: 'POST',
+    headers: headers
+  };
+
+  // GCM only allows 1000 ids at a time, so we beed to batch them in two.
+  // Future monica: past monica has obviously only thought up to 2000 ids.
+  // Hopefully by then you would've figured out a way to clear the stale IDs. 
+  var ids = [];
+  if (activeSubscriptionIds.length > 1000) {
+    ids.push(activeSubscriptionIds.slice(0, 999));
+    ids.push(activeSubscriptionIds.slice(1000));
+  } else {
+    ids.push(activeSubscriptionIds);
+  }
+
+  for (var i = 0; i < ids.length; i++) {
+    var data = {
+      "delayWhileIdle":true,
+      "timeToLive":3,
+      "data":{
+        'title': 'this is an important cat notification',
+        'message': 'click on it. click on the cat.'
+      },
+      "registration_ids":ids[i]
+    };
+    var dataString =  JSON.stringify(data);
+
+    var req = http.request(options, function(res) {
+      res.setEncoding('utf-8');
+      var responseString = '';
+
+      res.on('data', function(data) {
+        responseString += data;
+      });
+      res.on('end', function() {
+        // TODO: figure out how to clear the failed IDs.
+        console.log('response' + responseString);
+      });
+      console.log('STATUS: ' + res.statusCode);
+    });
+    req.on('error', function(e) {
+      console.log('error : ' + e.message + e.code);
+    });
+    console.log(req);
+    req.write(dataString);
+    req.end();
+  }
+}, 2 * 60 * 60 * 1000); 
+
+
 
 // listen for TERM signal .e.g. kill
 process.on ('SIGTERM', gracefulShutdown);
