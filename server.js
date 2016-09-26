@@ -3,12 +3,12 @@ var http       = require('http');
 var bodyParser = require("body-parser");
 var Promise    = require('es6-promise').Promise;
 var request    = require("request");
-var gulp = require('gulp')
-var runSeq = require('run-sequence')
+// var gulp = require('gulp')
+// var runSeq = require('run-sequence')
 
-gulp.task('heroku:production', function(){
-  runSeq('clean', 'build', 'minify')
-})
+// gulp.task('heroku:production', function(){
+//   runSeq('clean', 'build', 'minify')
+// })
 
 // Save the subscriptions since heroku kills free dynos like the ice age.
 var mongodb = require('mongodb');
