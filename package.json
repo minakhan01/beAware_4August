@@ -4,9 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server",
+    "build": "gulp",
     "postinstall": "bower install && gulp default",
-    "build": "gulp"
+    "start": "node server"
   },
   "engines": {
     "node": "6.2.2"
