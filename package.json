@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "postinstall": "bower install",
-    "start": "node server"
+    "start": "node server",
+    "build": "gulp"
   },
   "engines": {
     "node": "6.2.2"
