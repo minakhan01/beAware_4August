@@ -17,7 +17,9 @@
   "dependencies": {
     "body-parser": "^1.8.1",
     "bower": "^1.7.9",
+    "chart.js": "^2.3.0",
     "es6-promise": "^2.3.0",
+    "event-drops": "^0.3.0-alpha1",
     "express": "^4.12.4",
     "firebase": "^3.4.0",
     "mongodb": "^2.0.35",
