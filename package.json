@@ -24,6 +24,7 @@
     "express": "^4.12.4",
     "firebase": "^3.4.0",
     "gulp": "^3.9.1",
+    "gulp-cli": "^1.2.2",
     "gulp-install": "^0.6.0",
     "mongodb": "^2.0.35",
     "request": "^2.58.0",
