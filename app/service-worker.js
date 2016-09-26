@@ -37,7 +37,7 @@ self.addEventListener('notificationclick', function(event) {
   // Android doesn't close the notification when you click it
   // See http://crbug.com/463146
   event.notification.close();
-  var url = 'https://youtu.be/gYMkEMCHtJ4';
+  var url = 'https://be-aware.herokuapp.com';
   // Check if there's already a tab open with this URL.
   // If yes: focus on the tab.
   // If no: open a tab with the URL.
