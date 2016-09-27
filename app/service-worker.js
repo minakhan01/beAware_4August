@@ -22,11 +22,11 @@ self.addEventListener('activate', function(event) {
 
 self.addEventListener('push', function(event) {
   console.log('Push message received', event);
-    var title = 'Push message';
-
+    var title = 'Be-aware :)';
+var id = self.userID;
   event.waitUntil(
     self.registration.showNotification(title, {
-     body: 'The Message',
+     body: 'Time for a mindful moment' + self.userID,
      icon: 'images/app-icon-32.png',
      vibrate: [200, 100, 200, 100, 200, 100, 400],
      tag: 'my-tag'
@@ -60,5 +60,14 @@ self.addEventListener('notificationclick', function(event) {
       }
     })
   );
+});
+
+self.addEventListener('message', function(event){
+    var data = JSON.parse(event.data);
+
+    console.log("SW Received Message:");
+    console.log(data);
+
+    self.userID = data.uid;
 });
 
