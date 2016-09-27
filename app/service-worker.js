@@ -28,6 +28,7 @@ self.addEventListener('push', function(event) {
     self.registration.showNotification(title, {
      body: 'The Message',
      icon: 'images/app-icon-32.png',
+     vibrate: [200, 100, 200, 100, 200, 100, 400],
      tag: 'my-tag'
    }));
 });

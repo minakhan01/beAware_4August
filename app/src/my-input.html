@@ -265,6 +265,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{updateAggregateDetails}}">
     </firebase-document>
     <firebase-document
+        id="updateMindfulnessFirebase"
+        app-name="notes"
+        path="/"
+        data="{{updateMindfulnessDetails}}">
+    </firebase-document>
+    <firebase-document
         id="createTotalFirebase"
         app-name="notes"
         path="/"
@@ -406,6 +412,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: Object,
             observer: 'aggregateDetailsChanged'
           },
+          mindfulnessdb: {
+            type: Object,
+            observer: 'mindfulnessDetailsChanged'
+          },
           catemotiondb: {
             type: Object,
             observer: 'categoricalEmotionsChanged'
@@ -517,6 +527,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       observers: [
            'dataChanged(datadb.*)',
            'aggregateDetailsChanged(aggregatedb.*)',
+           'mindfulnessDetailsChanged(mindfulnessdb.*)',
            'totalDataChanged(totaldb.*)',
            'categoricalActivityChanged(catactivitydb.*)',
            'categoricalEmotionsChanged(catemotiondb.*)'
@@ -587,6 +598,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.oldAggregateDetails = this.tempAggregateDetails;
         console.log("updateAggregateDetails");
         console.log(this.oldAggregateDetails);
+      },
+      mindfulnessDetailsChanged: function(mindfulnessdb) {
+        console.log("new mindfulnessdb: ");
+        console.log(this.mindfulnessdb);
+        console.log("end mindfulness db");
+        var mindfulnessData = this.mindfulnessdb;
+        this.tempMindulnessDetails = {}; 
+        var that = this;
+        mindfulnessData.forEach(function(childSnapshot) {
+          var key = childSnapshot.$key;
+          console.log("mindfulnessdb childSnapshot");
+          console.log(childSnapshot);
+          if (key === "score") {
+          that.tempMindulnessDetails.score = {};
+          var activityName = "activities";
+          that.tempMindulnessDetails.score.activities = childSnapshot[activityName];
+        }
+          
+        });
+        this.oldMindfulnessDetails = this.tempMindulnessDetails;
+        console.log("updateMindfulnessDetails");
+        console.log(this.oldMindfulnessDetails);
       },
       categoricalActivityChanged: function(catactivitydb) {
         console.log("catactivitydb: ");
@@ -743,6 +776,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       createNewAggregateActivity: function() {
         this.newAggregateDetails = {};
+        this.newMindfulnessDetails = {};
+        this.newMindfulnessDetails.score = {};
+        this.newMindfulnessDetails.score.activites = 0;
         this.newAggregateDetails.emotions = {};
         for (var i=0; i<this.emotions.length;i++) {
           //TODO: WHY IS activity 0
@@ -761,6 +797,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log("createNewAggregateActivity");
         console.log(this.newAggregateDetails);
         this.oldAggregateDetails = this.newAggregateDetails;
+        this.oldMindfulnessDetails = this.newMindfulnessDetails;
         // this.aggregateDetails = this.newAggregateDetails;
 
         var tempUpdateTotalDetails = this.oldTotalData;
@@ -895,6 +932,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         return Promise.resolve();
       },
+      updateMindfulness: function() { 
+      console.log("update new aggregate day"); 
+        if (this.$.updateMindfulnessFirebase.isNew) {
+          var that = this;
+          return this.$.updateMindfulnessFirebase.save(this.user+"/mindfulness", (new Date()).toDateString()).then(function() {
+            that.$.updateMindfulnessFirebase.reset();
+          });
+        }
+        return Promise.resolve();
+      },
       delete: function(key) {  
         if (this.$.deleteActivityFirebase.isNew) {
           this.pathDelete = this.user+"/daily/"+(new Date()).toDateString()+"/"+key;
@@ -986,9 +1033,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         
         var tempPlaceUpdateAggregateDetails = this.oldAggregateDetails;
+        var tempMindulnessDetails = this.oldMindfulnessDetails;
         console.log("this.oldAggregateDetails");
         console.log(this.oldAggregateDetails);
         tempPlaceUpdateAggregateDetails.activities[this.activity] = parseInt(this.oldAggregateDetails.activities[this.activity]) + this.activityDetails.duration;
+        tempMindulnessDetails.score.activities = parseInt(this.oldMindfulnessDetails.score.activities) + this.activityDetails.duration;
         // console.log("AFTER this.updateAggregateDetails.activities[this.activity]");
         var total = this.joyScore + this.calmScore + this.hopeScore - this.angerScore - this.sorrowScore - this.fearScore;
         // console.log(this.oldAggregateDetails.activities[this.activity]);
@@ -999,11 +1048,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         tempPlaceUpdateAggregateDetails.emotions.fear = parseInt(this.oldAggregateDetails.emotions.fear) + this.fearScore;
         tempPlaceUpdateAggregateDetails.emotions.sorrow = parseInt(this.oldAggregateDetails.emotions.sorrow) + this.sorrowScore;
         tempPlaceUpdateAggregateDetails.emotions.total = parseInt(this.oldAggregateDetails.emotions.total) + total;
+        this.updateMindfulnessDetails = tempMindulnessDetails;
         this.updateAggregateDetails = tempPlaceUpdateAggregateDetails;
         this.oldAggregateDetails = this.updateAggregateDetails;
+        this.oldMindfulnessDetails = this.updateMindfulnessDetails;
         console.log("tempPlaceUpdateAggregateDetails");
         console.log(this.tempPlaceUpdateAggregateDetails);
         this.updateNewDayAggregate();
+        this.updateMindfulness();
 
         var tempUpdateTotalDetails = this.oldTotalData;
         console.log("oldTotalData");
@@ -1088,6 +1140,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       editTotal: function (diffDuration, diffJoy, diffSorrow, diffCalm, diffAnger, diffHope, diffFear, diffTotalEmotion, diffActivityName) {
         var tempUpdateTotalDetails = this.oldTotalData;
+        var tempMindulnessDetails = this.oldMindfulnessDetails;
         tempUpdateTotalDetails.activities[diffActivityName] = parseInt(this.oldTotalData.activities[diffActivityName]) + diffDuration;
         tempUpdateTotalDetails.emotions.joy = parseInt(this.oldTotalData.emotions.joy) + diffJoy;
         tempUpdateTotalDetails.emotions.calm = parseInt(this.oldTotalData.emotions.calm) + diffCalm;
@@ -1098,6 +1151,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         tempUpdateTotalDetails.emotions.total = parseInt(this.oldTotalData.emotions.total) + diffTotalEmotion;
         this.updateTotalDetails = tempUpdateTotalDetails;
         this.oldTotalData = this.updateTotalDetails;
+        tempMindulnessDetails.score.activities = parseInt(this.oldMindfulnessDetails.score.activities) + diffDuration;
+        this.updateMindfulnessDetails = tempMindulnessDetails;
+        this.oldMindfulnessDetails = this.updateMindfulnessDetails;
+        this.updateMindfulness();
         console.log("update total");
         console.log(this.updateTotalDetails);
         this.updateTotal();

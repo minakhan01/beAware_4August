@@ -208,6 +208,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       id="aggregateQuery"
       app-name="notes"
       sequentialTransactions=true
+      path="/[[user.uid]]/aggregate/[[date]]"
+      data="{{aggregatedb}}">
+    </firebase-query>
+
+    <firebase-query
+      id="mindfulnessQuery"
+      app-name="notes"
+      sequentialTransactions=true
+      path="/[[user.uid]]/mindfulness/[[date]]"
+      data="{{mindfulnessdb}}">
+    </firebase-query>
+
+    <firebase-query
+      id="aggregateQuery"
+      app-name="notes"
+      sequentialTransactions=true
       path="/[[user.uid]]/aggregate"
       data="{{aggregatedball}}">
     </firebase-query>
@@ -329,7 +345,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-header>
 
         <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
-          <my-input name="input" user="[[user.uid]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}" catactivitydb="{{catactivitydb}}" catemotiondb="{{catemotiondb}}"></my-input>
+          <my-input name="input" user="[[user.uid]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}" catactivitydb="{{catactivitydb}}" catemotiondb="{{catemotiondb}}" mindfulnessdb="[[mindfulnessdb]]"></my-input>
           <my-asterClock name="asterClock" user="[[user.uid]]" datadb="{{datadb}}"></my-asterClock>
           <my-avgActivity name="avgActivity" user="[[user.uid]]" datadb="{{datadb}}" colors-array="{{activtiyColorsArray}}" background-colors-array="{{activtiyBackgroundColorsArray}}"></my-avgActivity>
           <my-avgEmotion name="avgEmotion" user="[[user.uid]]" datadb="{{datadb}}"></my-avgEmotion>
@@ -407,6 +423,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         aggregatedb: {
           type: Object
         },
+        // mindfulnessdb: {
+        //   type: Object,
+        //   value: 0,
+        //   observer: 'mindfulnessChanged'
+        // },
         totaldb: {
           type: Object
         },
@@ -432,6 +453,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       ready: function() {
         this.date = (new Date()).toDateString();
+      },
+      mindfulnessChanged: function(newVaue) {
+        console.log(this.mindfulnessdb);
+        console.log("mindfulnessChanged: "+newVaue);
       },
       aggregateDataChanged: function(aggregatedb) {
         if (aggregatedb) {
