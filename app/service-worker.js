@@ -23,11 +23,9 @@ self.addEventListener('activate', function(event) {
 self.addEventListener('push', function(event) {
   console.log('Push message received', event);
     var title = 'Be-aware :)';
-var id = self.userID;
-console.log("id: "+id);
   event.waitUntil(
     self.registration.showNotification(title, {
-     body: 'Time for a mindful moment' + self.userID,
+     body: 'Time for a mindful moment',
      icon: 'images/app-icon-32.png',
      vibrate: [200, 100, 200, 100, 200, 100, 400],
      tag: 'my-tag'

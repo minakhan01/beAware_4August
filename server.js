@@ -285,7 +285,7 @@ var headers = {
     req.write(dataString);
     req.end();
   }
-}, 60 * 1000); 
+}, 60 * 2 * 60 * 1000); 
 
 
 
