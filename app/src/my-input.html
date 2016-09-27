@@ -270,6 +270,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         path="/"
         data="{{updateMindfulnessDetails}}">
     </firebase-document>
+    <app-indexeddb-mirror
+    key="mindfulness"
+    data="{{updateMindfulnessDetails}}"
+    persisted-data="{{persistedMindfulnessDetails}}">
+    </app-indexeddb-mirror>
     <firebase-document
         id="createTotalFirebase"
         app-name="notes"

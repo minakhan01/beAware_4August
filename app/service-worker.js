@@ -11,6 +11,9 @@
 // importScripts('bower_components/platinum-sw/service-worker.js');
 console.log('Started', self);
 
+var dbs = new Map(); // name --> Promise<IDBDatabase>
+
+
 self.addEventListener('install', function(event) {
   self.skipWaiting();
   console.log('Installed', event);
