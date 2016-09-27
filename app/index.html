@@ -42,37 +42,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     })();
 
     // load pre-caching service worker
-    if ('serviceWorker' in navigator) {
-      console.log('Service Worker is supported');
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('service-worker.js').then(function() {
-          return navigator.serviceWorker.ready;
-        }).then(function(reg) {
-          serviceWorkerRegistration = reg;
-          console.log('Service Worker is ready :^)', reg);
-          reg.pushManager.subscribe({userVisibleOnly: true}).then(function(sub) {
-            console.log('endpoint:', sub.endpoint);
-            var subscriptionId = sub.endpoint.split("/").slice(-1);
-            // <3 fetch() <3
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/subscription_change');
-            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8");
-            // There's no response in the success case.
-            xhr.onerror = function() {
-              console.log("Couldn't send subscription to server.");
-            };
-            xhr.send('enabled=' + true + '&id=' + subscriptionId);
-            console.log("subscriptionId: "+subscriptionId);
-          });
-        }).catch(function(error) {
-          console.log('Service Worker error :^(', error);
-        });
-      });
-    }
+    // if ('serviceWorker' in navigator) {
+    //   console.log('Service Worker is supported');
+    //   window.addEventListener('load', function() {
+    //     navigator.serviceWorker.register('service-worker.js').then(function() {
+    //       return navigator.serviceWorker.ready;
+    //     }).then(function(reg) {
+    //       serviceWorkerRegistration = reg;
+    //       console.log('Service Worker is ready :^)', reg);
+    //       reg.pushManager.subscribe({userVisibleOnly: true}).then(function(sub) {
+    //         console.log('endpoint:', sub.endpoint);
+    //         var subscriptionId = sub.endpoint.split("/").slice(-1);
+    //         // <3 fetch() <3
+    //         var xhr = new XMLHttpRequest();
+    //         xhr.open('POST', '/subscription_change');
+    //         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8");
+    //         // There's no response in the success case.
+    //         xhr.onerror = function() {
+    //           console.log("Couldn't send subscription to server.");
+    //         };
+    //         xhr.send('enabled=' + true + '&id=' + subscriptionId);
+    //         console.log("subscriptionId: "+subscriptionId);
+    //       });
+    //     }).catch(function(error) {
+    //       console.log('Service Worker error :^(', error);
+    //     });
+    //   });
+    // }
 
-    var serviceWorkerRegistration;
-var sub;
-var isSubscribed = false;
+    // var serviceWorkerRegistration;
+    // var sub;
+    // var isSubscribed = false;
+    
 // var subscribeButton = document.querySelector('button');
 
 // if ('serviceWorker' in navigator) {

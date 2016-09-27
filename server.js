@@ -114,12 +114,13 @@ app.get('/manifest.json', function (req, res) {
 app.post('/subscription_change', function (req, res) {
   var enabled = req.body.enabled;
   var id = req.body.id;
+  var uid = req.body.uid;
   var index = activeSubscriptionIds.indexOf(id);
   console.log("index: "+ index+ ", id:"+id);
   if (enabled == 'true') {
     if (index == -1) {
       databasePromise.then(function(db) {
-        db.collection('subscriptions').insert([{id: id}]);
+        db.collection('subscriptions').insert([{id: id, uid: uid}]);
         console.log("inserting");
       });
       activeSubscriptionIds.push(id);
@@ -146,10 +147,10 @@ app.get('/get_subscription_count', function (req, res) {
 app.get('/push_cats', function (req, res) {
   var elapsed = new Date() - previousRequestTime;
 
-  if ((elapsed / 1000) < 60) {
-    res.end('Request throttled. No cat spam!');
-    return;
-  }
+  // if ((elapsed / 1000) < 60) {
+  //   res.end('Request throttled. No cat spam!');
+  //   return;
+  // }
 
   var headers = {
     'Authorization' : 'key= AIzaSyA6ILSdTifHdrWDpzpnqkkGRXoT9nk1O_w',
@@ -284,7 +285,7 @@ var headers = {
     req.write(dataString);
     req.end();
   }
-}, 2 * 60 * 60 * 1000); 
+}, 60 * 1000); 
 
 
 
