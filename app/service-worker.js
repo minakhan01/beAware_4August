@@ -24,6 +24,7 @@ self.addEventListener('push', function(event) {
   console.log('Push message received', event);
     var title = 'Be-aware :)';
 var id = self.userID;
+console.log("id: "+id);
   event.waitUntil(
     self.registration.showNotification(title, {
      body: 'Time for a mindful moment' + self.userID,
