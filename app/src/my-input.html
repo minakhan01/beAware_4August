@@ -213,7 +213,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div id="scope" style="overflow: hidden;
         font-size: 14px;
         height:100%;">
-            <paper-time-picker id="picker" class="horizontal layout" period-start-selected="{{periodStartSelected}}" period-end-selected="{{periodEndSelected}}">
+            <paper-time-picker id="picker" class="horizontal layout" period-start-selected="{{periodStartSelected}}" period-end-selected="{{periodEndSelected}}" on-track="preventScrolling">
             </paper-time-picker>
 <!--               <div class="white horizontal layout center-justified">
               <paper-button class="work">Work</paper-button>
@@ -675,6 +675,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.oldCatEmotionData = this.tempCatEmotionData;
         console.log("updateAggregateDetails");
         console.log(this.oldCatEmotionData);
+      },
+      preventScrolling: function(event) {
+        event.preventDefault();
       },
       totalDataChanged: function(totaldb) {
         console.log("totaldb: ");
