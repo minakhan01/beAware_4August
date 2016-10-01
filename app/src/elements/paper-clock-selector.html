@@ -602,6 +602,7 @@
               this.selecting = true;
               break;
             case "touchmove":
+              event.preventDefault();
               if (this.selectingInnerZone) {
                 this.stopSelectingInnerZone();
               }
@@ -660,6 +661,7 @@
               this.selecting = true;
               break;
             case "touchmove":
+              event.preventDefault();
               if (this.selectingOuterZone) {
                 this.stopSelectingOuterZone();
               }
