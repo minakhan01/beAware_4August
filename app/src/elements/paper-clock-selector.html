@@ -382,7 +382,7 @@
         },
         _populate: function() {
           delete this._resizedCache;
-          var display, value, number;
+          var display, value, number, label;
           var $numbers = this.$.numbers;
 
           this.set('_numbers', []);
@@ -398,19 +398,31 @@
           for (var i=0; i<this.count * 2; i++) {
             value = i;
             display = null;
-            if (i === 0 && !this.useZero) {
-              value = this.count;
+            // if (i === 0 && !this.useZero) {
+            //   value = this.count;
+            // }
+            display = value % this._step === 0;
+            label = value.toString();
+            if (i == 0) {
+              console.log("ZERO");
+              label = 'AM';
+            }
+            else if (i == 12) {
+              console.log("TWELVE");
+              label = 'PM';
             }
 
             number = {
               index: i,
               value: value,
-              display: value % this._step === 0,
+              display: display,
               x: 0,
               y: 0,
-              label: value.toString()
+              label: label
             };
 
+            console.log(number);
+            
             number.dom = this._createNumberElement(number);
             numbers.push(number);
             $numbers.appendChild(number.dom.g);
@@ -455,6 +467,7 @@
           if (number.display) {
             text = create('text');
             text.textContent = number.label;
+            console.log("label: "+number.label);
             g.appendChild(text);
             textClipped = create('text', ['clipped']);
             textClipped.textContent = number.label;

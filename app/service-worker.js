@@ -28,7 +28,7 @@ self.addEventListener('push', function(event) {
     var title = 'Be-aware :)';
   event.waitUntil(
     self.registration.showNotification(title, {
-     body: 'Time for a mindful moment',
+     body: 'Take a moment to record your day',
      icon: 'images/app-icon-32.png',
      vibrate: [200, 100, 200, 100, 200, 100, 400],
      tag: 'my-tag'
