@@ -10,9 +10,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="elements/paper-time-picker.html">
-<link rel="import" href="elements/menu-overlay.html">
-<link rel="import" href="elements/paper-clock-selector.html">
 <link rel="import" href="elements/simple-menu.html">
 <link rel="import" href="elements/simple-menubar.html">
 <link rel="import" href="elements/my-animatable.html">
@@ -23,9 +20,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="colors-material.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html"> 
+<link rel="import" href="../bower_components/paper-slider/paper-slider.html">
 
-<dom-module id="my-input">
+<dom-module id="my-heart">
 
   <template>
 <style>
@@ -141,6 +139,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       height: 100px;
     }
 
+    .caption {
+      padding-left: 12px;
+      color: #a0a0a0;
+    }
+
     .menuitem-floating {
       float:left; 
       display:inline;
@@ -171,31 +174,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     </style>
 
-    <div id="scope" style="overflow: hidden;
-        font-size: 14px;
-        height:100%;">
-            <paper-time-picker id="picker" class="horizontal layout" period-start-selected="{{periodStartSelected}}" period-end-selected="{{periodEndSelected}}" on-track="preventScrolling">
-            </paper-time-picker>
+    
 
-            <div class="horizontal layout center-justified wrap" style="padding:0px; margin: 0px;">
-              <div class="legend"><div id="rectangle" class="work1"></div> <div class="legend-title">Work 1</div></div>
-
-              <div class="legend"><div id="rectangle" class="work2"></div> <div class="legend-title">Work 2</div></div>
-
-              <div class="legend"><div id="rectangle" class="sleep"></div> <div class="legend-title">Sleep </div></div>
-
-              <div class="legend"><div id="rectangle" class="exercise"></div> <div class="legend-title">Exercise </div></div>
-
-              <div class="legend"><div id="rectangle" class="social"></div> <div class="legend-title">Social </div></div>
-
-              <div class="legend"><div id="rectangle" class="personal"></div> <div class="legend-title">Personal </div></div> 
-
-              <div class="legend"><div id="rectangle" class="errands"></div> <div class="legend-title">Errands/Chores </div></div> 
-              
-            </div>
+        <div>Ratings: <div id="ratingslabel" class="caption">8</div></div><br>
+        <paper-slider id="ratings" pin snaps max="10" max-markers="10" step="1" value="5"></paper-slider>
             
-
-    </div>
 
     <firebase-document
         id="activityFirebase"
@@ -241,32 +224,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </firebase-document>
 
     <colors-material id="colorSheet"></colors-material>
-    <menu-overlay no-cancel-on-outside-click id="plain" tabindex="-1" class="with-margin scrollable">
-    <div style="padding-bottom: 40px;">    
-      <paper-icon-button icon="icons:close" style="float: left;" on-tap="_closePopUp"></paper-icon-button>
-      <paper-icon-button icon="icons:check" style="float: right;" on-tap="_saveSelection"></paper-icon-button>
-    </div>
-    <div class="scrollable">
-      <p style="text-align: center;">{{periodStartSelected}} pm to {{periodEndSelected}} pm</p>
-      <p class="heading">Select Activity</p><hr style="margin-bottom:20px;">
-      <!-- <div class="horizontal-section-container"> -->
-        <div>
-          <!-- <div class="row"> -->
-            <div class="horizontal layout center-justified wrap">
-              <simple-menubar selected="{{activity}}" id="activitySelection" attr-for-selected="name" fallback-selection="Work1">
-                <paper-button class="work1" role="menuitem" name="Work1">Work 1</paper-button>
-                <paper-button class="work2" role="menuitem" name="Work2">Work 2</paper-button>
-                <paper-button class="sleep" role="menuitem" name="Sleep">Sleep</paper-button>
-                <paper-button class="exercise" role="menuitem" name="Exercise">Exercise</paper-button>
-                <paper-button class="social" role="menuitem" name="Social">Social</paper-button>
-                <paper-button class="personal" role="menuitem" name="Personal">Personal</paper-button>
-                <paper-button class="errands" role="menuitem" name="Errands">Errands/Chores</paper-button>
-              </simple-menubar>
-            </div>
-          <!-- </div> -->
-        </div>
-    </div>
-    </menu-overlay>
 
   </template>
 
@@ -274,7 +231,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     Polymer({
 
-      is: 'my-input',
+      is: 'my-heart',
 
       behaviors: [
         Polymer.NoteAppBehavior
@@ -362,6 +319,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
            'aggregateDetailsChanged(aggregatedb.*)',
            'totalDataChanged(totaldb.*)'
       ],
+      attached: function() {
+        this.date = (new Date()).toDateString();
+        var ratings = this.$.ratings;
+        ratings.addEventListener('value-change', function() {
+          console.log("Listener"+ratings.value);
+          this.$.ratingslabel.textContent = ratings.value;
+        });
+      },
       aggregateDetailsChanged: function(aggregatedb) {
         console.log("aggregatedb: ");
         console.log(this.aggregatedb);
@@ -430,7 +395,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var endTime = childSnapshot.endTime;
           var colorShadeString = activityColors[activityLabel].colorShade;
           var activitySelectedColor = colorSheet.colors[colorShadeString].a700;
-          that.$.picker.drawArcOnClock(startTime, endTime, activitySelectedColor);
         });
         console.log("AFTER");
       },
@@ -583,7 +547,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var colorShadeString = activityColors[activitySelected].colorShade;
         // console.log("colorShadeString: "+colorShadeString);
         var activitySelectedColor = this.$.colorSheet.colors[colorShadeString].a700;
-        this.$.picker.drawArcOnClock(this.periodStartSelected, this.periodEndSelected, activitySelectedColor);
         this.searchDb();
         
         console.log("newDayExists: "+this.newDayExists);
