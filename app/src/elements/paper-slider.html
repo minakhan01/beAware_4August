@@ -71,14 +71,14 @@ Custom property | Description | Default
         @apply(--layout);
         @apply(--layout-justified);
         @apply(--layout-center);
-        width: 200px;
+        width: 250px;
         cursor: default;
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-        --paper-progress-active-color: var(--paper-slider-active-color, --google-blue-700);
+        --paper-progress-active-color: var(--paper-slider-active-color, --google-blue-500);
         --paper-progress-secondary-color: var(--paper-slider-secondary-color, --google-blue-300);
         --paper-progress-disabled-active-color: var(--paper-slider-disabled-active-color, --paper-grey-400);
         --paper-progress-disabled-secondary-color: var(--paper-slider-disabled-secondary-color, --paper-grey-400);
@@ -136,6 +136,10 @@ Custom property | Description | Default
         --paper-progress-height: var(--paper-slider-height, 2px);
       }
 
+      .colored {
+        border-color: var(--paper-slider-active-color, --google-blue-500);
+      }
+
       .slider-markers {
         position: absolute;
         top: calc(14px + var(--paper-slider-height,2px)/2);
@@ -166,8 +170,8 @@ Custom property | Description | Default
         left: 0;
         top: 0;
         margin-left: calc(-15px - var(--paper-slider-height, 2px)/2);
-        width: calc(30px + var(--paper-slider-height, 2px));
-        height: calc(30px + var(--paper-slider-height, 2px));
+        width: calc(30px + var(--paper-slider-height, 5px));
+        height: calc(30px + var(--paper-slider-height, 5px));
       }
 
       .transiting > #sliderKnob {
@@ -330,18 +334,21 @@ Custom property | Description | Default
         <div class="slider-markers">
           <template is="dom-repeat" items="[[markers]]">
             <div class="slider-marker">
-              <div style="width: [[item]]px;
+              <div class="colored" style="width: [[item.value]]px;
               position:relative;
-              top: calc(-[[item]]px/2);
-  height: [[item]]px;
+              top: calc(-[[item.value]]px/2);
+              left: calc([[item.value]]px/3);
+  height: [[item.value]]px;
   border-radius: 50%;
-  background: red;
   display: block;
   margin-left: -1px;
-  background-color: black;"></div>
-              <!-- style="height=[[item]]px; width=[[item]]px;" -->
+  border-style: solid;
+  border-width: 1px;"></div>
             </div>
-            <span>{{item}}</span>
+            <span style="width: [[item.value]]px;
+              position:relative;
+              top: 5px;
+              left: calc([[item.value]]px/2);">{{item.value}}</span>
           </template>
         </div>
       </template>
@@ -470,6 +477,11 @@ Custom property | Description | Default
         markers: {
           type: Array,
           readOnly: true,
+          value: []
+        },
+
+        array: {
+          type: Array,
           value: []
         },
       },
@@ -665,8 +677,11 @@ Custom property | Description | Default
         if (steps > maxMarkers) {
           steps = maxMarkers;
         }
-        console.log(new Array(steps));
-        this._setMarkers([5,10,15]);
+        this.array = [];
+        for (i = 0; i < steps; i++) { 
+            this.array.push({"value": i*3, "filled": 0});
+        }
+        this._setMarkers(this.array);
       },
 
       _mergeClasses: function(classes) {
