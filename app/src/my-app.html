@@ -192,7 +192,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       id="query"
       app-name="notes"
       sequentialTransactions=true
-      path="/[[user.uid]]/daily/[[date]]"
+      path="/[[user.uid]]/daily/[[date]]/activities"
       data="{{datadb}}">
     </firebase-query>
 
@@ -200,15 +200,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       id="aggregateQuery"
       app-name="notes"
       sequentialTransactions=true
-      path="/[[user.uid]]/aggregate/[[date]]"
-      data="{{aggregatedb}}">
-    </firebase-query>
-
-    <firebase-query
-      id="aggregateQuery"
-      app-name="notes"
-      sequentialTransactions=true
-      path="/[[user.uid]]/aggregate/[[date]]"
+      path="/[[user.uid]]/aggregate/[[date]]/activities"
       data="{{aggregatedb}}">
     </firebase-query>
 
@@ -224,7 +216,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       id="aggregateQuery"
       app-name="notes"
       sequentialTransactions=true
-      path="/[[user.uid]]/aggregate"
+      path="/[[user.uid]]/aggregate/"
       data="{{aggregatedball}}">
     </firebase-query>
 
@@ -234,22 +226,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       sequentialTransactions=true
       path="/[[user.uid]]/total"
       data="{{totaldb}}">
-    </firebase-query>
-
-    <firebase-query
-      id="catActivityQuery"
-      app-name="notes"
-      sequentialTransactions=true
-      path="/[[user.uid]]/catActivity"
-      data="{{catactivitydb}}">
-    </firebase-query>
-
-    <firebase-query
-      id="catEmotionQuery"
-      app-name="notes"
-      sequentialTransactions=true
-      path="/[[user.uid]]/catEmotion"
-      data="{{catemotiondb}}">
     </firebase-query>
 
     <firebase-query

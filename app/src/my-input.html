@@ -475,7 +475,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       saveEntry: function() {  
         if (this.$.activityFirebase.isNew) {
           var that = this;
-          return this.$.activityFirebase.save(this.user+"/daily/"+(new Date()).toDateString()).then(function() {
+          return this.$.activityFirebase.save(this.user+"/daily/"+(new Date()).toDateString()+"/activities/").then(function() {
             that.$.activityFirebase.reset();
           });
         }
@@ -523,7 +523,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       delete: function(key) {  
         if (this.$.deleteActivityFirebase.isNew) {
-          this.pathDelete = this.user+"/daily/"+(new Date()).toDateString()+"/"+key;
+          this.pathDelete = this.user+"/daily/"+(new Date()).toDateString()+"/activities/"+key;
           var that = this;
           return this.$.deleteActivityFirebase.destroy().then(function() {
             that.$.deleteActivityFirebase.reset();
@@ -534,7 +534,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       editOldEntry: function(key) {  
         if (this.$.editActivity.isNew) {
           var that = this;
-          return this.$.editActivity.save(this.user+"/daily/"+(new Date()).toDateString(), key).then(function() {
+          return this.$.editActivity.save(this.user+"/daily/"+(new Date()).toDateString()+"/activities/", key).then(function() {
             that.$.editActivity.reset();
           });
         }

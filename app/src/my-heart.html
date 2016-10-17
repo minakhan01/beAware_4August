@@ -22,6 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="elements/paper-slider-custom.html">
+<link rel="import" href="../bower_components/paper-slider/paper-slider.html">
 
 <dom-module id="my-heart">
 
@@ -68,44 +69,106 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       color: var(--google-grey-300);
     }
 
+    .happy {
+      --paper-slider-knob-color: var(--paper-yellow-a200);
+      --paper-slider-active-color: var(--paper-yellow-a200);
+    }
+    .sad {
+      --paper-slider-knob-color: var(--paper-blue-200);
+      --paper-slider-active-color: var(--paper-blue-200);
+    }
+    .peaceful {
+      --paper-slider-knob-color: var(--paper-teal-a200);
+      --paper-slider-active-color: var(--paper-teal-a200);
+    }
+    .anxious {
+      --paper-slider-knob-color: var(--paper-purple-200);
+      --paper-slider-active-color: var(--paper-purple-200);
+    }
+    .hopeful {
+      --paper-slider-knob-color: var(--paper-orange-a200);
+      --paper-slider-active-color: var(--paper-orange-a200);
+    }
+    .hopeless {
+      --paper-slider-knob-color: var(--paper-blue-grey-200);
+      --paper-slider-active-color: var(--paper-blue-grey-200);
+    }
+    .energetic {
+      --paper-slider-knob-color: var(--paper-deep-purple-a200);
+      --paper-slider-active-color: var(--paper-deep-purple-a200);
+    }
+    .tired {
+      --paper-slider-knob-color: var(--paper-lime-200);
+      --paper-slider-active-color: var(--paper-lime-200);
+    }
+    .confident {
+      --paper-slider-knob-color: var(--paper-pink-a200);
+      --paper-slider-active-color: var(--paper-pink-a200);
+    }
+    .insecure {
+      --paper-slider-knob-color: var(--paper-green-200);
+      --paper-slider-active-color: var(--paper-green-200);
+    }
+    .relaxed {
+      --paper-slider-knob-color: var(--paper-indigo-a200);
+      --paper-slider-active-color: var(--paper-indigo-a200);
+    }
+    .stressed {
+      --paper-slider-knob-color: var(--paper-amber-500);
+      --paper-slider-active-color: var(--paper-amber-500);
+    }
+    .grateful {
+      --paper-slider-knob-color: var(--paper-purple-a200);
+      --paper-slider-active-color: var(--paper-purple-a200);
+    }
+    .disappointed {
+      --paper-slider-knob-color: var(--paper-green-200);
+      --paper-slider-active-color: var(--paper-green-200);
+    }
+    .extroverted {
+      --paper-slider-knob-color: var(--paper-red-a200);
+      --paper-slider-active-color: var(--paper-red-a200);
+    }
+    .withdrawn {
+      --paper-slider-knob-color: var(--paper-yellow-200);
+      --paper-slider-active-color: var(--paper-yellow-200);
+    }
+    .empathetic {
+      --paper-slider-knob-color: var(--paper-light-blue-a200);
+      --paper-slider-active-color: var(--paper-light-blue-a200);
+    }
+    .carefree {
+      --paper-slider-knob-color: var(--paper-pink-200);
+      --paper-slider-active-color: var(--paper-pink-200);
+    }
+    .focused {
+      --paper-slider-knob-color: var(--paper-blue-a200);
+      --paper-slider-active-color: var(--paper-blue-a200);
+    }
+    .chaotic {
+      --paper-slider-knob-color: var(--paper-red-200);
+      --paper-slider-active-color: var(--paper-red-200);
+    }
+    .inspired {
+      --paper-slider-knob-color: var(--paper-green-a200);
+      --paper-slider-active-color: var(--paper-green-a200);
+    }
+    .unchallenged {
+      --paper-slider-knob-color: var(--paper-indigo-200);
+      --paper-slider-active-color: var(--paper-indigo-200);
+    }
+    .effective {
+      --paper-slider-knob-color: var(--paper-deep-orange-a200);
+      --paper-slider-active-color: var(--paper-deep-orange-a200);
+    }
+    .frustrated {
+      --paper-slider-knob-color: var(--paper-deep-purple-200);
+      --paper-slider-active-color: var(--paper-deep-purple-200);
+    }
+
     #rectangle{
     width:10px;
     height:10px;
-    }
-
-    .work1 {
-      border-color: var(--paper-blue-500);
-      background-color: var(--paper-blue-500);
-    }
-
-    .work2 {
-      border-color: var(--paper-purple-500);
-      background-color: var(--paper-purple-500);
-    }
-
-    .sleep {
-      border-color: var(--paper-teal-500);
-      background-color: var(--paper-teal-500);
-    }
-
-    .exercise {
-      background-color: var(--paper-orange-500);
-      border-color: var(--paper-orange-500);
-    }
-
-    .social {
-      border-color: var(--paper-pink-500);
-      background-color: var(--paper-pink-500);
-    }
-
-    .personal {
-      border-color: var(--paper-green-500);
-      background-color: var(--paper-green-500);
-    }
-
-    .errands {
-      border-color: var(--paper-deep-purple-500);
-      background-color: var(--paper-deep-purple-500);
     }
 
     a {
@@ -176,8 +239,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     
 
-        <div>Ratings: <span id="ratingslabel" class="caption">8</span></div><br>
-        <paper-slider-custom id="ratings" pin snaps max="4" max-markers="4" step="1" value="5"></paper-slider-custom>
+        <div>Ratings: <span id="ratingslabel" class="caption"></span></div><br>
+        <!-- <div>Happy: <span id="ratingslabel" class="caption"></span></div><paper-slider-custom class="happy" id="happy-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider-custom><br> -->
+        <div>Happy: <span id="ratingslabel" class="caption"></span></div><paper-slider class="happy" id="happy-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Sad: <span id="ratingslabel" class="caption"></span></div><paper-slider class="sad" id="sad-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Peaceful: <span id="ratingslabel" class="caption"></span></div><paper-slider class="peaceful" id="peaceful-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Anxious: <span id="ratingslabel" class="caption"></span></div><paper-slider class="anxious" id="anxious-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Hopeful: <span id="ratingslabel" class="caption"></span></div><paper-slider class="hopeful" id="hopeful-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Hopeless: <span id="ratingslabel" class="caption"></span></div><paper-slider class="hopeless" id="hopeless-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+
+        <div>Energetic: <span id="ratingslabel" class="caption"></span></div><paper-slider class="energetic" id="energetic-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Tired: <span id="ratingslabel" class="caption"></span></div><paper-slider class="tired" id="tired-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Confident: <span id="ratingslabel" class="caption"></span></div><paper-slider class="confident" id="confident-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Insecure: <span id="ratingslabel" class="caption"></span></div><paper-slider class="insecure" id="insecure-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Relaxed: <span id="ratingslabel" class="caption"></span></div><paper-slider class="relaxed" id="relaxed-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Stressed: <span id="ratingslabel" class="caption"></span></div><paper-slider class="stressed" id="stressed-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+
+        <div>Grateful: <span id="ratingslabel" class="caption"></span></div><paper-slider class="grateful" id="grateful-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Disappointed: <span id="ratingslabel" class="caption"></span></div><paper-slider class="disappointed" id="disappointed-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Extroverted: <span id="ratingslabel" class="caption"></span></div><paper-slider class="extroverted" id="extroverted-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Withdrawn: <span id="ratingslabel" class="caption"></span></div><paper-slider class="withdrawn" id="withdrawn-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Empathetic: <span id="ratingslabel" class="caption"></span></div><paper-slider class="empathetic" id="empathetic-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Carefree: <span id="ratingslabel" class="caption"></span></div><paper-slider class="carefree" id="carefree-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+
+        <div>Focused: <span id="ratingslabel" class="caption"></span></div><paper-slider class="focused" id="focused-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Chaotic: <span id="ratingslabel" class="caption"></span></div><paper-slider class="chaotic" id="chaotic-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Inspired: <span id="ratingslabel" class="caption"></span></div><paper-slider class="inspired" id="inspired-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Unchallenged: <span id="ratingslabel" class="caption"></span></div><paper-slider class="unchallenged" id="unchallenged-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Effective: <span id="ratingslabel" class="caption"></span></div><paper-slider class="effective" id="effectives-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Frustrated: <span id="ratingslabel" class="caption"></span></div><paper-slider class="frustrated" id="frustrated-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider>
             
 
     <firebase-document
@@ -525,14 +615,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.plain.close();
       },
       _saveSelection: function() {
-        var activityColors = 
-        { "Sleep": {"colorShade": "Teal", "colorType": "A200"},
-          "Work1" : {"colorShade": "Blue", "colorType": "A200"},
-          "Work2" : {"colorShade": "Purple", "colorType": "A200"},
-          "Exercise" : {"colorShade": "Orange", "colorType": "A200"},
-          "Social" : {"colorShade": "Pink", "colorType": "A200"},
-          "Errands" : {"colorShade": "Purple", "colorType": "A200"},
-          "Personal": {"colorShade": "Green", "colorType": "A200"}
+        var heartColors = 
+        { "Happy": {"colorShade": "Yellow", "colorType": "A200"},
+          "Sad" : {"colorShade": "Blue", "colorType": "200"},
+          "Peaceful" : {"colorShade": "Teal", "colorType": "A200"},
+          "Anxious" : {"colorShade": "Purple", "colorType": "200"},
+          "Hopeful" : {"colorShade": "Orange", "colorType": "A200"},
+          "Hopeless" : {"colorShade": "BlueGrey", "colorType": "200"}
+        };
+        var bodyColors = 
+        { "Energetic": {"colorShade": "DeepPurple", "colorType": "A200"},
+          "Tired" : {"colorShade": "Lime", "colorType": "200"},
+          "Confident" : {"colorShade": "Pink", "colorType": "A200"},
+          "Insecure" : {"colorShade": "Green", "colorType": "200"},
+          "Relaxed" : {"colorShade": "Indigo", "colorType": "A200"},
+          "Stressed" : {"colorShade": "Amber", "colorType": "200"}
+        };
+        var spiritColors = 
+        { "Grateful": {"colorShade": "Purple", "colorType": "A200"},
+          "Disappointed" : {"colorShade": "Green", "colorType": "200"},
+          "Extroverted" : {"colorShade": "Red", "colorType": "A200"},
+          "Withdrawn" : {"colorShade": "Yellow", "colorType": "200"},
+          "Empathetic" : {"colorShade": "LightBlue", "colorType": "A200"},
+          "Carefree" : {"colorShade": "Pink", "colorType": "200"}
+        };
+        var mindColors = 
+        { "Focused": {"colorShade": "Yellow", "colorType": "A200"},
+          "Chaotic" : {"colorShade": "Blue", "colorType": "200"},
+          "Inspired" : {"colorShade": "Teal", "colorType": "A200"},
+          "Unchallenged" : {"colorShade": "Purple", "colorType": "200"},
+          "Effective" : {"colorShade": "Orange", "colorType": "A200"},
+          "Frustrated" : {"colorShade": "BlueGrey", "colorType": "200"}
         };
         console.log("activity: " +this.activity);
         console.log("SAVE SELECTION");
