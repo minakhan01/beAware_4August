@@ -241,42 +241,55 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <div>Ratings: <span id="ratingslabel" class="caption"></span></div><br>
         <!-- <div>Happy: <span id="ratingslabel" class="caption"></span></div><paper-slider-custom class="happy" id="happy-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider-custom><br> -->
-        <div>Happy: <span id="ratingslabel" class="caption"></span></div><paper-slider class="happy" id="happyRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
-        <div>Sad: <span id="ratingslabel" class="caption"></span></div><paper-slider class="sad" id="sadRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Happy: <span id="ratingslabel" class="caption"></span></div><paper-slider class="happy" id="happyRatings" pin snaps max="4" max-markers="4" step="1" value="[[happyValue]]"></paper-slider><br>
 
-        <div>Peaceful: <span id="ratingslabel" class="caption"></span></div><paper-slider class="peaceful" id="peacefulRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Sad: <span id="ratingslabel" class="caption"></span></div><paper-slider class="sad" id="sadRatings" pin snaps max="4" max-markers="4" step="1" value="[[sadValue]]"></paper-slider><br>
 
-        <div>Anxious: <span id="ratingslabel" class="caption"></span></div><paper-slider class="anxious" id="anxiousRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
-        <div>Hopeful: <span id="ratingslabel" class="caption"></span></div><paper-slider class="hopeful" id="hopefulRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
-        <div>Hopeless: <span id="ratingslabel" class="caption"></span></div><paper-slider class="hopeless" id="hopelessRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Peaceful: <span id="ratingslabel" class="caption"></span></div><paper-slider class="peaceful" id="peacefulRatings" pin snaps max="4" max-markers="4" step="1" value="[[peacefulValue]]"></paper-slider><br>
 
-        <div>Energetic: <span id="ratingslabel" class="caption"></span></div><paper-slider class="energetic" id="energeticRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
-        <div>Tired: <span id="ratingslabel" class="caption"></span></div><paper-slider class="tired" id="tiredRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
-        <div>Confident: <span id="ratingslabel" class="caption"></span></div><paper-slider class="confident" id="confidentRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
-        <div>Insecure: <span id="ratingslabel" class="caption"></span></div><paper-slider class="insecure" id="insecureRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
-        <div>Relaxed: <span id="ratingslabel" class="caption"></span></div><paper-slider class="relaxed" id="relaxedRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
-        <div>Stressed: <span id="ratingslabel" class="caption"></span></div><paper-slider class="stressed" id="stressedRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Anxious: <span id="ratingslabel" class="caption"></span></div><paper-slider class="anxious" id="anxiousRatings" pin snaps max="4" max-markers="4" step="1" value="[[anxiousValue]]"></paper-slider><br>
 
-        <div>Grateful: <span id="ratingslabel" class="caption"></span></div><paper-slider class="grateful" id="gratefulRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
-        <div>Disappointed: <span id="ratingslabel" class="caption"></span></div><paper-slider class="disappointed" id="disappointedRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
-        <div>Extroverted: <span id="ratingslabel" class="caption"></span></div><paper-slider class="extroverted" id="extrovertedRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
-        <div>Withdrawn: <span id="ratingslabel" class="caption"></span></div><paper-slider class="withdrawn" id="withdrawnRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
-        <div>Empathetic: <span id="ratingslabel" class="caption"></span></div><paper-slider class="empathetic" id="empatheticRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
-        <div>Carefree: <span id="ratingslabel" class="caption"></span></div><paper-slider class="carefree" id="carefreeRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
+        <div>Hopeful: <span id="ratingslabel" class="caption"></span></div><paper-slider class="hopeful" id="hopefulRatings" pin snaps max="4" max-markers="4" step="1" value="[[hopefulValue]]"></paper-slider><br>
 
-        <div>Focused: <span id="ratingslabel" class="caption"></span></div><paper-slider class="focused" id="focusedRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
-        <div>Chaotic: <span id="ratingslabel" class="caption"></span></div><paper-slider class="chaotic" id="chaoticRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
-        <div>Inspired: <span id="ratingslabel" class="caption"></span></div><paper-slider class="inspired" id="inspiredRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
-        <div>Unchallenged: <span id="ratingslabel" class="caption"></span></div><paper-slider class="unchallenged" id="unchallengedRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
-        <div>Effective: <span id="ratingslabel" class="caption"></span></div><paper-slider class="effective" id="effectivesRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider><br>
-        <div>Frustrated: <span id="ratingslabel" class="caption"></span></div><paper-slider class="frustrated" id="frustratedRatings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider>
+        <div>Hopeless: <span id="ratingslabel" class="caption"></span></div><paper-slider class="hopeless" id="hopelessRatings" pin snaps max="4" max-markers="4" step="1" value="[[hopelessValue]]"></paper-slider><br>
+
+        <div>Energetic: <span id="ratingslabel" class="caption"></span></div><paper-slider class="energetic" id="energeticRatings" pin snaps max="4" max-markers="4" step="1" value="[[energeticValue]]"></paper-slider><br>
+
+        <div>Tired: <span id="ratingslabel" class="caption"></span></div><paper-slider class="tired" id="tiredRatings" pin snaps max="4" max-markers="4" step="1" value="[[tiredValue]]"></paper-slider><br>
+
+        <div>Confident: <span id="ratingslabel" class="caption"></span></div><paper-slider class="confident" id="confidentRatings" pin snaps max="4" max-markers="4" step="1" value="[[confidentValue]]"></paper-slider><br>
+
+        <div>Insecure: <span id="ratingslabel" class="caption"></span></div><paper-slider class="insecure" id="insecureRatings" pin snaps max="4" max-markers="4" step="1" value="[[insecureValue]]"></paper-slider><br>
+
+        <div>Relaxed: <span id="ratingslabel" class="caption"></span></div><paper-slider class="relaxed" id="relaxedRatings" pin snaps max="4" max-markers="4" step="1" value="[[relaxedValue]]"></paper-slider><br>
+
+        <div>Stressed: <span id="ratingslabel" class="caption"></span></div><paper-slider class="stressed" id="stressedRatings" pin snaps max="4" max-markers="4" step="1" value="[[stressedValue]]"></paper-slider><br>
+
+        <div>Grateful: <span id="ratingslabel" class="caption"></span></div><paper-slider class="grateful" id="gratefulRatings" pin snaps max="4" max-markers="4" step="1" value="[[gratefulValue]]"></paper-slider><br>
+
+        <div>Disappointed: <span id="ratingslabel" class="caption"></span></div><paper-slider class="disappointed" id="disappointedRatings" pin snaps max="4" max-markers="4" step="1" value="[[disappointedValue]]"></paper-slider><br>
+
+        <div>Extroverted: <span id="ratingslabel" class="caption"></span></div><paper-slider class="extroverted" id="extrovertedRatings" pin snaps max="4" max-markers="4" step="1" value="[[extrovertedValue]]"></paper-slider><br>
+
+        <div>Withdrawn: <span id="ratingslabel" class="caption"></span></div><paper-slider class="withdrawn" id="withdrawnRatings" pin snaps max="4" max-markers="4" step="1" value="[[withdrawnValue]]"></paper-slider><br>
+
+        <div>Empathetic: <span id="ratingslabel" class="caption"></span></div><paper-slider class="empathetic" id="empatheticRatings" pin snaps max="4" max-markers="4" step="1" value="[[empatheticValue]]"></paper-slider><br>
+
+        <div>Carefree: <span id="ratingslabel" class="caption"></span></div><paper-slider class="carefree" id="carefreeRatings" pin snaps max="4" max-markers="4" step="1" value="[[carefreeValue]]"></paper-slider><br>
+
+        <div>Focused: <span id="ratingslabel" class="caption"></span></div><paper-slider class="focused" id="focusedRatings" pin snaps max="4" max-markers="4" step="1" value="[[focusedValue]]"></paper-slider><br>
+        <div>Chaotic: <span id="ratingslabel" class="caption"></span></div><paper-slider class="chaotic" id="chaoticRatings" pin snaps max="4" max-markers="4" step="1" value="[[chaoticValue]]"></paper-slider><br>
+        <div>Inspired: <span id="ratingslabel" class="caption"></span></div><paper-slider class="inspired" id="inspiredRatings" pin snaps max="4" max-markers="4" step="1" value="[[inspiredValue]]"></paper-slider><br>
+        <div>Unchallenged: <span id="ratingslabel" class="caption"></span></div><paper-slider class="unchallenged" id="unchallengedRatings" pin snaps max="4" max-markers="4" step="1" value="[[unchallengedValue]]"></paper-slider><br>
+        <div>Effective: <span id="ratingslabel" class="caption"></span></div><paper-slider class="effective" id="effectiveRatings" pin snaps max="4" max-markers="4" step="1" value="[[effectiveValue]]"></paper-slider><br>
+        <div>Frustrated: <span id="ratingslabel" class="caption"></span></div><paper-slider class="frustrated" id="frustratedRatings" pin snaps max="4" max-markers="4" step="1" value="[[frustratedValue]]"></paper-slider>
             
 
     <firebase-document
-        id="activityFirebase"
+        id="emotionFirebase"
         app-name="notes"
         path="/"
-        data="{{activityDetails}}">
+        data="{{emotionDetails}}">
     </firebase-document>
     <firebase-document
         id="createAggregateFirebase"
@@ -330,7 +343,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ],
 
       properties: {
-          datadb: {
+          emotiondb: {
           type: Object,
           observer: 'dataChanged'
           },
@@ -338,17 +351,101 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: String,
             value: '' 
           },
-          periodEndSelected: {
+          happyValue: {
             type: Number,
             value: 0,
-            notify: true,
-            observer: '_periodEndChanged' 
           },
-          periodStartSelected: {
+          sadValue: {
             type: Number,
             value: 0,
-            notify: true,
-            observer: '_periodStartChanged' 
+          },
+          peacefulValue: {
+            type: Number,
+            value: 0,
+          },
+          anxiousValue: {
+            type: Number,
+            value: 0,
+          },
+          hopefulValue: {
+            type: Number,
+            value: 0,
+          },
+          hopelessValue: {
+            type: Number,
+            value: 0,
+          },
+          energeticValue: {
+            type: Number,
+            value: 0,
+          },
+          tiredValue: {
+            type: Number,
+            value: 0,
+          },
+          confidentValue: {
+            type: Number,
+            value: 0,
+          },
+          insecureValue: {
+            type: Number,
+            value: 0,
+          },
+          relaxedValue: {
+            type: Number,
+            value: 0,
+          },
+          stressedValue: {
+            type: Number,
+            value: 0,
+          },
+          gratefulValue: {
+            type: Number,
+            value: 0,
+          },
+          disappointedValue: {
+            type: Number,
+            value: 0,
+          },
+          extrovertedValue: {
+            type: Number,
+            value: 0,
+          },
+          withdrawnValue: {
+            type: Number,
+            value: 0,
+          },
+          empatheticValue: {
+            type: Number,
+            value: 0,
+          },
+          carefreeValue: {
+            type: Number,
+            value: 0,
+          },
+          focusedValue: {
+            type: Number,
+            value: 0,
+          },
+          chaoticValue: {
+            type: Number,
+            value: 0,
+          },
+          inspiredValue: {
+            type: Number,
+            value: 0,
+          },
+          unchallengedValue: {
+            type: Number,
+            value: 0,
+          },
+          effectiveValue: {
+            type: Number,
+            value: 0,
+          },
+          frustratedValue: {
+            type: Number,
+            value: 0,
           },
           activity: {
             type: String,
@@ -407,131 +504,180 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
       },
       observers: [
-           'dataChanged(datadb.*)',
+           'dataChanged(emotiondb.*)',
            'aggregateDetailsChanged(aggregatedb.*)',
            'totalDataChanged(totaldb.*)'
       ],
       attached: function() {
         this.date = (new Date()).toDateString();
+        var that = this;
         
         var happyRatings = this.$.happyRatings;
         happyRatings.addEventListener('value-change', function() {
           console.log("Listener"+happyRatings.value);
+          that.emotionDetails.value = happyRatings.value;
+          that.saveEntry('happy');
         });
 
         var sadRatings = this.$.sadRatings;
         sadRatings.addEventListener('value-change', function() {
           console.log("Listener"+sadRatings.value);
+          that.emotionDetails.value = sadRatings.value;
+          that.saveEntry('sad');
         });
 
         var peacefulRatings = this.$.peacefulRatings;
         peacefulRatings.addEventListener('value-change', function() {
           console.log("Listener"+peacefulRatings.value);
+          that.emotionDetails.value = peacefulRatings.value;
+          that.saveEntry('peaceful');
         });
 
         var anxiousRatings = this.$.anxiousRatings;
         anxiousRatings.addEventListener('value-change', function() {
           console.log("Listener"+anxiousRatings.value);
+          that.emotionDetails.value = anxiousRatings.value;
+          that.saveEntry('anxious');
         });
 
         var hopefulRatings = this.$.hopefulRatings;
         hopefulRatings.addEventListener('value-change', function() {
           console.log("Listener"+hopefulRatings.value);
+          that.emotionDetails.value = hopefulRatings.value;
+          that.saveEntry('hopeful');
         });
 
         var hopelessRatings = this.$.hopelessRatings;
         hopelessRatings.addEventListener('value-change', function() {
           console.log("Listener"+hopelessRatings.value);
+          that.emotionDetails.value = hopelessRatings.value;
+          that.saveEntry('hopeless');
         });
 
         var energeticRatings = this.$.energeticRatings;
         energeticRatings.addEventListener('value-change', function() {
           console.log("Listener"+energeticRatings.value);
+          that.emotionDetails.value = energeticRatings.value;
+          that.saveEntry('energetic');
         });
 
         var tiredRatings = this.$.tiredRatings;
         tiredRatings.addEventListener('value-change', function() {
           console.log("Listener"+tiredRatings.value);
+          that.emotionDetails.value = tiredRatings.value;
+          that.saveEntry('tired');
         });
 
         var confidentRatings = this.$.confidentRatings;
         confidentRatings.addEventListener('value-change', function() {
           console.log("Listener"+confidentRatings.value);
+          that.emotionDetails.value = confidentRatings.value;
+          that.saveEntry('confident');
         });
 
         var insecureRatings = this.$.insecureRatings;
         insecureRatings.addEventListener('value-change', function() {
           console.log("Listener"+insecureRatings.value);
+          that.emotionDetails.value = insecureRatings.value;
+          that.saveEntry('insecure');
         });
 
         var relaxedRatings = this.$.relaxedRatings;
         relaxedRatings.addEventListener('value-change', function() {
           console.log("Listener"+relaxedRatings.value);
+          that.emotionDetails.value = relaxedRatings.value;
+          that.saveEntry('relaxed');
         });
 
         var stressedRatings = this.$.stressedRatings;
         stressedRatings.addEventListener('value-change', function() {
           console.log("Listener"+stressedRatings.value);
+          that.emotionDetails.value = stressedRatings.value;
+          that.saveEntry('stressed');
         });
 
         var gratefulRatings = this.$.gratefulRatings;
         gratefulRatings.addEventListener('value-change', function() {
           console.log("Listener"+gratefulRatings.value);
+          that.emotionDetails.value = gratefulRatings.value;
+          that.saveEntry('grateful');
         });
 
         var disappointedRatings = this.$.disappointedRatings;
         disappointedRatings.addEventListener('value-change', function() {
           console.log("Listener"+disappointedRatings.value);
+          that.emotionDetails.value = disappointedRatings.value;
+          that.saveEntry('disappointed');
         });
 
         var extrovertedRatings = this.$.extrovertedRatings;
         extrovertedRatings.addEventListener('value-change', function() {
           console.log("Listener"+extrovertedRatings.value);
+          that.emotionDetails.value = extrovertedRatings.value;
+          that.saveEntry('extroverted');
         });
 
         var withdrawnRatings = this.$.withdrawnRatings;
         withdrawnRatings.addEventListener('value-change', function() {
           console.log("Listener"+withdrawnRatings.value);
+          that.emotionDetails.value = withdrawnRatings.value;
+          that.saveEntry('withdrawn');
         });
 
         var empatheticRatings = this.$.empatheticRatings;
         empatheticRatings.addEventListener('value-change', function() {
           console.log("Listener"+empatheticRatings.value);
+          that.emotionDetails.value = empatheticRatings.value;
+          that.saveEntry('empathetic');
         });
 
         var carefreeRatings = this.$.carefreeRatings;
         carefreeRatings.addEventListener('value-change', function() {
           console.log("Listener"+carefreeRatings.value);
+          that.emotionDetails.value = carefreeRatings.value;
+          that.saveEntry('carefree');
         });
 
         var focusedRatings = this.$.focusedRatings;
         focusedRatings.addEventListener('value-change', function() {
           console.log("Listener"+focusedRatings.value);
+          that.emotionDetails.value = focusedRatings.value;
+          that.saveEntry('focused');
         });
 
         var chaoticRatings = this.$.chaoticRatings;
         chaoticRatings.addEventListener('value-change', function() {
           console.log("Listener"+chaoticRatings.value);
+          that.emotionDetails.value = chaoticRatings.value;
+          that.saveEntry('chaotic');
         });
 
         var inspiredRatings = this.$.inspiredRatings;
         inspiredRatings.addEventListener('value-change', function() {
           console.log("Listener"+inspiredRatings.value);
+          that.emotionDetails.value = inspiredRatings.value;
+          that.saveEntry('inspired');
         });
 
         var unchallengedRatings = this.$.unchallengedRatings;
         unchallengedRatings.addEventListener('value-change', function() {
           console.log("Listener"+unchallengedRatings.value);
+          that.emotionDetails.value = unchallengedRatings.value;
+          that.saveEntry('unchallenged');
         });
 
         var effectiveRatings = this.$.effectiveRatings;
         effectiveRatings.addEventListener('value-change', function() {
           console.log("Listener"+effectiveRatings.value);
+          that.emotionDetails.value = effectiveRatings.value;
+          that.saveEntry('effective');
         });
 
         var frustratedRatings = this.$.frustratedRatings;
         frustratedRatings.addEventListener('value-change', function() {
           console.log("Listener"+frustratedRatings.value);
+          that.emotionDetails.value = frustratedRatings.value;
+          that.saveEntry('frustrated');
         });
 
       },
@@ -578,7 +724,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log("updateAggregateDetails");
         console.log(this.oldTotalData);
       },
-      dataChanged: function (datadb) {
+      dataChanged: function (emotiondb) {
         var activityColors = 
         { "Sleep": {"colorShade": "Teal", "colorType": "A200"},
           "Work1" : {"colorShade": "Blue", "colorType": "A200"},
@@ -591,18 +737,91 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var that = this;
         // do something when the query returns values
         console.log("---BEFORE");
-        var data = this.datadb;
+        var data = this.emotiondb;
         var localDataAster = [];
         var colorSheet = this.$.colorSheet;
+        console.log(data);
         data.forEach(function(childSnapshot) {
+          var key = childSnapshot.$key; 
+          console.log("value: "+childSnapshot.value);
+
+          if (key === "happy") {
+            console.log("happyValue: "+that.happyValue);
+            that.happyValue = childSnapshot.value;
+            console.log("happyValue: "+that.happyValue);
+          }
+          else if (key === "sad") {
+            that.sadValue = childSnapshot.value;
+          }
+          else if (key === "peaceful") {
+            that.peacefulValue = childSnapshot.value;
+          }
+          else if (key === "anxious") {
+            that.anxiousValue = childSnapshot.value;
+          }
+          else if (key === "hopeful") {
+            that.hopefulValue = childSnapshot.value;
+          }
+          else if (key === "hopeless") {
+            that.hopelessValue = childSnapshot.value;
+          }
+          else if (key === "energetic") {
+            that.energeticValue = childSnapshot.value;
+          }
+          else if (key === "tired") {
+            that.tiredValue = childSnapshot.value;
+          }
+          else if (key === "confident") {
+            that.confidentValue = childSnapshot.value;
+          }
+          else if (key === "insecure") {
+            that.insecureValue = childSnapshot.value;
+          }
+          else if (key === "relaxed") {
+            that.relaxedValue = childSnapshot.value;
+          }
+          else if (key === "stressed") {
+            that.stressedValue = childSnapshot.value;
+          }
+          else if (key === "grateful") {
+            that.gratefulValue = childSnapshot.value;
+          }
+          else if (key === "disappointed") {
+            that.disappointedValue = childSnapshot.value;
+          }
+          else if (key === "extroverted") {
+            that.extrovertedValue = childSnapshot.value;
+          }
+          else if (key === "withdrawn") {
+            that.withdrawnValue = childSnapshot.value;
+          }
+          else if (key === "empathetic") {
+            that.empatheticValue = childSnapshot.value;
+          }
+          else if (key === "carefree") {
+            that.carefreeValue = childSnapshot.value;
+          }
+          else if (key === "focused") {
+            that.focusedValue = childSnapshot.value;
+          }
+          else if (key === "chaotic") {
+            that.chaoticValue = childSnapshot.value;
+          }
+          else if (key === "inspired") {
+            that.inspiredValue = childSnapshot.value;
+          }
+          else if (key === "unchallenged") {
+            that.unchallengedValue = childSnapshot.value;
+          }
+          else if (key === "effective") {
+            that.effectiveValue = childSnapshot.value;
+          }
+          else if (key === "frustrated") {
+            that.frustratedValue = childSnapshot.value;
+          }
+          
           console.log("my input");
           console.log(childSnapshot);
-          // key will be "fred" the first time and "barney" the second time
-          var activityLabel = childSnapshot.activityType;
-          var startTime = childSnapshot.startTime;
-          var endTime = childSnapshot.endTime;
-          var colorShadeString = activityColors[activityLabel].colorShade;
-          var activitySelectedColor = colorSheet.colors[colorShadeString].a700;
         });
         console.log("AFTER");
       },
@@ -644,11 +863,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _activityListChanged: function(activityList) {
         console.log("activityList: "+this.activityList);
       },
-      saveEntry: function(emotionName, value) {  
-        if (this.$.activityFirebase.isNew) {
+      saveEntry: function(emotionName) {  
+        if (this.$.emotionFirebase.isNew) {
           var that = this;
-          return this.$.activityFirebase.save(this.user+"/daily/"+(new Date()).toDateString()+"/emotions/").then(function() {
-            that.$.activityFirebase.reset();
+          return this.$.emotionFirebase.save(this.user+"/daily/"+(new Date()).toDateString()+"/emotions/", emotionName).then(function() {
+            console.log("saving emotion");
+            that.$.emotionFirebase.reset();
           });
         }
         return Promise.resolve();

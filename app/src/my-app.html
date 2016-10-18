@@ -197,6 +197,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </firebase-query>
 
     <firebase-query
+      id="queryEmotion"
+      app-name="notes"
+      sequentialTransactions=true
+      path="/[[user.uid]]/daily/[[date]]/emotions"
+      data="{{emotiondb}}">
+    </firebase-query>
+
+    <firebase-query
       id="aggregateQuery"
       app-name="notes"
       sequentialTransactions=true
@@ -323,7 +331,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
           <my-input name="input" user="[[user.uid]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-input>
-          <my-heart name="heart" user="[[user.uid]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-heart>
+          <my-heart name="heart" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-heart>
           <my-asterClock name="asterClock" user="[[user.uid]]" datadb="{{datadb}}"></my-asterClock>
           <my-avgActivity name="avgActivity" user="[[user.uid]]" datadb="{{datadb}}" colors-array="{{activtiyColorsArray}}" background-colors-array="{{activtiyBackgroundColorsArray}}"></my-avgActivity>
           <my-avgEmotion name="avgEmotion" user="[[user.uid]]" datadb="{{datadb}}"></my-avgEmotion>
