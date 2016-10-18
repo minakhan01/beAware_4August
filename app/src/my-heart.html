@@ -23,10 +23,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="elements/paper-slider-custom.html">
 <link rel="import" href="../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+
 
 <dom-module id="my-heart">
 
   <template>
+        <style is="custom-style" include="iron-flex iron-flex-alignment">
 <style>
       :host {
         display: block;
@@ -236,53 +240,124 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           font-size: 14px;
     }
     </style>
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+          Happy:
+          </div>
 
-    
+          <div class="flex-6">
+            Sad:
+          </div>
+        </div>
 
-        <div>Ratings: <span id="ratingslabel" class="caption"></span></div><br>
-        <!-- <div>Happy: <span id="ratingslabel" class="caption"></span></div><paper-slider-custom class="happy" id="happy-ratings" pin snaps max="4" max-markers="4" step="1" value="0"></paper-slider-custom><br> -->
-        <div>Happy: <span id="ratingslabel" class="caption"></span></div><paper-slider class="happy" id="happyRatings" pin snaps max="4" max-markers="4" step="1" value="[[happyValue]]"></paper-slider><br>
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+          Happy: <paper-slider class="happy" id="happyRatings" pin snaps max="4" max-markers="4" step="1" value="[[happyValue]]"></paper-slider>
+          </div>
 
-        <div>Sad: <span id="ratingslabel" class="caption"></span></div><paper-slider class="sad" id="sadRatings" pin snaps max="4" max-markers="4" step="1" value="[[sadValue]]"></paper-slider><br>
+          <div class="flex-6">
+            Sad: <paper-slider class="sad" id="sadRatings" pin snaps max="4" max-markers="4" step="1" value="[[sadValue]]"></paper-slider>
+          </div>
+        </div>
 
-        <div>Peaceful: <span id="ratingslabel" class="caption"></span></div><paper-slider class="peaceful" id="peacefulRatings" pin snaps max="4" max-markers="4" step="1" value="[[peacefulValue]]"></paper-slider><br>
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+            Peaceful: <paper-slider class="peaceful" id="peacefulRatings" pin snaps max="4" max-markers="4" step="1" value="[[peacefulValue]]"></paper-slider>
+          </div>
+          <div class="flex-6">
+            Anxious: <paper-slider class="anxious" id="anxiousRatings" pin snaps max="4" max-markers="4" step="1" value="[[anxiousValue]]"></paper-slider>
+          </div>
+        </div>
 
-        <div>Anxious: <span id="ratingslabel" class="caption"></span></div><paper-slider class="anxious" id="anxiousRatings" pin snaps max="4" max-markers="4" step="1" value="[[anxiousValue]]"></paper-slider><br>
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+            Hopeful: <paper-slider class="hopeful" id="hopefulRatings" pin snaps max="4" max-markers="4" step="1" value="[[hopefulValue]]"></paper-slider>
+          </div>
+          <div class="flex-6">
+            Hopeless: <paper-slider class="hopeless" id="hopelessRatings" pin snaps max="4" max-markers="4" step="1" value="[[hopelessValue]]"></paper-slider>
+          </div>
+        </div>
 
-        <div>Hopeful: <span id="ratingslabel" class="caption"></span></div><paper-slider class="hopeful" id="hopefulRatings" pin snaps max="4" max-markers="4" step="1" value="[[hopefulValue]]"></paper-slider><br>
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+            Energetic: <paper-slider class="energetic" id="energeticRatings" pin snaps max="4" max-markers="4" step="1" value="[[energeticValue]]"></paper-slider>
+          </div>
+          <div class="flex-6">
+            Tired: <paper-slider class="tired" id="tiredRatings" pin snaps max="4" max-markers="4" step="1" value="[[tiredValue]]"></paper-slider>
+          </div>
+        </div>
 
-        <div>Hopeless: <span id="ratingslabel" class="caption"></span></div><paper-slider class="hopeless" id="hopelessRatings" pin snaps max="4" max-markers="4" step="1" value="[[hopelessValue]]"></paper-slider><br>
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+            Confident: <paper-slider class="confident" id="confidentRatings" pin snaps max="4" max-markers="4" step="1" value="[[confidentValue]]"></paper-slider>
+          </div>
+          <div class="flex-6">
+            Insecure: <paper-slider class="insecure" id="insecureRatings" pin snaps max="4" max-markers="4" step="1" value="[[insecureValue]]"></paper-slider>
+          </div>
+        </div>
 
-        <div>Energetic: <span id="ratingslabel" class="caption"></span></div><paper-slider class="energetic" id="energeticRatings" pin snaps max="4" max-markers="4" step="1" value="[[energeticValue]]"></paper-slider><br>
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+            Relaxed: <paper-slider class="relaxed" id="relaxedRatings" pin snaps max="4" max-markers="4" step="1" value="[[relaxedValue]]"></paper-slider>
+          </div>
+          <div class="flex-6">
+            Stressed: <paper-slider class="stressed" id="stressedRatings" pin snaps max="4" max-markers="4" step="1" value="[[stressedValue]]"></paper-slider>
+          </div>
+        </div>
 
-        <div>Tired: <span id="ratingslabel" class="caption"></span></div><paper-slider class="tired" id="tiredRatings" pin snaps max="4" max-markers="4" step="1" value="[[tiredValue]]"></paper-slider><br>
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+            Grateful: <paper-slider class="grateful" id="gratefulRatings" pin snaps max="4" max-markers="4" step="1" value="[[gratefulValue]]"></paper-slider>
+          </div>
+          <div class="flex-6">
+            Disappointed: <paper-slider class="disappointed" id="disappointedRatings" pin snaps max="4" max-markers="4" step="1" value="[[disappointedValue]]"></paper-slider>
+          </div>
+        </div>
 
-        <div>Confident: <span id="ratingslabel" class="caption"></span></div><paper-slider class="confident" id="confidentRatings" pin snaps max="4" max-markers="4" step="1" value="[[confidentValue]]"></paper-slider><br>
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+            Extroverted: <paper-slider class="extroverted" id="extrovertedRatings" pin snaps max="4" max-markers="4" step="1" value="[[extrovertedValue]]"></paper-slider>
+          </div>
+          <div class="flex-6">
+            Withdrawn: <paper-slider class="withdrawn" id="withdrawnRatings" pin snaps max="4" max-markers="4" step="1" value="[[withdrawnValue]]"></paper-slider>
+          </div>
+        </div>
 
-        <div>Insecure: <span id="ratingslabel" class="caption"></span></div><paper-slider class="insecure" id="insecureRatings" pin snaps max="4" max-markers="4" step="1" value="[[insecureValue]]"></paper-slider><br>
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+            Empathetic: <paper-slider class="empathetic" id="empatheticRatings" pin snaps max="4" max-markers="4" step="1" value="[[empatheticValue]]"></paper-slider>
+          </div>
+          <div class="flex-6">
+            Carefree: <paper-slider class="carefree" id="carefreeRatings" pin snaps max="4" max-markers="4" step="1" value="[[carefreeValue]]"></paper-slider>
+          </div>
+        </div>
 
-        <div>Relaxed: <span id="ratingslabel" class="caption"></span></div><paper-slider class="relaxed" id="relaxedRatings" pin snaps max="4" max-markers="4" step="1" value="[[relaxedValue]]"></paper-slider><br>
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+            Focused: <paper-slider class="focused" id="focusedRatings" pin snaps max="4" max-markers="4" step="1" value="[[focusedValue]]"></paper-slider>
+          </div>
+          <div class="flex-6">
+            Chaotic: <paper-slider class="chaotic" id="chaoticRatings" pin snaps max="4" max-markers="4" step="1" value="[[chaoticValue]]"></paper-slider>
+          </div>
+        </div>
 
-        <div>Stressed: <span id="ratingslabel" class="caption"></span></div><paper-slider class="stressed" id="stressedRatings" pin snaps max="4" max-markers="4" step="1" value="[[stressedValue]]"></paper-slider><br>
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+            Inspired: <paper-slider class="inspired" id="inspiredRatings" pin snaps max="4" max-markers="4" step="1" value="[[inspiredValue]]"></paper-slider>
+          </div>
+          <div class="flex-6">
+            Unchallenged: <paper-slider class="unchallenged" id="unchallengedRatings" pin snaps max="4" max-markers="4" step="1" value="[[unchallengedValue]]"></paper-slider>
+          </div>
+        </div>
 
-        <div>Grateful: <span id="ratingslabel" class="caption"></span></div><paper-slider class="grateful" id="gratefulRatings" pin snaps max="4" max-markers="4" step="1" value="[[gratefulValue]]"></paper-slider><br>
-
-        <div>Disappointed: <span id="ratingslabel" class="caption"></span></div><paper-slider class="disappointed" id="disappointedRatings" pin snaps max="4" max-markers="4" step="1" value="[[disappointedValue]]"></paper-slider><br>
-
-        <div>Extroverted: <span id="ratingslabel" class="caption"></span></div><paper-slider class="extroverted" id="extrovertedRatings" pin snaps max="4" max-markers="4" step="1" value="[[extrovertedValue]]"></paper-slider><br>
-
-        <div>Withdrawn: <span id="ratingslabel" class="caption"></span></div><paper-slider class="withdrawn" id="withdrawnRatings" pin snaps max="4" max-markers="4" step="1" value="[[withdrawnValue]]"></paper-slider><br>
-
-        <div>Empathetic: <span id="ratingslabel" class="caption"></span></div><paper-slider class="empathetic" id="empatheticRatings" pin snaps max="4" max-markers="4" step="1" value="[[empatheticValue]]"></paper-slider><br>
-
-        <div>Carefree: <span id="ratingslabel" class="caption"></span></div><paper-slider class="carefree" id="carefreeRatings" pin snaps max="4" max-markers="4" step="1" value="[[carefreeValue]]"></paper-slider><br>
-
-        <div>Focused: <span id="ratingslabel" class="caption"></span></div><paper-slider class="focused" id="focusedRatings" pin snaps max="4" max-markers="4" step="1" value="[[focusedValue]]"></paper-slider><br>
-        <div>Chaotic: <span id="ratingslabel" class="caption"></span></div><paper-slider class="chaotic" id="chaoticRatings" pin snaps max="4" max-markers="4" step="1" value="[[chaoticValue]]"></paper-slider><br>
-        <div>Inspired: <span id="ratingslabel" class="caption"></span></div><paper-slider class="inspired" id="inspiredRatings" pin snaps max="4" max-markers="4" step="1" value="[[inspiredValue]]"></paper-slider><br>
-        <div>Unchallenged: <span id="ratingslabel" class="caption"></span></div><paper-slider class="unchallenged" id="unchallengedRatings" pin snaps max="4" max-markers="4" step="1" value="[[unchallengedValue]]"></paper-slider><br>
-        <div>Effective: <span id="ratingslabel" class="caption"></span></div><paper-slider class="effective" id="effectiveRatings" pin snaps max="4" max-markers="4" step="1" value="[[effectiveValue]]"></paper-slider><br>
-        <div>Frustrated: <span id="ratingslabel" class="caption"></span></div><paper-slider class="frustrated" id="frustratedRatings" pin snaps max="4" max-markers="4" step="1" value="[[frustratedValue]]"></paper-slider>
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+            Effective: <paper-slider class="effective" id="effectiveRatings" pin snaps max="4" max-markers="4" step="1" value="[[effectiveValue]]"></paper-slider>
+          </div>
+          <div class="flex-6">
+            Frustrated: <paper-slider class="frustrated" id="frustratedRatings" pin snaps max="4" max-markers="4" step="1" value="[[frustratedValue]]"></paper-slider>
+          </div>
+        </div>
             
 
     <firebase-document
