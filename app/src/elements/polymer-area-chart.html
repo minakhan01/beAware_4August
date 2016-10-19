@@ -46,56 +46,43 @@
 
       is: 'polymer-area-chart',
       properties: {
-        emotions: {
-          type: Array,
-          value: 
-          ["joy", "calm", "hope", "sorrow", "anger", "fear"]
-        },
-        positiveNegativeEmotion: {
-          type: Object,
-          value: 
-          {"joy": 1, "calm" : 1, "hope": 1, "sorrow": -1, "anger": -1, "fear": -1}
-        },
-        activities: {
-          type: Array,
-          value: 
-          ["Work", "Sleep", "Leisure", "Social", "Gym"]
-        },
         aggregatedb: {
           type: Object,
           observer: 'aggregateDetailsChanged'
         },
-        emotionColors: {
-          type: Object,
-          value: 
-          { "joy": {"colorShade": "Lime", "colorType": "a400"},
-          "calm": {"colorShade": "Cyan", "colorType": "a400"},
-          "fear" : {"colorShade": "Orange", "colorType": "a700"},
-          "anger" : {"colorShade": "Red", "colorType": "a700"},
-          "sorrow" : {"colorShade": "Yellow", "colorType": "a700"},
-          "hope": {"colorShade": "Teal", "colorType": "a400"}
-          }
+        data: {
+          type: Array,
+          value: []
+        },
+        activityColorsList: {
+          type: Array,
+          value: []
         },
         activityColors: {
           type: Object,
           value: 
-          { "Sleep": {"colorShade": "Green", "colorType": "a200"},
-          "Work" : {"colorShade": "Blue", "colorType": "a200"},
-          "Gym" : {"colorShade": "Pink", "colorType": "a200"},
-          "Social" : {"colorShade": "Amber", "colorType": "a200"},
-          "Leisure": {"colorShade": "Purple", "colorType": "a200"}
-          }
+            { "Sleep": {"colorShade": "Teal", "colorType": "a200"},
+              "Work1" : {"colorShade": "Blue", "colorType": "a200"},
+              "Work2" : {"colorShade": "Purple", "colorType": "a200"},
+              "Exercise" : {"colorShade": "Orange", "colorType": "a200"},
+              "Social" : {"colorShade": "Pink", "colorType": "a200"},
+              "Errands" : {"colorShade": "Purple", "colorType": "a200"},
+              "Personal": {"colorShade": "Green", "colorType": "a200"}
+            }
         },
-        data: {
+        activities: {
           type: Array,
-          value: []
-        }
+          value: 
+          ["Work1", "Work2", "Sleep", "Exercise", "Social", "Personal", "Errands"]
+        },
       },
       getActivityColor: function(activityName) {
+
           var colorSheet = this.$.colorSheet;
           var colorShadeString = this.activityColors[activityName].colorShade;
           var colorGradientString = this.activityColors[activityName].colorType;
           var selectedColor = colorSheet.colors[colorShadeString][colorGradientString];
+          console.log("activityName: "+activityName+" colorShadeString: "+colorShadeString + " colorGradientString: " + colorGradientString + " selectedColor: "+selectedColor);
           return selectedColor;        
       },
       getEmotionColor: function(emotionName){
@@ -106,32 +93,27 @@
           return selectedColor;
       },
       readyProduce: function() {
+        console.log("area color this.activityColorsList");
+        console.log(this.activityColorsList);
         /*eslint-disable */
 
         // create dataset
-        var names = (this.activities).concat(this.emotions);
-        var endTime = Date.now();
-        console.log("SEE THIS: "+this.getBoundingClientRect().width);
+        // var names = (this.activities).concat(this.emotions);
+        // var endTime = Date.now();
+        // console.log("SEE THIS: "+this.getBoundingClientRect().width);
         // this.$.chart.style.width = 0.9 * this.getBoundingClientRect().width;
-        var month = 30 * 24 * 60 * 60 * 1000;
-        var week = 7 * 24 * 60 * 60 * 1000;
-        var day = 24 * 60 * 60 * 1000;
-        var startTime = endTime - day;
-        var activityColorsList = [];
-
-        for (var i = 0; i < this.activities.length; i++) {
-          activityColorsList.push(this.getActivityColor(this.activities[i]));
-        }
-        var emotionColorsList = [];
-        for (var i = 0; i < this.emotions.length; i++) {
-          emotionColorsList.push(this.getEmotionColor(this.emotions[i]));
-        }
-        var color  = (activityColorsList).concat(emotionColorsList);
+        // var month = 30 * 24 * 60 * 60 * 1000;
+        // var week = 7 * 24 * 60 * 60 * 1000;
+        // var day = 24 * 60 * 60 * 1000;
+        // var startTime = endTime - day;
+        // var emotionColorsList = [];
+        // for (var i = 0; i < this.emotions.length; i++) {
+        //   emotionColorsList.push(this.getEmotionColor(this.emotions[i]));
+        // }
+        // var color  = (activityColorsList).concat(emotionColorsList);
         // for (var i = 0; i < names.length; i++) {
         //     data.push(createEmptyEvent(names[i]));
         // }
-        console.log("DEFINING COLOR");
-        console.log(color);
 
         var datearray = [];
         var colorrange = [];
@@ -147,7 +129,14 @@
         else if (color == "orange") {
           colorrange = ["#B30000", "#E34A33", "#FC8D59", "#FDBB84", "#FDD49E", "#FEF0D9"];
         }
-        strokecolor = colorrange[0];
+        this.activityColorsList = [];
+        for (var i = 0; i < this.activities.length; i++) {
+          this.activityColorsList.push(this.getActivityColor(this.activities[i]));
+        }
+        colorrange = this.activityColorsList;
+        console.log("colorrange");
+        console.log(colorrange);
+        strokecolor = "#045A8D";
 
         var format = d3.time.format("%m/%d/%y");
 
