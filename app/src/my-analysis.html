@@ -22,7 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style></style>
     <colors-material id="colorSheet"></colors-material>
     <polymer-area-chart id="charts" data="[[data]]"></polymer-area-chart>
-        
+
   </template>
 
   <script>
@@ -39,6 +39,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Object,
           observer: 'dataChanged'
           },
+        allVariables: {
+          type: Array,
+          value: ["happy", "sad", "peaceful", "anxious", "hopeful", "hopeless", "energetic", "tired", "confident", "insecure", "relaxed", "stressed", "grateful", "disappointed", "extroverted", "withdrawn", "empathetic", "carefree", "focused", "chaotic", "inspired", "unchallenged", "effective", "frustrated", "Work1", "Work2", "Sleep", "Exercise", "Social", "Personal", "Errands"]
+        },
         data: {
           type: Array,
           value: []
@@ -46,17 +50,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         emotions: {
           type: Array,
           value: 
-          ["joy", "calm", "hope", "sorrow", "anger", "fear"]
-        },
-        positiveNegativeEmotion: {
-          type: Object,
-          value: 
-          {"joy": 1, "calm" : 1, "hope": 1, "sorrow": -1, "anger": -1, "fear": -1}
+          ["happy", "sad", "peaceful", "anxious", "hopeful", "hopeless", "energetic", "tired", "confident", "insecure", "relaxed", "stressed", "grateful", "disappointed", "extroverted", "withdrawn", "empathetic", "carefree", "focused", "chaotic", "inspired", "unchallenged", "effective", "frustrated"]
         },
         activities: {
           type: Array,
           value: 
-          ["Work", "Sleep", "Leisure", "Social", "Gym"]
+          ["Work1", "Work2", "Sleep", "Exercise", "Social", "Personal", "Errands"]
         },
         names: {
           type: Array,
@@ -65,23 +64,43 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         emotionColors: {
           type: Object,
           value: 
-          { "joy": {"colorShade": "Lime", "colorType": "a400"},
-          "calm": {"colorShade": "Cyan", "colorType": "a400"},
-          "fear" : {"colorShade": "Orange", "colorType": "a700"},
-          "anger" : {"colorShade": "Red", "colorType": "a700"},
-          "sorrow" : {"colorShade": "Yellow", "colorType": "a700"},
-          "hope": {"colorShade": "Teal", "colorType": "a400"}
+          { "happy": {"colorShade": "Yellow", "colorType": "A200"},
+            "sad" : {"colorShade": "Blue", "colorType": "200"},
+            "peaceful" : {"colorShade": "Teal", "colorType": "A200"},
+            "anxious" : {"colorShade": "Purple", "colorType": "200"},
+            "hopeful" : {"colorShade": "Orange", "colorType": "A200"},
+            "hopeless" : {"colorShade": "BlueGrey", "colorType": "200"},
+            "energetic": {"colorShade": "DeepPurple", "colorType": "A200"},
+            "tired" : {"colorShade": "Lime", "colorType": "200"},
+            "confident" : {"colorShade": "Pink", "colorType": "A200"},
+            "insecure" : {"colorShade": "Green", "colorType": "200"},
+            "relaxed" : {"colorShade": "Indigo", "colorType": "A200"},
+            "stressed" : {"colorShade": "Amber", "colorType": "200"},
+            "grateful": {"colorShade": "Purple", "colorType": "A200"},
+            "disappointed" : {"colorShade": "Green", "colorType": "200"},
+            "extroverted" : {"colorShade": "Red", "colorType": "A200"},
+            "withdrawn" : {"colorShade": "Yellow", "colorType": "200"},
+            "empathetic" : {"colorShade": "LightBlue", "colorType": "A200"},
+            "carefree" : {"colorShade": "Pink", "colorType": "200"},
+            "focused": {"colorShade": "Yellow", "colorType": "A200"},
+            "chaotic" : {"colorShade": "Blue", "colorType": "200"},
+            "inspired" : {"colorShade": "Teal", "colorType": "A200"},
+            "unchallenged" : {"colorShade": "Purple", "colorType": "200"},
+            "effective" : {"colorShade": "Orange", "colorType": "A200"},
+            "frustrated" : {"colorShade": "BlueGrey", "colorType": "200"},
           }
         },
         activityColors: {
           type: Object,
           value: 
-          { "Sleep": {"colorShade": "Green", "colorType": "a200"},
-          "Work" : {"colorShade": "Blue", "colorType": "a200"},
-          "Gym" : {"colorShade": "Pink", "colorType": "a200"},
-          "Social" : {"colorShade": "Amber", "colorType": "a200"},
-          "Leisure": {"colorShade": "Purple", "colorType": "a200"}
-          }
+            { "Sleep": {"colorShade": "Teal", "colorType": "A200"},
+              "Work1" : {"colorShade": "Blue", "colorType": "A200"},
+              "Work2" : {"colorShade": "Purple", "colorType": "A200"},
+              "Exercise" : {"colorShade": "Orange", "colorType": "A200"},
+              "Social" : {"colorShade": "Pink", "colorType": "A200"},
+              "Errands" : {"colorShade": "Purple", "colorType": "A200"},
+              "Personal": {"colorShade": "Green", "colorType": "A200"}
+            }
         },
       },
       observers: [
@@ -105,10 +124,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         /*eslint-disable */
 
         this.names = (this.activities).concat(this.emotions);
-        var endTime = Date.now();
-        var month = 30 * 24 * 60 * 60 * 1000;
-        var week = 7 * 24 * 60 * 60 * 1000;
-        var startTime = endTime - week;
+
         var activityColorsList = [];
         for (var i = 0; i < this.activities.length; i++) {
           activityColorsList.push(this.getActivityColor(this.activities[i]));
@@ -118,18 +134,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           emotionColorsList.push(this.getEmotionColor(this.emotions[i]));
         }
         var color  = (activityColorsList).concat(emotionColorsList);
-        for (var i = 0; i < this.names.length; i++) {
-            this.data.push(this.createEmptyEvent(this.names[i]));
-        }
+        // for (var i = 0; i < this.names.length; i++) {
+        //     this.data.push(this.createEmptyEvent(this.names[i]));
+        // }
         console.log("DEFINING COLOR");
         console.log(color);
         
       },
        createEmptyEvent: function(name) {
-            var event = {
-                name: name,
-                dates: []
-            };
+            var event = [];
 
             return event;
         },
@@ -144,10 +157,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log(this.data);
         
         this.names = (this.activities).concat(this.emotions);
-        var endTime = Date.now();
-        var month = 30 * 24 * 60 * 60 * 1000;
-        var week = 7 * 24 * 60 * 60 * 1000;
-        var startTime = endTime - week;
+        
         var activityColorsList = [];
         for (var i = 0; i < this.activities.length; i++) {
           activityColorsList.push(this.getActivityColor(this.activities[i]));
@@ -157,48 +167,62 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           emotionColorsList.push(this.getEmotionColor(this.emotions[i]));
         }
         var color  = (activityColorsList).concat(emotionColorsList);
+
+        this.dataList = [];
         for (var i = 0; i < this.names.length; i++) {
-            this.data.push(this.createEmptyEvent(this.names[i]));
+            this.dataList.push([]);
         }
-        this.data = [];
-        for (var i = 0; i < this.names.length; i++) {
-            this.data.push(this.createEmptyEvent(this.names[i]));
-        }
+
         dataRaw.forEach(function(childSnapshot) {
+          var dateString = childSnapshot.$key;
+          var date = dateString;
           console.log("childSnapshot");
           console.log(childSnapshot);
-          var dateString = childSnapshot.$key;
-          var date = Date.parse(dateString);
-          console.log("date in ms: "+ date);
-          var hourMSIncrement = 60*60*1000;
           for (var key in childSnapshot) {
             console.log("key");
             console.log(key);
-            var childChildSnapshot = childSnapshot[key];
-            console.log(childChildSnapshot);
-            var startTime = childChildSnapshot.startTime;
-            var hourms = parseInt(startTime)*60*60*1000;
-            var duration = childChildSnapshot.duration;
-            var activityLabel = childChildSnapshot.activityType;
-            //TODO: 1 CALCULATE TIMES
-            var times = [];
-            for (var j=0; j < duration; j++) {
-              var time = hourms + j*hourMSIncrement + date;
-              // TODO 2: ADD TIMES TO THAT ACTIVITY's DATA LIST
-              var index = that.names.indexOf(activityLabel);
-              that.data[index].dates.push(time);
-              for (var i=0; i<that.emotions.length;i++) {
-                var emotionScore = childChildSnapshot.emotion[that.emotions[i]];
-                if (emotionScore > 0) {
-                  var index = that.names.indexOf(that.emotions[i]);
-                  that.data[index].dates.push(time);
+             // || key === "emotions"
+            if (key === "activities") {
+              var childChildSnapshot = childSnapshot[key];
+              console.log("childChildSnapshot");
+              console.log(childChildSnapshot);
+              for (var keyChild in childChildSnapshot) {
+                var name = keyChild;
+                var childKey = childChildSnapshot[keyChild];
+                var value;
+                console.log("childKey: ");
+                console.log(childKey);
+                if (key === "activities") {
+                  value = childKey;
                 }
-              }   
-            }
-                  
+                else {
+                  value = childKey.value;
+                }
+                var entry = {"key": name, "value": value, "date": date};
+                console.log(entry);
+                var index = that.names.indexOf(name);
+                console.log("index");
+                console.log(index);
+                that.dataList[index].push(entry);
+                console.log("that.dataList");
+                console.log(that.dataList);                
+              }
+            } 
           }
         });
         console.log("dataChanged");
+        this.data = [];
+        console.log(this.dataList);
+        console.log("START this.data");
+        console.log(this.data);
+        for (list in this.dataList) {
+          console.log("list");
+          console.log(this.dataList[list]);
+          console.log("this.data");
+          console.log(this.data);
+          this.data = this.data.concat(this.dataList[list]);
+        }
+        console.log("END this.data");
         console.log(this.data);
         // Date date = new SimpleDateFormat("EEE MMM dd yyyy").parse(s);
         this.$.charts.readyProduce();

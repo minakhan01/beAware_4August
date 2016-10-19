@@ -208,25 +208,30 @@
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        var data = [{ "key": "AR", "value": 0.1, "date": "01/08/13"},
-          { "key": "AR", "value": 0.1, "date": "02/08/13"},
-          { "key": "AR", "value": 0.1, "date": "03/08/13"},
+        var data = [
+          { "key": "AR", "value": 0.1, "date": "01/08/13"},
+          { "key": "AR", "value": 0.3, "date": "02/09/13"},
+          { "key": "AR", "value": 0.2, "date": "03/10/13"},
           { "key": "DJ", "value": 0.1, "date": "01/08/13"},
-          { "key": "DJ", "value": 0.1, "date": "02/08/13"},
-          { "key": "DJ", "value": 0.1, "date": "03/08/13"},
-          { "key": "MS", "value": 0.1, "date": "01/08/13"},
-          { "key": "MS", "value": 0.1, "date": "02/08/13"},
-          { "key": "MS", "value": 0.1, "date": "03/08/13"},
-          { "key": "RC", "value": 0.1, "date": "01/08/13"},
-          { "key": "RC", "value": 0.1, "date": "02/08/13"},
-          { "key": "RC", "value": 0.1, "date": "03/08/13"},
-          { "key": "CG", "value": 0.1, "date": "01/08/13"},
-          { "key": "CG", "value": 0.1, "date": "02/08/13"},
-          { "key": "CG", "value": 0.1, "date": "03/08/13"}];
+          { "key": "DJ", "value": 0.2, "date": "02/09/13"},
+          { "key": "DJ", "value": 0.4, "date": "03/10/13"},
+          { "key": "MS", "value": 0.3, "date": "01/08/13"},
+          { "key": "MS", "value": 0.2, "date": "02/09/13"},
+          { "key": "MS", "value": 0.1, "date": "03/10/13"},
+          { "key": "RC", "value": 0.3, "date": "01/08/13"},
+          { "key": "RC", "value": 0.2, "date": "02/09/13"},
+          { "key": "RC", "value": 0.1, "date": "03/10/13"},
+          { "key": "CG", "value": 0.4, "date": "01/08/13"},
+          { "key": "CG", "value": 0.2, "date": "02/09/13"},
+          { "key": "CG", "value": 0.1, "date": "03/10/13"},];
 
-        
+        data = this.data;
+        console.log("data: ");
+        console.log(data);
+        console.log("this.data: ");
+        console.log(this.data);
           data.forEach(function(d) {
-            d.date = format.parse(d.date);
+            d.date = new Date(d.date);
             d.value = +d.value;
           });
           console.log("data");

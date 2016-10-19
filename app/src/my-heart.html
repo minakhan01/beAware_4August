@@ -367,6 +367,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{emotionDetails}}">
     </firebase-document>
     <firebase-document
+        id="emotionAggregateFirebase"
+        app-name="notes"
+        path="/"
+        data="{{emotionDetails}}">
+    </firebase-document>
+    <firebase-document
         id="createAggregateFirebase"
         app-name="notes"
         path="/"
@@ -592,6 +598,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+happyRatings.value);
           that.emotionDetails.value = happyRatings.value;
           that.saveEntry('happy');
+          that.saveAggregateEntry('happy');
         });
 
         var sadRatings = this.$.sadRatings;
@@ -599,6 +606,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+sadRatings.value);
           that.emotionDetails.value = sadRatings.value;
           that.saveEntry('sad');
+          that.saveAggregateEntry('sad');
         });
 
         var peacefulRatings = this.$.peacefulRatings;
@@ -606,6 +614,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+peacefulRatings.value);
           that.emotionDetails.value = peacefulRatings.value;
           that.saveEntry('peaceful');
+          that.saveAggregateEntry('peaceful');
         });
 
         var anxiousRatings = this.$.anxiousRatings;
@@ -613,6 +622,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+anxiousRatings.value);
           that.emotionDetails.value = anxiousRatings.value;
           that.saveEntry('anxious');
+          that.saveAggregateEntry('anxious');
         });
 
         var hopefulRatings = this.$.hopefulRatings;
@@ -620,6 +630,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+hopefulRatings.value);
           that.emotionDetails.value = hopefulRatings.value;
           that.saveEntry('hopeful');
+          that.saveAggregateEntry('hopeful');
         });
 
         var hopelessRatings = this.$.hopelessRatings;
@@ -627,6 +638,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+hopelessRatings.value);
           that.emotionDetails.value = hopelessRatings.value;
           that.saveEntry('hopeless');
+          that.saveAggregateEntry('hopeless');
         });
 
         var energeticRatings = this.$.energeticRatings;
@@ -634,6 +646,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+energeticRatings.value);
           that.emotionDetails.value = energeticRatings.value;
           that.saveEntry('energetic');
+          that.saveAggregateEntry('energetic');
         });
 
         var tiredRatings = this.$.tiredRatings;
@@ -641,6 +654,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+tiredRatings.value);
           that.emotionDetails.value = tiredRatings.value;
           that.saveEntry('tired');
+          that.saveAggregateEntry('tired');
         });
 
         var confidentRatings = this.$.confidentRatings;
@@ -648,6 +662,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+confidentRatings.value);
           that.emotionDetails.value = confidentRatings.value;
           that.saveEntry('confident');
+          that.saveAggregateEntry('confident');
         });
 
         var insecureRatings = this.$.insecureRatings;
@@ -655,6 +670,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+insecureRatings.value);
           that.emotionDetails.value = insecureRatings.value;
           that.saveEntry('insecure');
+          that.saveAggregateEntry('insecure');
         });
 
         var relaxedRatings = this.$.relaxedRatings;
@@ -662,6 +678,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+relaxedRatings.value);
           that.emotionDetails.value = relaxedRatings.value;
           that.saveEntry('relaxed');
+          that.saveAggregateEntry('relaxed');
         });
 
         var stressedRatings = this.$.stressedRatings;
@@ -669,6 +686,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+stressedRatings.value);
           that.emotionDetails.value = stressedRatings.value;
           that.saveEntry('stressed');
+          that.saveAggregateEntry('stressed');
         });
 
         var gratefulRatings = this.$.gratefulRatings;
@@ -676,6 +694,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+gratefulRatings.value);
           that.emotionDetails.value = gratefulRatings.value;
           that.saveEntry('grateful');
+          that.saveAggregateEntry('grateful');
         });
 
         var disappointedRatings = this.$.disappointedRatings;
@@ -683,6 +702,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+disappointedRatings.value);
           that.emotionDetails.value = disappointedRatings.value;
           that.saveEntry('disappointed');
+          that.saveAggregateEntry('disappointed');
         });
 
         var extrovertedRatings = this.$.extrovertedRatings;
@@ -690,6 +710,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+extrovertedRatings.value);
           that.emotionDetails.value = extrovertedRatings.value;
           that.saveEntry('extroverted');
+          that.saveAggregateEntry('extroverted');
         });
 
         var withdrawnRatings = this.$.withdrawnRatings;
@@ -697,6 +718,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+withdrawnRatings.value);
           that.emotionDetails.value = withdrawnRatings.value;
           that.saveEntry('withdrawn');
+          that.saveAggregateEntry('withdrawn');
         });
 
         var empatheticRatings = this.$.empatheticRatings;
@@ -704,6 +726,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+empatheticRatings.value);
           that.emotionDetails.value = empatheticRatings.value;
           that.saveEntry('empathetic');
+          that.saveAggregateEntry('empathetic');
         });
 
         var carefreeRatings = this.$.carefreeRatings;
@@ -711,6 +734,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+carefreeRatings.value);
           that.emotionDetails.value = carefreeRatings.value;
           that.saveEntry('carefree');
+          that.saveAggregateEntry('carefree');
         });
 
         var focusedRatings = this.$.focusedRatings;
@@ -718,6 +742,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+focusedRatings.value);
           that.emotionDetails.value = focusedRatings.value;
           that.saveEntry('focused');
+          that.saveAggregateEntry('focused');
         });
 
         var chaoticRatings = this.$.chaoticRatings;
@@ -725,6 +750,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+chaoticRatings.value);
           that.emotionDetails.value = chaoticRatings.value;
           that.saveEntry('chaotic');
+          that.saveAggregateEntry('chaotic');
         });
 
         var inspiredRatings = this.$.inspiredRatings;
@@ -732,6 +758,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+inspiredRatings.value);
           that.emotionDetails.value = inspiredRatings.value;
           that.saveEntry('inspired');
+          that.saveAggregateEntry('inspired');
         });
 
         var unchallengedRatings = this.$.unchallengedRatings;
@@ -739,6 +766,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+unchallengedRatings.value);
           that.emotionDetails.value = unchallengedRatings.value;
           that.saveEntry('unchallenged');
+          that.saveAggregateEntry('unchallenged');
         });
 
         var effectiveRatings = this.$.effectiveRatings;
@@ -746,6 +774,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+effectiveRatings.value);
           that.emotionDetails.value = effectiveRatings.value;
           that.saveEntry('effective');
+          that.saveAggregateEntry('effective');
         });
 
         var frustratedRatings = this.$.frustratedRatings;
@@ -753,6 +782,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+frustratedRatings.value);
           that.emotionDetails.value = frustratedRatings.value;
           that.saveEntry('frustrated');
+          that.saveAggregateEntry('frustrated');
         });
 
       },
@@ -948,6 +978,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         return Promise.resolve();
       },
+      saveAggregateEntry: function(emotionName) {  
+        if (this.$.emotionAggregateFirebase.isNew) {
+          var that = this;
+          return this.$.emotionAggregateFirebase.save(this.user+"/aggregate/"+(new Date()).toDateString()+"/emotions/", emotionName).then(function() {
+            console.log("saving emotion");
+            that.$.emotionAggregateFirebase.reset();
+          });
+        }
+        return Promise.resolve();
+      },
       createTotal: function() {  
         console.log("creating new aggregate day");
         if (this.$.createTotalFirebase.isNew) {
@@ -1100,7 +1140,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log(this.tempUpdateTotalDetails);
         this.updateTotal();
 
-        this.saveEntry();
+        // this.saveEntry();
+        // this.saveAggregateEntry();
 
         // console.log("ENTRY SAVED AND BEFORE UPDATE NEW AGGREGATE");
         // this.updateNewDayAggregate();
