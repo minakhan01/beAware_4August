@@ -22,6 +22,11 @@
         font: 12px helvetica;
       }
 
+      .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+      }
 
       .axis path, .axis line {
         fill: none;
@@ -54,9 +59,47 @@
           type: Array,
           value: []
         },
+        dataemotion: {
+          type: Array,
+          value: []
+        },
         activityColorsList: {
           type: Array,
           value: []
+        },
+        emotions: {
+          type: Array,
+          value: 
+          ["happy", "sad", "peaceful", "anxious", "hopeful", "hopeless", "energetic", "tired", "confident", "insecure", "relaxed", "stressed", "grateful", "disappointed", "extroverted", "withdrawn", "empathetic", "carefree", "focused", "chaotic", "inspired", "unchallenged", "effective", "frustrated"]
+        },
+        emotionColors: {
+          type: Object,
+          value: 
+          { "happy": {"colorShade": "Yellow", "colorType": "a200"},
+            "sad" : {"colorShade": "Blue", "colorType": "200"},
+            "peaceful" : {"colorShade": "Teal", "colorType": "a200"},
+            "anxious" : {"colorShade": "Purple", "colorType": "200"},
+            "hopeful" : {"colorShade": "Orange", "colorType": "a200"},
+            "hopeless" : {"colorShade": "BlueGrey", "colorType": "200"},
+            "energetic": {"colorShade": "DeepPurple", "colorType": "a200"},
+            "tired" : {"colorShade": "Lime", "colorType": "200"},
+            "confident" : {"colorShade": "Pink", "colorType": "a200"},
+            "insecure" : {"colorShade": "Green", "colorType": "200"},
+            "relaxed" : {"colorShade": "Indigo", "colorType": "a200"},
+            "stressed" : {"colorShade": "Amber", "colorType": "200"},
+            "grateful": {"colorShade": "Purple", "colorType": "a200"},
+            "disappointed" : {"colorShade": "Green", "colorType": "200"},
+            "extroverted" : {"colorShade": "Red", "colorType": "a200"},
+            "withdrawn" : {"colorShade": "Yellow", "colorType": "200"},
+            "empathetic" : {"colorShade": "LightBlue", "colorType": "a200"},
+            "carefree" : {"colorShade": "Pink", "colorType": "200"},
+            "focused": {"colorShade": "Yellow", "colorType": "a200"},
+            "chaotic" : {"colorShade": "Blue", "colorType": "200"},
+            "inspired" : {"colorShade": "Teal", "colorType": "a200"},
+            "unchallenged" : {"colorShade": "Purple", "colorType": "200"},
+            "effective" : {"colorShade": "Orange", "colorType": "a200"},
+            "frustrated" : {"colorShade": "BlueGrey", "colorType": "200"},
+          }
         },
         activityColors: {
           type: Object,
@@ -133,6 +176,12 @@
         for (var i = 0; i < this.activities.length; i++) {
           this.activityColorsList.push(this.getActivityColor(this.activities[i]));
         }
+
+        this.emotionColorsList = [];
+        for (var i = 0; i < this.emotions.length; i++) {
+          this.emotionColorsList.push(this.getEmotionColor(this.emotions[i]));
+        }
+
         colorrange = this.activityColorsList;
         console.log("colorrange");
         console.log(colorrange);
@@ -164,6 +213,9 @@
         var z = d3.scale.ordinal()
             .range(colorrange);
 
+        var zEmotion = d3.scale.ordinal()
+            .range(this.emotionColorsList);
+
         var xAxis = d3.svg.axis()
             .scale(x)
             .orient("bottom")
@@ -172,7 +224,7 @@
         var yAxis = d3.svg.axis()
             .scale(y);
 
-        var yAxisr = d3.svg.axis()
+        var yAxis = d3.svg.axis()
             .scale(y);
 
         var stack = d3.layout.stack()
@@ -189,6 +241,12 @@
             .x(function(d) { return x(d.date); })
             .y0(function(d) { return y(d.y0); })
             .y1(function(d) { return y(d.y0 + d.y); });
+
+        var line = d3.svg.line()
+            .interpolate("cardinal")
+            .x(function(d) { return x(d.date); })
+            // .y0(function(d) { return y(d.y0); })
+            .y(function(d) { return y(d.y); });
 
         var svg = d3.select(this.$.chart)
             .append("svg")
@@ -215,105 +273,132 @@
           { "key": "CG", "value": 0.1, "date": "03/10/13"},];
 
         data = this.data;
+        dataemotion = this.dataemotion;
         console.log("data: ");
         console.log(data);
         console.log("this.data: ");
         console.log(this.data);
-          data.forEach(function(d) {
-            d.date = new Date(d.date);
-            d.value = +d.value;
-          });
-          console.log("data");
-          console.log(data);
-          console.log(nest.entries(data));
-          var layers = stack(nest.entries(data));
+        console.log(this.dataemotion);
 
-          x.domain(d3.extent(data, function(d) { return d.date; }));
-          y.domain([0, d3.max(data, function(d) { return d.y0 + d.y; })]);
+        data.forEach(function(d) {
+          d.date = new Date(d.date);
+          d.value = +d.value;
+        });
 
-          svg.selectAll(".layer")
-              .data(layers)
-            .enter().append("path")
-              .attr("class", "layer")
-              .attr("d", function(d) { return area(d.values); })
-              .style("fill", function(d, i) { return z(i); });
+        dataemotion.forEach(function(d) {
+          d.date = new Date(d.date);
+          d.value = +d.value;
+        });
 
+        console.log("data");
+        // console.log(data);
+        // console.log(nest.entries(data));
 
-          svg.append("g")
-              .attr("class", "x axis")
-              .attr("transform", "translate(0," + height + ")")
-              .call(xAxis);
+        var layers = stack(nest.entries(data));
+        var layersEmotion = stack(nest.entries(dataemotion));
 
-          svg.append("g")
-              .attr("class", "y axis")
-              .attr("transform", "translate(" + width + ", 0)")
-              .call(yAxis.orient("right"));
+        console.log("layers");
+        console.log(layers);
+        console.log("layersEmotion");
+        console.log(layersEmotion);
 
-          svg.append("g")
-              .attr("class", "y axis")
-              .call(yAxis.orient("left"));
+        x.domain(d3.extent(data, function(d) { return d.date; }));
+        y.domain([0, d3.max(data, function(d) { return d.y0 + d.y; })]);
 
-          svg.selectAll(".layer")
-            .attr("opacity", 1)
-            .on("mouseover", function(d, i) {
-              svg.selectAll(".layer").transition()
-              .duration(250)
-              .attr("opacity", function(d, j) {
-                return j != i ? 0.6 : 1;
-            })})
+        svg.selectAll(".layer")
+            .data(layers)
+          .enter().append("path")
+            .attr("class", "layer")
+            .attr("d", function(d) { return area(d.values); })
+            .style("fill", function(d, i) { return z(i); });
 
-            .on("mousemove", function(d, i) {
-              mousex = d3.mouse(this);
-              mousex = mousex[0];
-              var invertedx = x.invert(mousex);
-              invertedx = invertedx.getMonth() + invertedx.getDate();
-              var selected = (d.values);
-              for (var k = 0; k < selected.length; k++) {
-                datearray[k] = selected[k].date
-                datearray[k] = datearray[k].getMonth() + datearray[k].getDate();
-              }
+        svg.selectAll(".layer")
+            .data(layersEmotion)
+          .enter().append("path")
+            .attr("class", "layer")
+            .attr("d", function(d) { return line(d.values); })
+            .style("stroke", function(d, i) { return zEmotion(i); });
+        // svg.selectAll(".layer")
+        //   .data(layers)
+        //   .enter().append("path")
+        //   .attr("class", "line")
+        //   .attr("d", line);
 
-              mousedate = datearray.indexOf(invertedx);
-              pro = d.values[mousedate].value;
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis);
 
-              d3.select(this)
-              .classed("hover", true)
-              .attr("stroke", strokecolor)
-              .attr("stroke-width", "0.5px"), 
-              tooltip.html( "<p>" + d.key + "<br>" + pro + "</p>" ).style("visibility", "visible");
-              
-            })
-            .on("mouseout", function(d, i) {
-             svg.selectAll(".layer")
-              .transition()
-              .duration(250)
-              .attr("opacity", "1");
-              d3.select(this)
-              .classed("hover", false)
-              .attr("stroke-width", "0px"), tooltip.html( "<p>" + d.key + "<br>" + pro + "</p>" ).style("visibility", "hidden");
-          })
+        svg.append("g")
+            .attr("class", "y axis")
+            .attr("transform", "translate(" + width + ", 0)")
+            .call(yAxis.orient("right"));
+
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis.orient("left"));
+
+        svg.selectAll(".layer")
+          .attr("opacity", 1)
+          .on("mouseover", function(d, i) {
+            svg.selectAll(".layer").transition()
+            .duration(250)
+            .attr("opacity", function(d, j) {
+              return j != i ? 0.6 : 1;
+          })})
+
+          .on("mousemove", function(d, i) {
+            mousex = d3.mouse(this);
+            mousex = mousex[0];
+            var invertedx = x.invert(mousex);
+            invertedx = invertedx.getMonth() + invertedx.getDate();
+            var selected = (d.values);
+            for (var k = 0; k < selected.length; k++) {
+              datearray[k] = selected[k].date
+              datearray[k] = datearray[k].getMonth() + datearray[k].getDate();
+            }
+
+            mousedate = datearray.indexOf(invertedx);
+            pro = d.values[mousedate].value;
+
+            d3.select(this)
+            .classed("hover", true)
+            .attr("stroke", strokecolor)
+            .attr("stroke-width", "0.5px"), 
+            tooltip.html( "<p>" + d.key + "<br>" + pro + "</p>" ).style("visibility", "visible");
             
-          var vertical = d3.select(this.$.chart)
-                .append("div")
-                .attr("class", "remove")
-                .style("position", "absolute")
-                .style("z-index", "19")
-                .style("width", "1px")
-                .style("height", "380px")
-                .style("top", "10px")
-                .style("bottom", "30px")
-                .style("left", "0px")
-                .style("background", "#fff");
+          })
+          .on("mouseout", function(d, i) {
+           svg.selectAll(".layer")
+            .transition()
+            .duration(250)
+            .attr("opacity", "1");
+            d3.select(this)
+            .classed("hover", false)
+            .attr("stroke-width", "0px"), tooltip.html( "<p>" + d.key + "<br>" + pro + "</p>" ).style("visibility", "hidden");
+        })
+          
+        var vertical = d3.select(this.$.chart)
+              .append("div")
+              .attr("class", "remove")
+              .style("position", "absolute")
+              .style("z-index", "19")
+              .style("width", "1px")
+              .style("height", "380px")
+              .style("top", "10px")
+              .style("bottom", "30px")
+              .style("left", "0px")
+              .style("background", "#fff");
 
-          d3.select(this.$.chart)
-              .on("mousemove", function(){  
-                 mousex = d3.mouse(this);
-                 mousex = mousex[0] + 5;
-                 vertical.style("left", mousex + "px" )})
-              .on("mouseover", function(){  
-                 mousex = d3.mouse(this);
-                 mousex = mousex[0] + 5;
-                 vertical.style("left", mousex + "px")});
+        d3.select(this.$.chart)
+            .on("mousemove", function(){  
+               mousex = d3.mouse(this);
+               mousex = mousex[0] + 5;
+               vertical.style("left", mousex + "px" )})
+            .on("mouseover", function(){  
+               mousex = d3.mouse(this);
+               mousex = mousex[0] + 5;
+               vertical.style("left", mousex + "px")});
         
         
       },

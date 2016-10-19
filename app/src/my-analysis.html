@@ -20,8 +20,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <template>
     <style></style>
+    <div style="padding: 30px;"></div>
     <colors-material id="colorSheet"></colors-material>
-    <polymer-area-chart id="charts" data="[[data]]" activityColorsList="[[activityColorsList]]"></polymer-area-chart>
+    <polymer-area-chart id="charts" data="[[data]]" dataemotion="[[dataemotion]]" activityColorsList="[[activityColorsList]]"></polymer-area-chart>
 
   </template>
 
@@ -105,6 +106,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         activityColorsList: {
           type: Array,
           value: []
+        },
+        dataemotion: {
+          type: Array,
+          value: []
         }
       },
       observers: [
@@ -178,6 +183,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // var color  = (activityColorsList).concat(emotionColorsList);
 
         this.dataList = [];
+        this.dataEmotionList = [];
         for (var i = 0; i < this.names.length; i++) {
             this.dataList.push([]);
         }
@@ -191,7 +197,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             // console.log("key");
             // console.log(key);
              // || key === "emotions"
-            if (key === "activities") {
+            if (key === "activities" || key === "emotions") {
               var childChildSnapshot = childSnapshot[key];
               // console.log("childChildSnapshot");
               // console.log(childChildSnapshot);
@@ -212,7 +218,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 var index = that.names.indexOf(name);
                 // console.log("index");
                 // console.log(index);
-                that.dataList[index].push(entry);
+                if (key === "activities") {
+                  that.dataList[index].push(entry);
+                }
+                else {
+                  that.dataEmotionList.push(entry);
+                }
                 // console.log("that.dataList");
                 // console.log(that.dataList);                
               }
@@ -221,6 +232,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         });
         // console.log("dataChanged");
         this.data = [];
+        this.dataemotion = [];
         // console.log(this.dataList);
         // console.log("START this.data");
         // console.log(this.data);
@@ -231,8 +243,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           // console.log(this.data);
           this.data = this.data.concat(this.dataList[list]);
         }
+        for (i in this.dataEmotionList) {
+          // console.log("list");
+          // console.log(this.dataList[list]);
+          // console.log("this.data");
+          // console.log(this.data);
+          this.dataemotion = this.dataemotion.concat(this.dataEmotionList[i]);
+        }
+
+        // this.data = this.dataemotion;
         console.log("this.activityColorsList");
         console.log(this.activityColorsList);
+
+        console.log("this.dataemotion");
+        console.log(this.dataemotion);
+
+        console.log("this.data");
+        console.log(this.data);
+
         this.$.charts.readyProduce();
       }
     });
