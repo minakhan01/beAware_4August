@@ -121,6 +121,8 @@ function unsubscribe() {
   </script>
 
   <link rel="import" href="/src/my-app.html">
+  <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+  <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 
   <style>
 
@@ -131,13 +133,25 @@ function unsubscribe() {
       min-height: 100vh;
       background-color: #eee;
     }
+    html{
+        height: 100%;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+    }
+    .outer {
+        margin: 0;
+        width: 100%;
+        min-height: 100vh;
+        @apply(--layout-vertical);
+        @apply(--layout-flex);
+    }
 
   </style>
 
 </head>
 <body>
-
-  <my-app></my-app>
+  <my-app class="outer"></my-app>
 
 </body>
 </html>

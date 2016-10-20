@@ -10,11 +10,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
-<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <!-- <link rel="import" href="../bower_components/iron-icons/iron-icons.html"> -->
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
@@ -35,6 +34,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs-icons.html">
+<link rel="import" href="../bower_components/paper-header-panel/paper-header-panel.html">
+<link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html">
 
 <dom-module id="my-app">
 
@@ -63,6 +64,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       iron-icon {
         margin-right: 0.5em;
+      }
+      .content {
+        @apply(--layout-flex);
       }
       .drawer-options {
         margin: 20px 20px 15px 20px;
@@ -111,8 +115,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
     </style>
+    <style include="iron-flex iron-flex-alignment">
+    </style>
 
-    <style is="custom-style">
+    <style is="custom-style" include="iron-flex iron-flex-alignment">
       paper-button.custom {
         --paper-button-ink-color: var(--paper-pink-a200);
         /* These could also be individually defined for each of the
@@ -150,6 +156,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       paper-button.disabled {
         color: white;
+      }
+      .outer {
+            width: 100%;
+            height: 100vh;
+            @apply(--layout-vertical);
+            @apply(--layout-flex);
+      }
+      .inner {
+            @apply(--layout-flex);
+      }
+      footer {
+        height: 50px;
+        width: 100%;
+        position: fixed;
+        line-height: 50px;
+        text-align: center;
+        background-color: white;
+        font-size: 14px;
+        bottom: 0px;
+        @apply(--layout-horizontal);
+        @apply(--layout-flex);
+        @apply(--layout-flex);
       }
     </style>
 
@@ -249,53 +277,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
 
-    <body class="fullbleed layout vertical">
+<!--     <body class="fullbleed layout vertical">
       <paper-header-panel class="flex">
         <paper-toolbar>
-          <div>Hello World!</div>
-        </paper-toolbar>
-      </paper-header-panel>
-    </body>
-
-    <app-drawer-layout fullbleed>
-
-      <!-- Drawer content -->
-<!--       <app-drawer>
-        <app-toolbar>      
-          <div class="bottom layout vertical">
-            <span style="font-size: 80%;"><b> {{user.displayName}}</b></span>
-          </div>
-        </app-toolbar>
-
-        <div>
-          
-          <div class="drawer-options" on-click="toggleOne"><paper-icon-button icon="icons:expand-more" style="float: right;"></paper-icon-button>One Day</div>
-            <iron-collapse id="collapseOne">
-              <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-              <a name="input" href="/input">Input</a>
-              <a name="heart" href="/heart">Heart</a>
-              <a name="analysis" href="/analysis">Charts</a>
-              <a name="asterClock" href="/asterClock">Aster Emotions</a>
-              <a name="avgActivity" href="/avgActivity">Activity Charts</a>
-              <a name="avgEmotion" href="/avgEmotion">Emotion Charts</a>
-              </iron-selector>
-            </iron-collapse>
-
-        </div>
-
-        <div class="layout horizontal center">
-        <paper-button raised class="custom green" on-tap="sendNotification"> <iron-icon icon="notifications-active"></iron-icon> Mindfulness Reminder
-        </paper-button>
-        </div>
-
-      </app-drawer> -->
-
-      <!-- Main content -->
-      <app-header-layout>
-
-        <app-header condenses reveals effects="waterfall">
-        <div class="layout horizontal center">
-            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+          <div class="layout horizontal center">
             <h1>beAware</h1>
             <iron-icon icon="cloud" hidden$="[[!online]]"></iron-icon>
             <iron-icon icon="cloud-off" hidden$="[[online]]"></iron-icon>
@@ -304,28 +289,82 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 disabled="[[!signedIn]]"
                 on-tap="lock">
             </paper-icon-button>
-        </div>
+          </div>
+        </paper-toolbar>
+      </paper-header-panel>
+    </body> -->
+
+      <!-- Main content -->
+      <app-header-layout fullbleed flex vertical class="layout flex vertical outer">
+
+        <app-header condenses reveals effects="waterfall">
+          <div class="layout horizontal center">
+              <h1>beAware</h1>
+              <iron-icon icon="cloud" hidden$="[[!online]]"></iron-icon>
+              <iron-icon icon="cloud-off" hidden$="[[online]]"></iron-icon>
+              <paper-icon-button
+                  icon="[[computeLockIcon(signedIn)]]"
+                  disabled="[[!signedIn]]"
+                  on-tap="lock">
+              </paper-icon-button>
+          </div>
         </app-header>
-
-        <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
-          <my-input name="input" user="[[user.uid]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-input>
-          <my-heart name="heart" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-heart>
-          <my-mind name="mind" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-mind>
-          <my-body name="body" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-body>
-          <my-spirit name="spirit" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-spirit>
-          <my-analysis name="analysis" user="[[user.uid]]" dailydb="{{aggregatedball}}"></my-analysis>
+        <iron-pages class="content layout flex" role="main" selected="[[page]]" attr-for-selected="name">
+            <my-input name="input" user="[[user.uid]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-input>
+            <my-heart name="heart" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-heart>
+            <my-mind name="mind" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-mind>
+            <my-body name="body" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-body>
+            <my-spirit name="spirit" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-spirit>
+            <my-analysis name="analysis" user="[[user.uid]]" dailydb="{{aggregatedball}}"></my-analysis>
         </iron-pages>
-
+        <footer>
+            <paper-tabs selected="[[page]]" attr-for-selected="name" class="drawer-list layout horizontal center justified" style="width:100%;" role="navigation" align-bottom>
+              <paper-tab><a name="input" href="/input">Input</a></paper-tab>
+              <paper-tab><a name="heart" href="/heart">Heart</a></paper-tab>
+              <paper-tab><a name="mind" href="/mind">Mind</a></paper-tab>
+              <paper-tab><a name="spirit" href="/spirit">Spirit</a></paper-tab>
+              <paper-tab><a name="body" href="/body">Body</a></paper-tab>
+              <paper-tab><a name="analysis" href="/analysis">Charts</a></paper-tab>
+            </paper-tabs>
+        </footer>
       </app-header-layout>
-
-    <paper-tabs selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation" align-bottom>
-      <paper-tab><a name="input" href="/input">Input</a></paper-tab>
-      <paper-tab><a name="heart" href="/heart">Heart</a></paper-tab>
-      <paper-tab><a name="mind" href="/mind">Mind</a></paper-tab>
-      <paper-tab><a name="spirit" href="/spirit">Spirit</a></paper-tab>
-      <paper-tab><a name="body" href="/body">Body</a></paper-tab>
-      <paper-tab><a name="analysis" href="/analysis">Charts</a></paper-tab>
-    </paper-tabs>
+  <!-- <paper-header-panel>
+    <paper-toolbar>
+      <div class="layout horizontal center">
+        <h1>beAware</h1>
+        <iron-icon icon="cloud" hidden$="[[!online]]"></iron-icon>
+        <iron-icon icon="cloud-off" hidden$="[[online]]"></iron-icon>
+        <paper-icon-button
+            icon="[[computeLockIcon(signedIn)]]"
+            disabled="[[!signedIn]]"
+            on-tap="lock">
+        </paper-icon-button>
+      </div>
+    </paper-toolbar>
+    <div class="layout vertical fit">
+      <div class="layout flex">
+        <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
+            <my-input name="input" user="[[user.uid]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-input>
+            <my-heart name="heart" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-heart>
+            <my-mind name="mind" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-mind>
+            <my-body name="body" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-body>
+            <my-spirit name="spirit" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-spirit>
+            <my-analysis name="analysis" user="[[user.uid]]" dailydb="{{aggregatedball}}"></my-analysis>
+          </iron-pages>
+      </div>
+      <paper-toolbar>
+        <paper-tabs selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation" align-bottom>
+          <paper-tab><a name="input" href="/input">Input</a></paper-tab>
+          <paper-tab><a name="heart" href="/heart">Heart</a></paper-tab>
+          <paper-tab><a name="mind" href="/mind">Mind</a></paper-tab>
+          <paper-tab><a name="spirit" href="/spirit">Spirit</a></paper-tab>
+          <paper-tab><a name="body" href="/body">Body</a></paper-tab>
+          <paper-tab><a name="analysis" href="/analysis">Charts</a></paper-tab>
+        </paper-tabs>
+      </paper-toolbar>
+    </div>
+  </paper-header-panels> -->
+  
 
   </template>
 
@@ -351,27 +390,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           reflectToAttribute: true,
           observer: '_toggleOptionChanged'
         },
-        activityColors: {
-          type: Object,
-          value: 
-          { "Sleep": {"colorShade": "Green", "colorType": "A200"},
-          "Work" : {"colorShade": "Blue", "colorType": "A200"},
-          "Gym" : {"colorShade": "Pink", "colorType": "A200"},
-          "Social" : {"colorShade": "Amber", "colorType": "A200"},
-          "Leisure": {"colorShade": "Purple", "colorType": "A200"}
-          }
-        },
-        emotionColors: {
-          type: Object,
-          value: 
-          { "joy": {"colorShade": "Lime", "colorType": "a400"},
-          "calm": {"colorShade": "Cyan", "colorType": "a400"},
-          "fear" : {"colorShade": "Orange", "colorType": "a700"},
-          "anger" : {"colorShade": "Red", "colorType": "a700"},
-          "sorrow" : {"colorShade": "Yellow", "colorType": "a700"},
-          "hope": {"colorShade": "Teal", "colorType": "a400"}
-          }
-        },
         emotions: {
           type: Array,
           value: 
@@ -390,11 +408,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         aggregatedb: {
           type: Object
         },
-        // mindfulnessdb: {
-        //   type: Object,
-        //   value: 0,
-        //   observer: 'mindfulnessChanged'
-        // },
+        mindfulnessdb: {
+          type: Object,
+          value: 0,
+          observer: 'mindfulnessChanged'
+        },
         totaldb: {
           type: Object
         },
@@ -503,36 +521,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // load page import on demand.
         this.importHref(
           this.resolveUrl('my-' + page + '.html'), null, null, true);
-      },
-
-      toggleOne: function() {
-        // closeAllMenus();
-        this.toggleMenu = 'one';
-        this.$.collapseOne.toggle();
-      },
-
-      toggleMultiple: function() {
-        // closeAllMenus();
-        this.toggleMenu = 'multiple';
-        this.$.collapseMultiple.toggle();
-      },
-
-      toggleAverage: function() {
-        // closeAllMenus();
-        this.toggleMenu = 'average';
-        this.$.collapseAverage.toggle();
-      },
-
-      _toggleOptionChanged: function() {
-        if (this.$.collapseOne.opened) {
-          this.$.collapseOne.toggle();
-        }
-        if (this.$.collapseMultiple.opened) {
-          this.$.collapseMultiple.toggle();
-        }
-        if (this.$.collapseAverage.opened) {
-          this.$.collapseAverage.toggle();
-        }
       },
 
       signIn : function() {

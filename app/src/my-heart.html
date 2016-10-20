@@ -239,6 +239,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           left: 15px; 
           font-size: 14px;
     }
+    .content {
+      @apply(--layout-flex);
+    }
     </style>
 
         <div class="horizontal layout" style="height:100%">
@@ -268,7 +271,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             Hopeless: <paper-slider class="hopeless" id="hopelessRatings" pin snaps max="4" max-markers="4" step="1" value="[[hopelessValue]]"></paper-slider>
           </div>
         </div>
-            
 
     <firebase-document
         id="emotionFirebase"
