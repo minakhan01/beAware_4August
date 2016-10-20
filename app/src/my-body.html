@@ -240,43 +240,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           font-size: 14px;
     }
     </style>
-        <div class="horizontal layout" style="height:100%">
-          <div class="flex-6">
-          Happy:
-          </div>
-
-          <div class="flex-6">
-            Sad:
-          </div>
-        </div>
-
-        <div class="horizontal layout" style="height:100%">
-          <div class="flex-6">
-          Happy: <paper-slider class="happy" id="happyRatings" pin snaps max="4" max-markers="4" step="1" value="[[happyValue]]"></paper-slider>
-          </div>
-
-          <div class="flex-6">
-            Sad: <paper-slider class="sad" id="sadRatings" pin snaps max="4" max-markers="4" step="1" value="[[sadValue]]"></paper-slider>
-          </div>
-        </div>
-
-        <div class="horizontal layout" style="height:100%">
-          <div class="flex-6">
-            Peaceful: <paper-slider class="peaceful" id="peacefulRatings" pin snaps max="4" max-markers="4" step="1" value="[[peacefulValue]]"></paper-slider>
-          </div>
-          <div class="flex-6">
-            Anxious: <paper-slider class="anxious" id="anxiousRatings" pin snaps max="4" max-markers="4" step="1" value="[[anxiousValue]]"></paper-slider>
-          </div>
-        </div>
-
-        <div class="horizontal layout" style="height:100%">
-          <div class="flex-6">
-            Hopeful: <paper-slider class="hopeful" id="hopefulRatings" pin snaps max="4" max-markers="4" step="1" value="[[hopefulValue]]"></paper-slider>
-          </div>
-          <div class="flex-6">
-            Hopeless: <paper-slider class="hopeless" id="hopelessRatings" pin snaps max="4" max-markers="4" step="1" value="[[hopelessValue]]"></paper-slider>
-          </div>
-        </div>
 
         <div class="horizontal layout" style="height:100%">
           <div class="flex-6">
@@ -304,61 +267,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             Stressed: <paper-slider class="stressed" id="stressedRatings" pin snaps max="4" max-markers="4" step="1" value="[[stressedValue]]"></paper-slider>
           </div>
         </div>
-
-        <div class="horizontal layout" style="height:100%">
-          <div class="flex-6">
-            Grateful: <paper-slider class="grateful" id="gratefulRatings" pin snaps max="4" max-markers="4" step="1" value="[[gratefulValue]]"></paper-slider>
-          </div>
-          <div class="flex-6">
-            Disappointed: <paper-slider class="disappointed" id="disappointedRatings" pin snaps max="4" max-markers="4" step="1" value="[[disappointedValue]]"></paper-slider>
-          </div>
-        </div>
-
-        <div class="horizontal layout" style="height:100%">
-          <div class="flex-6">
-            Extroverted: <paper-slider class="extroverted" id="extrovertedRatings" pin snaps max="4" max-markers="4" step="1" value="[[extrovertedValue]]"></paper-slider>
-          </div>
-          <div class="flex-6">
-            Withdrawn: <paper-slider class="withdrawn" id="withdrawnRatings" pin snaps max="4" max-markers="4" step="1" value="[[withdrawnValue]]"></paper-slider>
-          </div>
-        </div>
-
-        <div class="horizontal layout" style="height:100%">
-          <div class="flex-6">
-            Empathetic: <paper-slider class="empathetic" id="empatheticRatings" pin snaps max="4" max-markers="4" step="1" value="[[empatheticValue]]"></paper-slider>
-          </div>
-          <div class="flex-6">
-            Carefree: <paper-slider class="carefree" id="carefreeRatings" pin snaps max="4" max-markers="4" step="1" value="[[carefreeValue]]"></paper-slider>
-          </div>
-        </div>
-
-        <div class="horizontal layout" style="height:100%">
-          <div class="flex-6">
-            Focused: <paper-slider class="focused" id="focusedRatings" pin snaps max="4" max-markers="4" step="1" value="[[focusedValue]]"></paper-slider>
-          </div>
-          <div class="flex-6">
-            Chaotic: <paper-slider class="chaotic" id="chaoticRatings" pin snaps max="4" max-markers="4" step="1" value="[[chaoticValue]]"></paper-slider>
-          </div>
-        </div>
-
-        <div class="horizontal layout" style="height:100%">
-          <div class="flex-6">
-            Inspired: <paper-slider class="inspired" id="inspiredRatings" pin snaps max="4" max-markers="4" step="1" value="[[inspiredValue]]"></paper-slider>
-          </div>
-          <div class="flex-6">
-            Unchallenged: <paper-slider class="unchallenged" id="unchallengedRatings" pin snaps max="4" max-markers="4" step="1" value="[[unchallengedValue]]"></paper-slider>
-          </div>
-        </div>
-
-        <div class="horizontal layout" style="height:100%">
-          <div class="flex-6">
-            Effective: <paper-slider class="effective" id="effectiveRatings" pin snaps max="4" max-markers="4" step="1" value="[[effectiveValue]]"></paper-slider>
-          </div>
-          <div class="flex-6">
-            Frustrated: <paper-slider class="frustrated" id="frustratedRatings" pin snaps max="4" max-markers="4" step="1" value="[[frustratedValue]]"></paper-slider>
-          </div>
-        </div>
-            
 
     <firebase-document
         id="emotionFirebase"
@@ -592,55 +500,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       attached: function() {
         this.date = (new Date()).toDateString();
         var that = this;
-        
-        var happyRatings = this.$.happyRatings;
-        happyRatings.addEventListener('value-change', function() {
-          console.log("Listener"+happyRatings.value);
-          that.emotionDetails.value = happyRatings.value;
-          that.saveEntry('happy');
-          that.saveAggregateEntry('happy');
-        });
-
-        var sadRatings = this.$.sadRatings;
-        sadRatings.addEventListener('value-change', function() {
-          console.log("Listener"+sadRatings.value);
-          that.emotionDetails.value = sadRatings.value;
-          that.saveEntry('sad');
-          that.saveAggregateEntry('sad');
-        });
-
-        var peacefulRatings = this.$.peacefulRatings;
-        peacefulRatings.addEventListener('value-change', function() {
-          console.log("Listener"+peacefulRatings.value);
-          that.emotionDetails.value = peacefulRatings.value;
-          that.saveEntry('peaceful');
-          that.saveAggregateEntry('peaceful');
-        });
-
-        var anxiousRatings = this.$.anxiousRatings;
-        anxiousRatings.addEventListener('value-change', function() {
-          console.log("Listener"+anxiousRatings.value);
-          that.emotionDetails.value = anxiousRatings.value;
-          that.saveEntry('anxious');
-          that.saveAggregateEntry('anxious');
-        });
-
-        var hopefulRatings = this.$.hopefulRatings;
-        hopefulRatings.addEventListener('value-change', function() {
-          console.log("Listener"+hopefulRatings.value);
-          that.emotionDetails.value = hopefulRatings.value;
-          that.saveEntry('hopeful');
-          that.saveAggregateEntry('hopeful');
-        });
-
-        var hopelessRatings = this.$.hopelessRatings;
-        hopelessRatings.addEventListener('value-change', function() {
-          console.log("Listener"+hopelessRatings.value);
-          that.emotionDetails.value = hopelessRatings.value;
-          that.saveEntry('hopeless');
-          that.saveAggregateEntry('hopeless');
-        });
-
+       
         var energeticRatings = this.$.energeticRatings;
         energeticRatings.addEventListener('value-change', function() {
           console.log("Listener"+energeticRatings.value);
@@ -687,102 +547,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           that.emotionDetails.value = stressedRatings.value;
           that.saveEntry('stressed');
           that.saveAggregateEntry('stressed');
-        });
-
-        var gratefulRatings = this.$.gratefulRatings;
-        gratefulRatings.addEventListener('value-change', function() {
-          console.log("Listener"+gratefulRatings.value);
-          that.emotionDetails.value = gratefulRatings.value;
-          that.saveEntry('grateful');
-          that.saveAggregateEntry('grateful');
-        });
-
-        var disappointedRatings = this.$.disappointedRatings;
-        disappointedRatings.addEventListener('value-change', function() {
-          console.log("Listener"+disappointedRatings.value);
-          that.emotionDetails.value = disappointedRatings.value;
-          that.saveEntry('disappointed');
-          that.saveAggregateEntry('disappointed');
-        });
-
-        var extrovertedRatings = this.$.extrovertedRatings;
-        extrovertedRatings.addEventListener('value-change', function() {
-          console.log("Listener"+extrovertedRatings.value);
-          that.emotionDetails.value = extrovertedRatings.value;
-          that.saveEntry('extroverted');
-          that.saveAggregateEntry('extroverted');
-        });
-
-        var withdrawnRatings = this.$.withdrawnRatings;
-        withdrawnRatings.addEventListener('value-change', function() {
-          console.log("Listener"+withdrawnRatings.value);
-          that.emotionDetails.value = withdrawnRatings.value;
-          that.saveEntry('withdrawn');
-          that.saveAggregateEntry('withdrawn');
-        });
-
-        var empatheticRatings = this.$.empatheticRatings;
-        empatheticRatings.addEventListener('value-change', function() {
-          console.log("Listener"+empatheticRatings.value);
-          that.emotionDetails.value = empatheticRatings.value;
-          that.saveEntry('empathetic');
-          that.saveAggregateEntry('empathetic');
-        });
-
-        var carefreeRatings = this.$.carefreeRatings;
-        carefreeRatings.addEventListener('value-change', function() {
-          console.log("Listener"+carefreeRatings.value);
-          that.emotionDetails.value = carefreeRatings.value;
-          that.saveEntry('carefree');
-          that.saveAggregateEntry('carefree');
-        });
-
-        var focusedRatings = this.$.focusedRatings;
-        focusedRatings.addEventListener('value-change', function() {
-          console.log("Listener"+focusedRatings.value);
-          that.emotionDetails.value = focusedRatings.value;
-          that.saveEntry('focused');
-          that.saveAggregateEntry('focused');
-        });
-
-        var chaoticRatings = this.$.chaoticRatings;
-        chaoticRatings.addEventListener('value-change', function() {
-          console.log("Listener"+chaoticRatings.value);
-          that.emotionDetails.value = chaoticRatings.value;
-          that.saveEntry('chaotic');
-          that.saveAggregateEntry('chaotic');
-        });
-
-        var inspiredRatings = this.$.inspiredRatings;
-        inspiredRatings.addEventListener('value-change', function() {
-          console.log("Listener"+inspiredRatings.value);
-          that.emotionDetails.value = inspiredRatings.value;
-          that.saveEntry('inspired');
-          that.saveAggregateEntry('inspired');
-        });
-
-        var unchallengedRatings = this.$.unchallengedRatings;
-        unchallengedRatings.addEventListener('value-change', function() {
-          console.log("Listener"+unchallengedRatings.value);
-          that.emotionDetails.value = unchallengedRatings.value;
-          that.saveEntry('unchallenged');
-          that.saveAggregateEntry('unchallenged');
-        });
-
-        var effectiveRatings = this.$.effectiveRatings;
-        effectiveRatings.addEventListener('value-change', function() {
-          console.log("Listener"+effectiveRatings.value);
-          that.emotionDetails.value = effectiveRatings.value;
-          that.saveEntry('effective');
-          that.saveAggregateEntry('effective');
-        });
-
-        var frustratedRatings = this.$.frustratedRatings;
-        frustratedRatings.addEventListener('value-change', function() {
-          console.log("Listener"+frustratedRatings.value);
-          that.emotionDetails.value = frustratedRatings.value;
-          that.saveEntry('frustrated');
-          that.saveAggregateEntry('frustrated');
         });
 
       },
