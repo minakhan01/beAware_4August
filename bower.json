@@ -40,7 +40,8 @@
     "chart.js": "^2.3.0",
     "eventDrops": "marmelab/EventDrops#0.1.2",
     "app-storage": "PolymerElements/app-storage#^0.9.6",
-    "paper-slider": "PolymerElements/paper-slider#^1.0.11"
+    "paper-slider": "PolymerElements/paper-slider#^1.0.11",
+    "paper-tabs": "PolymerElements/paper-tabs#^1.6.2"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

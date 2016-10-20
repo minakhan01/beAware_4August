@@ -28,12 +28,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="my-icons.html">
 <link rel="import" href="../bower_components/platinum-sw/platinum-sw-elements.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
-<!-- <link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html"> -->
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
 <link rel="import" href="my-toolbar.html">
 <link rel="import" href="my-login.html">
-<!-- <link rel="import" href="toolbar-behavior.html"> -->
 <link rel="import" href="../bower_components/app-storage/app-network-status-behavior.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs-icons.html">
 
 <dom-module id="my-app">
 
@@ -112,45 +113,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <style is="custom-style">
-  paper-button.custom {
-    --paper-button-ink-color: var(--paper-pink-a200);
-    /* These could also be individually defined for each of the
-      specific css classes, but we'll just do it once as an example */
-    --paper-button-flat-keyboard-focus: {
-      background-color: var(--paper-pink-a200);
-      color: white !important;
-    };
-    --paper-button-raised-keyboard-focus: {
-      background-color: var(--paper-pink-a200) !important;
-      color: white !important;
-    };
-  }
-  paper-button.custom:hover {
-    background-color: var(--paper-indigo-100);
-  }
-  paper-button.pink {
-    color: var(--paper-pink-a200);
+      paper-button.custom {
+        --paper-button-ink-color: var(--paper-pink-a200);
+        /* These could also be individually defined for each of the
+          specific css classes, but we'll just do it once as an example */
+        --paper-button-flat-keyboard-focus: {
+          background-color: var(--paper-pink-a200);
+          color: white !important;
+        };
+        --paper-button-raised-keyboard-focus: {
+          background-color: var(--paper-pink-a200) !important;
+          color: white !important;
+        };
+      }
+      paper-button.custom:hover {
+        background-color: var(--paper-indigo-100);
+      }
+      paper-button.pink {
+        color: var(--paper-pink-a200);
 
-  }
-  paper-button.indigo {
-    background-color: var(--paper-indigo-500);
-    color: white;
-    --paper-button-raised-keyboard-focus: {
-      background-color: var(--paper-pink-a200) !important;
-      color: white !important;
-    };
-  }
-  paper-button.green {
-    background-color: var(--paper-green-500);
-    color: white;
-  }
-  paper-button.green[active] {
-    background-color: var(--paper-red-500);
-  }
-  paper-button.disabled {
-    color: white;
-  }
-</style>
+      }
+      paper-button.indigo {
+        background-color: var(--paper-indigo-500);
+        color: white;
+        --paper-button-raised-keyboard-focus: {
+          background-color: var(--paper-pink-a200) !important;
+          color: white !important;
+        };
+      }
+      paper-button.green {
+        background-color: var(--paper-green-500);
+        color: white;
+      }
+      paper-button.green[active] {
+        background-color: var(--paper-red-500);
+      }
+      paper-button.disabled {
+        color: white;
+      }
+    </style>
 
     <my-login
         on-sign-in="signIn"
@@ -170,15 +171,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </platinum-sw-register>
 
     <firebase-app
-    name="notes"
-        api-key = "AIzaSyA6ILSdTifHdrWDpzpnqkkGRXoT9nk1O_w"
-    auth-domain = "beawaretest-4a61f.firebaseapp.com"
-    database-url = "https://beawaretest-4a61f.firebaseio.com">
-      </firebase-app>
-<!--       api-key="AIzaSyDyR8rI9pbiTrwoP-uRRc39iuXyzN5Kdoc"
-        auth-domain="beaware-140408.firebaseapp.com"
-        database-url="https://beaware-140408.firebaseio.com">
- -->    
+      name="notes"
+      api-key = "AIzaSyA6ILSdTifHdrWDpzpnqkkGRXoT9nk1O_w"
+      auth-domain = "beawaretest-4a61f.firebaseapp.com"
+      database-url = "https://beawaretest-4a61f.firebaseio.com">
+    </firebase-app>
 
     <firebase-auth
     app-name="notes"
@@ -252,15 +249,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
 
+    <body class="fullbleed layout vertical">
+      <paper-header-panel class="flex">
+        <paper-toolbar>
+          <div>Hello World!</div>
+        </paper-toolbar>
+      </paper-header-panel>
+    </body>
+
     <app-drawer-layout fullbleed>
 
       <!-- Drawer content -->
-      <app-drawer>
+<!--       <app-drawer>
         <app-toolbar>      
           <div class="bottom layout vertical">
             <span style="font-size: 80%;"><b> {{user.displayName}}</b></span>
-            <!-- <paper-icon-button src="{{user.profileImageURL}}}"></paper-icon-button> -->
-            <!-- <span>{{user.email}}</span> -->
           </div>
         </app-toolbar>
 
@@ -280,41 +283,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         </div>
 
-        <div>
-          
-          <div class="drawer-options" on-click="toggleMultiple">Multiple Days<paper-icon-button icon="expand-more" style="float: right;"></paper-icon-button></div>
-            <iron-collapse id="collapseMultiple">
-              <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-              <a name="eventdrops" href="/eventdrops">Event Drops</a>
-              <a name="calendarview" href="/calendarview">Calendar View</a>
-              </iron-selector>
-            </iron-collapse>
-
-        </div>
-
-        <div>
-          
-          <div class="drawer-options" on-click="toggleAverage">Average Day<paper-icon-button icon="expand-more" style="float: right;"></paper-icon-button></div>
-            <iron-collapse id="collapseAverage">
-              <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-              <!-- <a name="asterClock" href="/asterClock">Emotions Flow</a> -->
-              <a name="asterAllClock" href="/asterAllClock">Aster Emotions</a>
-              <a name="avgAllActivity" href="/avgAllActivity">Activity Charts</a>
-              <a name="avgAllEmotion" href="/avgAllEmotion">Emotion Charts</a>
-              <!-- <a>Pictures/Friends/Location</a> -->
-              </iron-selector>
-            </iron-collapse>
-
-        </div>
         <div class="layout horizontal center">
         <paper-button raised class="custom green" on-tap="sendNotification"> <iron-icon icon="notifications-active"></iron-icon> Mindfulness Reminder
         </paper-button>
         </div>
 
-      </app-drawer>
+      </app-drawer> -->
 
       <!-- Main content -->
-      <app-header-layout has-scrolling-region>
+      <app-header-layout>
 
         <app-header condenses reveals effects="waterfall">
         <div class="layout horizontal center">
@@ -334,19 +311,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <my-input name="input" user="[[user.uid]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-input>
           <my-heart name="heart" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-heart>
           <my-analysis name="analysis" user="[[user.uid]]" dailydb="{{aggregatedball}}"></my-analysis>
-          <my-asterClock name="asterClock" user="[[user.uid]]" datadb="{{datadb}}"></my-asterClock>
-          <my-avgActivity name="avgActivity" user="[[user.uid]]" datadb="{{datadb}}" colors-array="{{activtiyColorsArray}}" background-colors-array="{{activtiyBackgroundColorsArray}}"></my-avgActivity>
-          <my-avgEmotion name="avgEmotion" user="[[user.uid]]" datadb="{{datadb}}"></my-avgEmotion>
-          <my-eventdrops name="eventdrops" user="[[user.uid]]" dailydb="{{dailydb}}"></my-eventdrops>
-          <my-calendarview name="calendarview" user="[[user.uid]]" datadb="{{aggregatedball}}"></my-calendarview>
-          <my-asterAllClock name="asterAllClock" user="[[user.uid]]" catactivitydb="{{catactivitydb}}" totaldb="{{totaldb}}"></my-asterAllClock>
-          <my-avgAllActivity name="avgAllActivity" user="[[user.uid]]" catactivitydb="{{catactivitydb}}" colors-array="{{activtiyColorsArray}}" background-colors-array="{{activtiyBackgroundColorsArray}}"></my-avgAllActivity>
-          <my-avgAllEmotion name="avgAllEmotion" user="[[user.uid]]" catemotiondb="{{catemotiondb}}"></my-avgAllEmotion>
         </iron-pages>
 
       </app-header-layout>
 
-    </app-drawer-layout>
+    <paper-tabs selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation" align-bottom>
+      <paper-tab><a name="input" href="/input">Input</a></paper-tab>
+      <paper-tab><a name="heart" href="/heart">Heart</a></paper-tab>
+      <paper-tab><a name="analysis" href="/analysis">Charts</a></paper-tab>
+    </paper-tabs>
 
   </template>
 
