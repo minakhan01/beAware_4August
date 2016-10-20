@@ -65,9 +65,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       iron-icon {
         margin-right: 0.5em;
       }
-      .content {
-        @apply(--layout-flex);
-      }
       .drawer-options {
         margin: 20px 20px 15px 20px;
       }
@@ -161,23 +158,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             width: 100%;
             height: 100vh;
             @apply(--layout-vertical);
-            @apply(--layout-flex);
       }
       .inner {
             @apply(--layout-flex);
       }
-      footer {
+      .footer {
         height: 50px;
         width: 100%;
-        position: fixed;
+        /*position: fixed;*/
         line-height: 50px;
         text-align: center;
         background-color: white;
         font-size: 14px;
         bottom: 0px;
         @apply(--layout-horizontal);
-        @apply(--layout-flex);
-        @apply(--layout-flex);
       }
     </style>
 
@@ -295,8 +289,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </body> -->
 
       <!-- Main content -->
-      <app-header-layout fullbleed flex vertical class="layout flex vertical outer">
-
+      <app-header-layout fullbleed flex vertical class="outer">
+      <div class="layout vertical flex outer">
+      <div>
         <app-header condenses reveals effects="waterfall">
           <div class="layout horizontal center">
               <h1>beAware</h1>
@@ -309,7 +304,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </paper-icon-button>
           </div>
         </app-header>
-        <iron-pages class="content layout flex" role="main" selected="[[page]]" attr-for-selected="name">
+      </div>
+      <div class="flex">
+        <iron-pages style="height:100%;" role="main" selected="[[page]]" attr-for-selected="name">
             <my-input name="input" user="[[user.uid]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-input>
             <my-heart name="heart" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-heart>
             <my-mind name="mind" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-mind>
@@ -317,7 +314,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <my-spirit name="spirit" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-spirit>
             <my-analysis name="analysis" user="[[user.uid]]" dailydb="{{aggregatedball}}"></my-analysis>
         </iron-pages>
-        <footer>
+      </div>
+      <div class="footer">
+        <!-- <footer> -->
             <paper-tabs selected="[[page]]" attr-for-selected="name" class="drawer-list layout horizontal center justified" style="width:100%;" role="navigation" align-bottom>
               <paper-tab><a name="input" href="/input">Input</a></paper-tab>
               <paper-tab><a name="heart" href="/heart">Heart</a></paper-tab>
@@ -326,7 +325,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <paper-tab><a name="body" href="/body">Body</a></paper-tab>
               <paper-tab><a name="analysis" href="/analysis">Charts</a></paper-tab>
             </paper-tabs>
-        </footer>
+        <!-- </footer> -->
+      </div>
+      </div>
       </app-header-layout>
   <!-- <paper-header-panel>
     <paper-toolbar>

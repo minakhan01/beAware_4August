@@ -30,7 +30,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="my-heart">
 
   <template>
-        <style is="custom-style" include="iron-flex iron-flex-alignment">
+        <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
 <style>
       :host {
         display: block;
@@ -243,34 +243,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       @apply(--layout-flex);
     }
     </style>
-
-        <div class="horizontal layout" style="height:100%">
-          <div class="flex-6">
+    <div class="vertical layout around-justified" style="height:100%;">
+        <div class="horizontal layout around-justified">
+          <div>
           Happy: <paper-slider class="happy" id="happyRatings" pin snaps max="4" max-markers="4" step="1" value="[[happyValue]]"></paper-slider>
           </div>
 
-          <div class="flex-6">
+          <div>
             Sad: <paper-slider class="sad" id="sadRatings" pin snaps max="4" max-markers="4" step="1" value="[[sadValue]]"></paper-slider>
           </div>
         </div>
 
-        <div class="horizontal layout" style="height:100%">
-          <div class="flex-6">
+        <div class="horizontal layout around-justified"s>
+          <div>
             Peaceful: <paper-slider class="peaceful" id="peacefulRatings" pin snaps max="4" max-markers="4" step="1" value="[[peacefulValue]]"></paper-slider>
           </div>
-          <div class="flex-6">
+          <div>
             Anxious: <paper-slider class="anxious" id="anxiousRatings" pin snaps max="4" max-markers="4" step="1" value="[[anxiousValue]]"></paper-slider>
           </div>
         </div>
 
-        <div class="horizontal layout" style="height:100%">
-          <div class="flex-6">
+        <div class="horizontal layout around-justified">
+          <div>
             Hopeful: <paper-slider class="hopeful" id="hopefulRatings" pin snaps max="4" max-markers="4" step="1" value="[[hopefulValue]]"></paper-slider>
           </div>
-          <div class="flex-6">
+          <div>
             Hopeless: <paper-slider class="hopeless" id="hopelessRatings" pin snaps max="4" max-markers="4" step="1" value="[[hopelessValue]]"></paper-slider>
           </div>
         </div>
+      </div>
 
     <firebase-document
         id="emotionFirebase"

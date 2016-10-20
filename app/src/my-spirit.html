@@ -240,33 +240,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           font-size: 14px;
     }
     </style>
-        
-        <div class="horizontal layout" style="height:100%">
-          <div class="flex-6">
+        <div class="vertical layout around-justified" style="height:100%;">
+        <div class="horizontal layout around-justified">
+          <div>
             Grateful: <paper-slider class="grateful" id="gratefulRatings" pin snaps max="4" max-markers="4" step="1" value="[[gratefulValue]]"></paper-slider>
           </div>
-          <div class="flex-6">
+          <div>
             Disappointed: <paper-slider class="disappointed" id="disappointedRatings" pin snaps max="4" max-markers="4" step="1" value="[[disappointedValue]]"></paper-slider>
           </div>
         </div>
 
-        <div class="horizontal layout" style="height:100%">
-          <div class="flex-6">
+        <div class="horizontal layout around-justified">
+          <div>
             Extroverted: <paper-slider class="extroverted" id="extrovertedRatings" pin snaps max="4" max-markers="4" step="1" value="[[extrovertedValue]]"></paper-slider>
           </div>
-          <div class="flex-6">
+          <div>
             Withdrawn: <paper-slider class="withdrawn" id="withdrawnRatings" pin snaps max="4" max-markers="4" step="1" value="[[withdrawnValue]]"></paper-slider>
           </div>
         </div>
 
-        <div class="horizontal layout" style="height:100%">
-          <div class="flex-6">
+        <div class="horizontal layout around-justified">
+          <div>
             Empathetic: <paper-slider class="empathetic" id="empatheticRatings" pin snaps max="4" max-markers="4" step="1" value="[[empatheticValue]]"></paper-slider>
           </div>
-          <div class="flex-6">
+          <div>
             Carefree: <paper-slider class="carefree" id="carefreeRatings" pin snaps max="4" max-markers="4" step="1" value="[[carefreeValue]]"></paper-slider>
           </div>
         </div>
+      </div>
 
     <firebase-document
         id="emotionFirebase"

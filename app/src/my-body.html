@@ -240,33 +240,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           font-size: 14px;
     }
     </style>
-
-        <div class="horizontal layout" style="height:100%">
-          <div class="flex-6">
+    <div class="vertical layout around-justified" style="height:100%;">
+        <div class="horizontal layout around-justified">
+          <div>
             Energetic: <paper-slider class="energetic" id="energeticRatings" pin snaps max="4" max-markers="4" step="1" value="[[energeticValue]]"></paper-slider>
           </div>
-          <div class="flex-6">
+          <div>
             Tired: <paper-slider class="tired" id="tiredRatings" pin snaps max="4" max-markers="4" step="1" value="[[tiredValue]]"></paper-slider>
           </div>
         </div>
-
-        <div class="horizontal layout" style="height:100%">
-          <div class="flex-6">
+        <div class="horizontal layout around-justified">
+          <div>
             Confident: <paper-slider class="confident" id="confidentRatings" pin snaps max="4" max-markers="4" step="1" value="[[confidentValue]]"></paper-slider>
           </div>
-          <div class="flex-6">
+          <div>
             Insecure: <paper-slider class="insecure" id="insecureRatings" pin snaps max="4" max-markers="4" step="1" value="[[insecureValue]]"></paper-slider>
           </div>
         </div>
-
-        <div class="horizontal layout" style="height:100%">
-          <div class="flex-6">
+        <div class="horizontal layout around-justified">
+          <div>
             Relaxed: <paper-slider class="relaxed" id="relaxedRatings" pin snaps max="4" max-markers="4" step="1" value="[[relaxedValue]]"></paper-slider>
           </div>
-          <div class="flex-6">
+          <div>
             Stressed: <paper-slider class="stressed" id="stressedRatings" pin snaps max="4" max-markers="4" step="1" value="[[stressedValue]]"></paper-slider>
           </div>
         </div>
+    </div>
 
     <firebase-document
         id="emotionFirebase"

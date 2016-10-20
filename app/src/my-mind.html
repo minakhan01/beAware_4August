@@ -240,34 +240,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           font-size: 14px;
     }
     </style>
-
-        <div class="horizontal layout" style="height:100%">
-          <div class="flex-6">
+    <div class="vertical layout around-justified" style="height:100%;">
+        <div class="horizontal layout around-justified">
+          <div>
             Focused: <paper-slider class="focused" id="focusedRatings" pin snaps max="4" max-markers="4" step="1" value="[[focusedValue]]"></paper-slider>
           </div>
-          <div class="flex-6">
+          <div>
             Chaotic: <paper-slider class="chaotic" id="chaoticRatings" pin snaps max="4" max-markers="4" step="1" value="[[chaoticValue]]"></paper-slider>
           </div>
         </div>
 
-        <div class="horizontal layout" style="height:100%">
-          <div class="flex-6">
+        <div class="horizontal layout around-justified">
+          <div>
             Inspired: <paper-slider class="inspired" id="inspiredRatings" pin snaps max="4" max-markers="4" step="1" value="[[inspiredValue]]"></paper-slider>
           </div>
-          <div class="flex-6">
+          <div>
             Unchallenged: <paper-slider class="unchallenged" id="unchallengedRatings" pin snaps max="4" max-markers="4" step="1" value="[[unchallengedValue]]"></paper-slider>
           </div>
         </div>
 
-        <div class="horizontal layout" style="height:100%">
-          <div class="flex-6">
+        <div class="horizontal layout around-justified">
+          <div>
             Effective: <paper-slider class="effective" id="effectiveRatings" pin snaps max="4" max-markers="4" step="1" value="[[effectiveValue]]"></paper-slider>
           </div>
-          <div class="flex-6">
+          <div>
             Frustrated: <paper-slider class="frustrated" id="frustratedRatings" pin snaps max="4" max-markers="4" step="1" value="[[frustratedValue]]"></paper-slider>
           </div>
         </div>
-            
+    </div>
 
     <firebase-document
         id="emotionFirebase"
