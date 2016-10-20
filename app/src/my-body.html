@@ -1,0 +1,1241 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="elements/simple-menu.html">
+<link rel="import" href="elements/simple-menubar.html">
+<link rel="import" href="elements/my-animatable.html">
+<link rel="import" href="elements/my-animatable-triangle.html">
+<link rel="import" href="my-icons.html">
+<link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="colors-material.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="elements/paper-slider-custom.html">
+<link rel="import" href="../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+
+<dom-module id="my-body">
+
+  <template>
+        <style is="custom-style" include="iron-flex iron-flex-alignment">
+<style>
+      :host {
+        display: block;
+        padding: 10px;
+        overflow: hidden;
+        font-size: 14px;
+        height:100%;
+      }
+
+    simple-menu,
+    simple-menubar {
+      display: inline-block;
+      width: 100%;
+    }
+
+    simple-menu a {
+      display: block;
+    }
+
+    simple-menubar a,
+    simple-menu a {
+      padding: 15px 20px;
+      color: var(--primary-text-color);
+      text-decoration: none;
+    }
+
+    paper-time-picker {
+        @apply(--layout-center-justified);
+        /*@apply(--layout-horizontal);*/
+    }
+
+    p.heading {
+      color: var(--app-primary-color);
+      text-decoration: none;
+      margin-bottom:0px;
+    }
+
+    simple-menu a[disabled],
+    simple-menubar a[disabled] {
+      color: var(--google-grey-300);
+    }
+
+    .happy {
+      --paper-slider-knob-color: var(--paper-yellow-a200);
+      --paper-slider-active-color: var(--paper-yellow-a200);
+    }
+    .sad {
+      --paper-slider-knob-color: var(--paper-blue-200);
+      --paper-slider-active-color: var(--paper-blue-200);
+    }
+    .peaceful {
+      --paper-slider-knob-color: var(--paper-teal-a200);
+      --paper-slider-active-color: var(--paper-teal-a200);
+    }
+    .anxious {
+      --paper-slider-knob-color: var(--paper-purple-200);
+      --paper-slider-active-color: var(--paper-purple-200);
+    }
+    .hopeful {
+      --paper-slider-knob-color: var(--paper-orange-a200);
+      --paper-slider-active-color: var(--paper-orange-a200);
+    }
+    .hopeless {
+      --paper-slider-knob-color: var(--paper-blue-grey-200);
+      --paper-slider-active-color: var(--paper-blue-grey-200);
+    }
+    .energetic {
+      --paper-slider-knob-color: var(--paper-deep-purple-a200);
+      --paper-slider-active-color: var(--paper-deep-purple-a200);
+    }
+    .tired {
+      --paper-slider-knob-color: var(--paper-lime-200);
+      --paper-slider-active-color: var(--paper-lime-200);
+    }
+    .confident {
+      --paper-slider-knob-color: var(--paper-pink-a200);
+      --paper-slider-active-color: var(--paper-pink-a200);
+    }
+    .insecure {
+      --paper-slider-knob-color: var(--paper-green-200);
+      --paper-slider-active-color: var(--paper-green-200);
+    }
+    .relaxed {
+      --paper-slider-knob-color: var(--paper-indigo-a200);
+      --paper-slider-active-color: var(--paper-indigo-a200);
+    }
+    .stressed {
+      --paper-slider-knob-color: var(--paper-amber-500);
+      --paper-slider-active-color: var(--paper-amber-500);
+    }
+    .grateful {
+      --paper-slider-knob-color: var(--paper-purple-a200);
+      --paper-slider-active-color: var(--paper-purple-a200);
+    }
+    .disappointed {
+      --paper-slider-knob-color: var(--paper-green-200);
+      --paper-slider-active-color: var(--paper-green-200);
+    }
+    .extroverted {
+      --paper-slider-knob-color: var(--paper-red-a200);
+      --paper-slider-active-color: var(--paper-red-a200);
+    }
+    .withdrawn {
+      --paper-slider-knob-color: var(--paper-yellow-200);
+      --paper-slider-active-color: var(--paper-yellow-200);
+    }
+    .empathetic {
+      --paper-slider-knob-color: var(--paper-light-blue-a200);
+      --paper-slider-active-color: var(--paper-light-blue-a200);
+    }
+    .carefree {
+      --paper-slider-knob-color: var(--paper-pink-200);
+      --paper-slider-active-color: var(--paper-pink-200);
+    }
+    .focused {
+      --paper-slider-knob-color: var(--paper-blue-a200);
+      --paper-slider-active-color: var(--paper-blue-a200);
+    }
+    .chaotic {
+      --paper-slider-knob-color: var(--paper-red-200);
+      --paper-slider-active-color: var(--paper-red-200);
+    }
+    .inspired {
+      --paper-slider-knob-color: var(--paper-green-a200);
+      --paper-slider-active-color: var(--paper-green-a200);
+    }
+    .unchallenged {
+      --paper-slider-knob-color: var(--paper-indigo-200);
+      --paper-slider-active-color: var(--paper-indigo-200);
+    }
+    .effective {
+      --paper-slider-knob-color: var(--paper-deep-orange-a200);
+      --paper-slider-active-color: var(--paper-deep-orange-a200);
+    }
+    .frustrated {
+      --paper-slider-knob-color: var(--paper-deep-purple-200);
+      --paper-slider-active-color: var(--paper-deep-purple-200);
+    }
+
+    #rectangle{
+    width:10px;
+    height:10px;
+    }
+
+    a {
+      color: white;
+      border-style: solid;
+      border-width: 1px;
+      font-size: 13px;
+      text-align: center;
+      margin: 2px;
+    }
+
+    paper-button {
+      color: white;
+      border-style: solid;
+      border-width: 1px;
+      font-size: 13px;
+      text-align: center;
+      margin-bottom: 10px;
+      --paper-button-raised-keyboard-focus: {
+        background-color: var(--paper-pink-a200) !important;
+        color: white !important;
+      };
+    }
+
+    .horizontal-section {
+      padding: 0;
+      margin-bottom: 20px;
+    }
+
+    .row {
+      height: 100px;
+    }
+
+    .caption {
+      padding-left: 12px;
+      color: #a0a0a0;
+    }
+
+    .menuitem-floating {
+      float:left; 
+      display:inline;
+      margin: 20px;
+    }
+
+    .white {
+      /*background-color: var(--primary-background-color);*/
+    }
+
+    .with-margin {
+          margin: 24px 40px;
+        }
+
+    .scrollable {
+          border: 1px solid lightgray;
+          padding: 24px;
+          @apply(--layout-scroll);
+        }
+    .legend {
+          padding-right: 45px;
+    }
+    .legend-title {
+          position: relative; 
+          top: -15px;
+          left: 15px; 
+          font-size: 14px;
+    }
+    </style>
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+          Happy:
+          </div>
+
+          <div class="flex-6">
+            Sad:
+          </div>
+        </div>
+
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+          Happy: <paper-slider class="happy" id="happyRatings" pin snaps max="4" max-markers="4" step="1" value="[[happyValue]]"></paper-slider>
+          </div>
+
+          <div class="flex-6">
+            Sad: <paper-slider class="sad" id="sadRatings" pin snaps max="4" max-markers="4" step="1" value="[[sadValue]]"></paper-slider>
+          </div>
+        </div>
+
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+            Peaceful: <paper-slider class="peaceful" id="peacefulRatings" pin snaps max="4" max-markers="4" step="1" value="[[peacefulValue]]"></paper-slider>
+          </div>
+          <div class="flex-6">
+            Anxious: <paper-slider class="anxious" id="anxiousRatings" pin snaps max="4" max-markers="4" step="1" value="[[anxiousValue]]"></paper-slider>
+          </div>
+        </div>
+
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+            Hopeful: <paper-slider class="hopeful" id="hopefulRatings" pin snaps max="4" max-markers="4" step="1" value="[[hopefulValue]]"></paper-slider>
+          </div>
+          <div class="flex-6">
+            Hopeless: <paper-slider class="hopeless" id="hopelessRatings" pin snaps max="4" max-markers="4" step="1" value="[[hopelessValue]]"></paper-slider>
+          </div>
+        </div>
+
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+            Energetic: <paper-slider class="energetic" id="energeticRatings" pin snaps max="4" max-markers="4" step="1" value="[[energeticValue]]"></paper-slider>
+          </div>
+          <div class="flex-6">
+            Tired: <paper-slider class="tired" id="tiredRatings" pin snaps max="4" max-markers="4" step="1" value="[[tiredValue]]"></paper-slider>
+          </div>
+        </div>
+
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+            Confident: <paper-slider class="confident" id="confidentRatings" pin snaps max="4" max-markers="4" step="1" value="[[confidentValue]]"></paper-slider>
+          </div>
+          <div class="flex-6">
+            Insecure: <paper-slider class="insecure" id="insecureRatings" pin snaps max="4" max-markers="4" step="1" value="[[insecureValue]]"></paper-slider>
+          </div>
+        </div>
+
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+            Relaxed: <paper-slider class="relaxed" id="relaxedRatings" pin snaps max="4" max-markers="4" step="1" value="[[relaxedValue]]"></paper-slider>
+          </div>
+          <div class="flex-6">
+            Stressed: <paper-slider class="stressed" id="stressedRatings" pin snaps max="4" max-markers="4" step="1" value="[[stressedValue]]"></paper-slider>
+          </div>
+        </div>
+
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+            Grateful: <paper-slider class="grateful" id="gratefulRatings" pin snaps max="4" max-markers="4" step="1" value="[[gratefulValue]]"></paper-slider>
+          </div>
+          <div class="flex-6">
+            Disappointed: <paper-slider class="disappointed" id="disappointedRatings" pin snaps max="4" max-markers="4" step="1" value="[[disappointedValue]]"></paper-slider>
+          </div>
+        </div>
+
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+            Extroverted: <paper-slider class="extroverted" id="extrovertedRatings" pin snaps max="4" max-markers="4" step="1" value="[[extrovertedValue]]"></paper-slider>
+          </div>
+          <div class="flex-6">
+            Withdrawn: <paper-slider class="withdrawn" id="withdrawnRatings" pin snaps max="4" max-markers="4" step="1" value="[[withdrawnValue]]"></paper-slider>
+          </div>
+        </div>
+
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+            Empathetic: <paper-slider class="empathetic" id="empatheticRatings" pin snaps max="4" max-markers="4" step="1" value="[[empatheticValue]]"></paper-slider>
+          </div>
+          <div class="flex-6">
+            Carefree: <paper-slider class="carefree" id="carefreeRatings" pin snaps max="4" max-markers="4" step="1" value="[[carefreeValue]]"></paper-slider>
+          </div>
+        </div>
+
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+            Focused: <paper-slider class="focused" id="focusedRatings" pin snaps max="4" max-markers="4" step="1" value="[[focusedValue]]"></paper-slider>
+          </div>
+          <div class="flex-6">
+            Chaotic: <paper-slider class="chaotic" id="chaoticRatings" pin snaps max="4" max-markers="4" step="1" value="[[chaoticValue]]"></paper-slider>
+          </div>
+        </div>
+
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+            Inspired: <paper-slider class="inspired" id="inspiredRatings" pin snaps max="4" max-markers="4" step="1" value="[[inspiredValue]]"></paper-slider>
+          </div>
+          <div class="flex-6">
+            Unchallenged: <paper-slider class="unchallenged" id="unchallengedRatings" pin snaps max="4" max-markers="4" step="1" value="[[unchallengedValue]]"></paper-slider>
+          </div>
+        </div>
+
+        <div class="horizontal layout" style="height:100%">
+          <div class="flex-6">
+            Effective: <paper-slider class="effective" id="effectiveRatings" pin snaps max="4" max-markers="4" step="1" value="[[effectiveValue]]"></paper-slider>
+          </div>
+          <div class="flex-6">
+            Frustrated: <paper-slider class="frustrated" id="frustratedRatings" pin snaps max="4" max-markers="4" step="1" value="[[frustratedValue]]"></paper-slider>
+          </div>
+        </div>
+            
+
+    <firebase-document
+        id="emotionFirebase"
+        app-name="notes"
+        path="/"
+        data="{{emotionDetails}}">
+    </firebase-document>
+    <firebase-document
+        id="emotionAggregateFirebase"
+        app-name="notes"
+        path="/"
+        data="{{emotionDetails}}">
+    </firebase-document>
+    <firebase-document
+        id="createAggregateFirebase"
+        app-name="notes"
+        path="/"
+        data="{{newAggregateDetails}}">
+    <firebase-document
+        id="updateAggregateFirebase"
+        app-name="notes"
+        path="/"
+        data="{{updateAggregateDetails}}">
+    </firebase-document>
+
+    <firebase-document
+        id="createTotalFirebase"
+        app-name="notes"
+        path="/"
+        data="{{newTotalData}}">
+
+    <firebase-document
+        id="updateTotalFirebase"
+        app-name="notes"
+        path="/"
+        data="{{updateTotalDetails}}">
+    </firebase-document>
+    <firebase-document
+        id="deleteActivityFirebase"
+        app-name="notes"
+        path="{{pathDelete}}">
+    </firebase-document>
+    
+    <firebase-document
+        id="editActivity"
+        app-name="notes"
+        path="/"
+        data="{{editedActivityDetails}}">
+    </firebase-document>
+
+    <colors-material id="colorSheet"></colors-material>
+
+  </template>
+
+  <script>
+
+    Polymer({
+
+      is: 'my-body',
+
+      behaviors: [
+        Polymer.NoteAppBehavior
+      ],
+
+      properties: {
+          emotiondb: {
+          type: Object,
+          observer: 'dataChanged'
+          },
+          user: {
+            type: String,
+            value: '' 
+          },
+          happyValue: {
+            type: Number,
+            value: 0,
+          },
+          sadValue: {
+            type: Number,
+            value: 0,
+          },
+          peacefulValue: {
+            type: Number,
+            value: 0,
+          },
+          anxiousValue: {
+            type: Number,
+            value: 0,
+          },
+          hopefulValue: {
+            type: Number,
+            value: 0,
+          },
+          hopelessValue: {
+            type: Number,
+            value: 0,
+          },
+          energeticValue: {
+            type: Number,
+            value: 0,
+          },
+          tiredValue: {
+            type: Number,
+            value: 0,
+          },
+          confidentValue: {
+            type: Number,
+            value: 0,
+          },
+          insecureValue: {
+            type: Number,
+            value: 0,
+          },
+          relaxedValue: {
+            type: Number,
+            value: 0,
+          },
+          stressedValue: {
+            type: Number,
+            value: 0,
+          },
+          gratefulValue: {
+            type: Number,
+            value: 0,
+          },
+          disappointedValue: {
+            type: Number,
+            value: 0,
+          },
+          extrovertedValue: {
+            type: Number,
+            value: 0,
+          },
+          withdrawnValue: {
+            type: Number,
+            value: 0,
+          },
+          empatheticValue: {
+            type: Number,
+            value: 0,
+          },
+          carefreeValue: {
+            type: Number,
+            value: 0,
+          },
+          focusedValue: {
+            type: Number,
+            value: 0,
+          },
+          chaoticValue: {
+            type: Number,
+            value: 0,
+          },
+          inspiredValue: {
+            type: Number,
+            value: 0,
+          },
+          unchallengedValue: {
+            type: Number,
+            value: 0,
+          },
+          effectiveValue: {
+            type: Number,
+            value: 0,
+          },
+          frustratedValue: {
+            type: Number,
+            value: 0,
+          },
+          activity: {
+            type: String,
+            reflectToAttribute: true,
+            observer: '_activityChanged' 
+          },
+          activityDetails: {
+            type: Object,
+            reflectToAttribute: true
+          },
+          newAggregateDetails: {
+            type: Object,
+            reflectToAttribute: true
+          },
+          newTotalData: {
+            type: Object,
+            reflectToAttribute: true
+          }, 
+          tempAggregateDetails: {
+            type: Object,
+            reflectToAttribute: true
+          }, 
+          tempTotalDetails: {
+            type: Object,
+            reflectToAttribute: true
+          }, 
+          aggregatedb: {
+            type: Object,
+            observer: 'aggregateDetailsChanged'
+          },
+          editedActivityDetails: {
+            type: Object,
+            reflectToAttribute: true
+          },          
+          activityList: {
+            type: Array,
+            value: [],
+            observer: '_activityListChanged' 
+          },
+          newDayExists: {
+            type: Boolean,
+            value: false,
+          },
+          totalDataExists: {
+            type: Boolean,
+            value: false,
+          },
+          activities: {
+            type: Array,
+            value: 
+            ["Work1", "Work2", "Sleep", "Personal", "Social", "Exercise", "Errands"]
+          },
+          firstTime: {
+            type: Boolean,
+            value: true
+          }
+      },
+      observers: [
+           'dataChanged(emotiondb.*)',
+           'aggregateDetailsChanged(aggregatedb.*)',
+           'totalDataChanged(totaldb.*)'
+      ],
+      attached: function() {
+        this.date = (new Date()).toDateString();
+        var that = this;
+        
+        var happyRatings = this.$.happyRatings;
+        happyRatings.addEventListener('value-change', function() {
+          console.log("Listener"+happyRatings.value);
+          that.emotionDetails.value = happyRatings.value;
+          that.saveEntry('happy');
+          that.saveAggregateEntry('happy');
+        });
+
+        var sadRatings = this.$.sadRatings;
+        sadRatings.addEventListener('value-change', function() {
+          console.log("Listener"+sadRatings.value);
+          that.emotionDetails.value = sadRatings.value;
+          that.saveEntry('sad');
+          that.saveAggregateEntry('sad');
+        });
+
+        var peacefulRatings = this.$.peacefulRatings;
+        peacefulRatings.addEventListener('value-change', function() {
+          console.log("Listener"+peacefulRatings.value);
+          that.emotionDetails.value = peacefulRatings.value;
+          that.saveEntry('peaceful');
+          that.saveAggregateEntry('peaceful');
+        });
+
+        var anxiousRatings = this.$.anxiousRatings;
+        anxiousRatings.addEventListener('value-change', function() {
+          console.log("Listener"+anxiousRatings.value);
+          that.emotionDetails.value = anxiousRatings.value;
+          that.saveEntry('anxious');
+          that.saveAggregateEntry('anxious');
+        });
+
+        var hopefulRatings = this.$.hopefulRatings;
+        hopefulRatings.addEventListener('value-change', function() {
+          console.log("Listener"+hopefulRatings.value);
+          that.emotionDetails.value = hopefulRatings.value;
+          that.saveEntry('hopeful');
+          that.saveAggregateEntry('hopeful');
+        });
+
+        var hopelessRatings = this.$.hopelessRatings;
+        hopelessRatings.addEventListener('value-change', function() {
+          console.log("Listener"+hopelessRatings.value);
+          that.emotionDetails.value = hopelessRatings.value;
+          that.saveEntry('hopeless');
+          that.saveAggregateEntry('hopeless');
+        });
+
+        var energeticRatings = this.$.energeticRatings;
+        energeticRatings.addEventListener('value-change', function() {
+          console.log("Listener"+energeticRatings.value);
+          that.emotionDetails.value = energeticRatings.value;
+          that.saveEntry('energetic');
+          that.saveAggregateEntry('energetic');
+        });
+
+        var tiredRatings = this.$.tiredRatings;
+        tiredRatings.addEventListener('value-change', function() {
+          console.log("Listener"+tiredRatings.value);
+          that.emotionDetails.value = tiredRatings.value;
+          that.saveEntry('tired');
+          that.saveAggregateEntry('tired');
+        });
+
+        var confidentRatings = this.$.confidentRatings;
+        confidentRatings.addEventListener('value-change', function() {
+          console.log("Listener"+confidentRatings.value);
+          that.emotionDetails.value = confidentRatings.value;
+          that.saveEntry('confident');
+          that.saveAggregateEntry('confident');
+        });
+
+        var insecureRatings = this.$.insecureRatings;
+        insecureRatings.addEventListener('value-change', function() {
+          console.log("Listener"+insecureRatings.value);
+          that.emotionDetails.value = insecureRatings.value;
+          that.saveEntry('insecure');
+          that.saveAggregateEntry('insecure');
+        });
+
+        var relaxedRatings = this.$.relaxedRatings;
+        relaxedRatings.addEventListener('value-change', function() {
+          console.log("Listener"+relaxedRatings.value);
+          that.emotionDetails.value = relaxedRatings.value;
+          that.saveEntry('relaxed');
+          that.saveAggregateEntry('relaxed');
+        });
+
+        var stressedRatings = this.$.stressedRatings;
+        stressedRatings.addEventListener('value-change', function() {
+          console.log("Listener"+stressedRatings.value);
+          that.emotionDetails.value = stressedRatings.value;
+          that.saveEntry('stressed');
+          that.saveAggregateEntry('stressed');
+        });
+
+        var gratefulRatings = this.$.gratefulRatings;
+        gratefulRatings.addEventListener('value-change', function() {
+          console.log("Listener"+gratefulRatings.value);
+          that.emotionDetails.value = gratefulRatings.value;
+          that.saveEntry('grateful');
+          that.saveAggregateEntry('grateful');
+        });
+
+        var disappointedRatings = this.$.disappointedRatings;
+        disappointedRatings.addEventListener('value-change', function() {
+          console.log("Listener"+disappointedRatings.value);
+          that.emotionDetails.value = disappointedRatings.value;
+          that.saveEntry('disappointed');
+          that.saveAggregateEntry('disappointed');
+        });
+
+        var extrovertedRatings = this.$.extrovertedRatings;
+        extrovertedRatings.addEventListener('value-change', function() {
+          console.log("Listener"+extrovertedRatings.value);
+          that.emotionDetails.value = extrovertedRatings.value;
+          that.saveEntry('extroverted');
+          that.saveAggregateEntry('extroverted');
+        });
+
+        var withdrawnRatings = this.$.withdrawnRatings;
+        withdrawnRatings.addEventListener('value-change', function() {
+          console.log("Listener"+withdrawnRatings.value);
+          that.emotionDetails.value = withdrawnRatings.value;
+          that.saveEntry('withdrawn');
+          that.saveAggregateEntry('withdrawn');
+        });
+
+        var empatheticRatings = this.$.empatheticRatings;
+        empatheticRatings.addEventListener('value-change', function() {
+          console.log("Listener"+empatheticRatings.value);
+          that.emotionDetails.value = empatheticRatings.value;
+          that.saveEntry('empathetic');
+          that.saveAggregateEntry('empathetic');
+        });
+
+        var carefreeRatings = this.$.carefreeRatings;
+        carefreeRatings.addEventListener('value-change', function() {
+          console.log("Listener"+carefreeRatings.value);
+          that.emotionDetails.value = carefreeRatings.value;
+          that.saveEntry('carefree');
+          that.saveAggregateEntry('carefree');
+        });
+
+        var focusedRatings = this.$.focusedRatings;
+        focusedRatings.addEventListener('value-change', function() {
+          console.log("Listener"+focusedRatings.value);
+          that.emotionDetails.value = focusedRatings.value;
+          that.saveEntry('focused');
+          that.saveAggregateEntry('focused');
+        });
+
+        var chaoticRatings = this.$.chaoticRatings;
+        chaoticRatings.addEventListener('value-change', function() {
+          console.log("Listener"+chaoticRatings.value);
+          that.emotionDetails.value = chaoticRatings.value;
+          that.saveEntry('chaotic');
+          that.saveAggregateEntry('chaotic');
+        });
+
+        var inspiredRatings = this.$.inspiredRatings;
+        inspiredRatings.addEventListener('value-change', function() {
+          console.log("Listener"+inspiredRatings.value);
+          that.emotionDetails.value = inspiredRatings.value;
+          that.saveEntry('inspired');
+          that.saveAggregateEntry('inspired');
+        });
+
+        var unchallengedRatings = this.$.unchallengedRatings;
+        unchallengedRatings.addEventListener('value-change', function() {
+          console.log("Listener"+unchallengedRatings.value);
+          that.emotionDetails.value = unchallengedRatings.value;
+          that.saveEntry('unchallenged');
+          that.saveAggregateEntry('unchallenged');
+        });
+
+        var effectiveRatings = this.$.effectiveRatings;
+        effectiveRatings.addEventListener('value-change', function() {
+          console.log("Listener"+effectiveRatings.value);
+          that.emotionDetails.value = effectiveRatings.value;
+          that.saveEntry('effective');
+          that.saveAggregateEntry('effective');
+        });
+
+        var frustratedRatings = this.$.frustratedRatings;
+        frustratedRatings.addEventListener('value-change', function() {
+          console.log("Listener"+frustratedRatings.value);
+          that.emotionDetails.value = frustratedRatings.value;
+          that.saveEntry('frustrated');
+          that.saveAggregateEntry('frustrated');
+        });
+
+      },
+      aggregateDetailsChanged: function(aggregatedb) {
+        console.log("aggregatedb: ");
+        console.log(this.aggregatedb);
+        var aggregateData = this.aggregatedb;
+        this.tempAggregateDetails = {}; 
+        var that = this;
+        aggregateData.forEach(function(childSnapshot) {
+          var key = childSnapshot.$key;
+          if (key === "activities") {
+          that.tempAggregateDetails.activities = {};
+            for (var i=0; i<that.activities.length;i++) {
+              var activityName = that.activities[i];
+              that.tempAggregateDetails.activities[activityName] = childSnapshot[activityName];
+            }
+          }
+        });
+        this.oldAggregateDetails = this.tempAggregateDetails;
+        console.log("updateAggregateDetails");
+        console.log(this.oldAggregateDetails);
+      },
+      preventScrolling: function(event) {
+        event.preventDefault();
+      },
+      totalDataChanged: function(totaldb) {
+        console.log("totaldb: ");
+        console.log(this.totaldb);
+        var totalData = this.totaldb;
+        this.tempTotalDetails = {}; 
+        var that = this;
+        totalData.forEach(function(childSnapshot) {
+          var key = childSnapshot.$key;
+          if (key === "activities") {
+          that.tempTotalDetails.activities = {};
+            for (var i=0; i<that.activities.length;i++) {
+              var activityName = that.activities[i];
+              that.tempTotalDetails.activities[activityName] = childSnapshot[activityName];
+            }
+          }
+        });
+        this.oldTotalData = this.tempTotalDetails;
+        console.log("updateAggregateDetails");
+        console.log(this.oldTotalData);
+      },
+      dataChanged: function (emotiondb) {
+        var activityColors = 
+        { "Sleep": {"colorShade": "Teal", "colorType": "A200"},
+          "Work1" : {"colorShade": "Blue", "colorType": "A200"},
+          "Work2" : {"colorShade": "Purple", "colorType": "A200"},
+          "Exercise" : {"colorShade": "Orange", "colorType": "A200"},
+          "Social" : {"colorShade": "Pink", "colorType": "A200"},
+          "Errands" : {"colorShade": "Purple", "colorType": "A200"},
+          "Personal": {"colorShade": "Green", "colorType": "A200"}
+        };
+        var that = this;
+        // do something when the query returns values
+        console.log("---BEFORE");
+        var data = this.emotiondb;
+        var localDataAster = [];
+        var colorSheet = this.$.colorSheet;
+        console.log(data);
+        data.forEach(function(childSnapshot) {
+          var key = childSnapshot.$key; 
+          console.log("value: "+childSnapshot.value);
+
+          if (key === "happy") {
+            console.log("happyValue: "+that.happyValue);
+            that.happyValue = childSnapshot.value;
+            console.log("happyValue: "+that.happyValue);
+          }
+          else if (key === "sad") {
+            that.sadValue = childSnapshot.value;
+          }
+          else if (key === "peaceful") {
+            that.peacefulValue = childSnapshot.value;
+          }
+          else if (key === "anxious") {
+            that.anxiousValue = childSnapshot.value;
+          }
+          else if (key === "hopeful") {
+            that.hopefulValue = childSnapshot.value;
+          }
+          else if (key === "hopeless") {
+            that.hopelessValue = childSnapshot.value;
+          }
+          else if (key === "energetic") {
+            that.energeticValue = childSnapshot.value;
+          }
+          else if (key === "tired") {
+            that.tiredValue = childSnapshot.value;
+          }
+          else if (key === "confident") {
+            that.confidentValue = childSnapshot.value;
+          }
+          else if (key === "insecure") {
+            that.insecureValue = childSnapshot.value;
+          }
+          else if (key === "relaxed") {
+            that.relaxedValue = childSnapshot.value;
+          }
+          else if (key === "stressed") {
+            that.stressedValue = childSnapshot.value;
+          }
+          else if (key === "grateful") {
+            that.gratefulValue = childSnapshot.value;
+          }
+          else if (key === "disappointed") {
+            that.disappointedValue = childSnapshot.value;
+          }
+          else if (key === "extroverted") {
+            that.extrovertedValue = childSnapshot.value;
+          }
+          else if (key === "withdrawn") {
+            that.withdrawnValue = childSnapshot.value;
+          }
+          else if (key === "empathetic") {
+            that.empatheticValue = childSnapshot.value;
+          }
+          else if (key === "carefree") {
+            that.carefreeValue = childSnapshot.value;
+          }
+          else if (key === "focused") {
+            that.focusedValue = childSnapshot.value;
+          }
+          else if (key === "chaotic") {
+            that.chaoticValue = childSnapshot.value;
+          }
+          else if (key === "inspired") {
+            that.inspiredValue = childSnapshot.value;
+          }
+          else if (key === "unchallenged") {
+            that.unchallengedValue = childSnapshot.value;
+          }
+          else if (key === "effective") {
+            that.effectiveValue = childSnapshot.value;
+          }
+          else if (key === "frustrated") {
+            that.frustratedValue = childSnapshot.value;
+          }
+          
+          console.log("my input");
+          console.log(childSnapshot);
+        });
+        console.log("AFTER");
+      },
+      createNewTotalData: function() {
+        console.log("createNewTotalData");
+        this.newTotalData = {};
+        this.newTotalData.numDays = 0;
+        this.newTotalData.activities = {};
+        for (var i=0; i<this.activities.length;i++) {
+          //TODO: WHY IS activity 0
+          console.log(this.activities[i]);
+          this.newTotalData.activities[this.activities[i]] = 0;
+        }
+        console.log(this.newTotalData);
+        this.oldTotalData = this.newTotalData;
+      },
+      createNewAggregateActivity: function() {
+        this.newAggregateDetails = {};
+        this.newAggregateDetails.activities = {};
+        for (var i=0; i<this.activities.length;i++) {
+          //TODO: WHY IS activity 0
+          console.log(this.activities[i]);
+          this.newAggregateDetails.activities[this.activities[i]] = 0;
+        }
+        console.log("createNewAggregateActivity");
+        console.log(this.newAggregateDetails);
+        this.oldAggregateDetails = this.newAggregateDetails;
+
+        var tempUpdateTotalDetails = this.oldTotalData;
+        tempUpdateTotalDetails.numDays = parseInt(this.oldTotalData.numDays) + 1;
+        console.log("AFTER this.updateAggregateDetails.activities[this.activity]");
+        this.updateTotalDetails = tempUpdateTotalDetails;
+        this.oldTotalData = this.updateTotalDetails;
+        this.updateTotal();
+      },
+      _periodStartChanged: function(periodStartSelected) {
+        
+        },
+      _activityListChanged: function(activityList) {
+        console.log("activityList: "+this.activityList);
+      },
+      saveEntry: function(emotionName) {  
+        if (this.$.emotionFirebase.isNew) {
+          var that = this;
+          return this.$.emotionFirebase.save(this.user+"/daily/"+(new Date()).toDateString()+"/emotions/", emotionName).then(function() {
+            console.log("saving emotion");
+            that.$.emotionFirebase.reset();
+          });
+        }
+        return Promise.resolve();
+      },
+      saveAggregateEntry: function(emotionName) {  
+        if (this.$.emotionAggregateFirebase.isNew) {
+          var that = this;
+          return this.$.emotionAggregateFirebase.save(this.user+"/aggregate/"+(new Date()).toDateString()+"/emotions/", emotionName).then(function() {
+            console.log("saving emotion");
+            that.$.emotionAggregateFirebase.reset();
+          });
+        }
+        return Promise.resolve();
+      },
+      createTotal: function() {  
+        console.log("creating new aggregate day");
+        if (this.$.createTotalFirebase.isNew) {
+          var that = this;
+          return this.$.createTotalFirebase.save(this.user,"total").then(function() {
+            that.$.createTotalFirebase.reset();
+          });
+        }
+        return Promise.resolve();
+      },
+      updateTotal: function() { 
+      console.log("update new aggregate day"); 
+        if (this.$.updateTotalFirebase.isNew) {
+          var that = this;
+          return this.$.updateTotalFirebase.save(this.user, "total").then(function() {
+            that.$.updateTotalFirebase.reset();
+          });
+        }
+        return Promise.resolve();
+      },
+      createDayAggregate: function() {  
+        console.log("creating new aggregate day");
+        if (this.$.createAggregateFirebase.isNew) {
+          var that = this;
+          return this.$.createAggregateFirebase.save(this.user+"/aggregate",(new Date()).toDateString()).then(function() {
+            that.$.createAggregateFirebase.reset();
+          });
+        }
+        return Promise.resolve();
+      },
+      updateNewDayAggregate: function() { 
+      console.log("update new aggregate day"); 
+        if (this.$.updateAggregateFirebase.isNew) {
+          var that = this;
+          return this.$.updateAggregateFirebase.save(this.user+"/aggregate", (new Date()).toDateString()).then(function() {
+            that.$.updateAggregateFirebase.reset();
+          });
+        }
+        return Promise.resolve();
+      },
+      editOldEntry: function(emotionName) {  
+        if (this.$.editActivity.isNew) {
+          var that = this;
+          return this.$.editActivity.save(this.user+"/daily/"+(new Date()).toDateString()+"/emotions/"+emotionName).then(function() {
+            that.$.editActivity.reset();
+          });
+        }
+        return Promise.resolve();
+      },
+      _activityChanged: function(activitySelected) {
+        console.log("_activityChanged: "+this.activity);
+        },
+      _periodEndChanged: function(periodEndSelected) {
+        console.log("_periodEndChanged");
+        console.log("this.firstTime: "+this.firstTime);
+        
+        if (this.firstTime) {
+          this.createPopUp();
+        }
+        
+        
+        },
+      createPopUp: function() {
+        this.$.plain.open();
+      },
+      _closePopUp: function() {
+        console.log("close");
+        this.$.plain.close();
+      },
+      _saveSelection: function() {
+        var heartColors = 
+        { "Happy": {"colorShade": "Yellow", "colorType": "A200"},
+          "Sad" : {"colorShade": "Blue", "colorType": "200"},
+          "Peaceful" : {"colorShade": "Teal", "colorType": "A200"},
+          "Anxious" : {"colorShade": "Purple", "colorType": "200"},
+          "Hopeful" : {"colorShade": "Orange", "colorType": "A200"},
+          "Hopeless" : {"colorShade": "BlueGrey", "colorType": "200"}
+        };
+        var bodyColors = 
+        { "Energetic": {"colorShade": "DeepPurple", "colorType": "A200"},
+          "Tired" : {"colorShade": "Lime", "colorType": "200"},
+          "Confident" : {"colorShade": "Pink", "colorType": "A200"},
+          "Insecure" : {"colorShade": "Green", "colorType": "200"},
+          "Relaxed" : {"colorShade": "Indigo", "colorType": "A200"},
+          "Stressed" : {"colorShade": "Amber", "colorType": "200"}
+        };
+        var spiritColors = 
+        { "Grateful": {"colorShade": "Purple", "colorType": "A200"},
+          "Disappointed" : {"colorShade": "Green", "colorType": "200"},
+          "Extroverted" : {"colorShade": "Red", "colorType": "A200"},
+          "Withdrawn" : {"colorShade": "Yellow", "colorType": "200"},
+          "Empathetic" : {"colorShade": "LightBlue", "colorType": "A200"},
+          "Carefree" : {"colorShade": "Pink", "colorType": "200"}
+        };
+        var mindColors = 
+        { "Focused": {"colorShade": "Yellow", "colorType": "A200"},
+          "Chaotic" : {"colorShade": "Blue", "colorType": "200"},
+          "Inspired" : {"colorShade": "Teal", "colorType": "A200"},
+          "Unchallenged" : {"colorShade": "Purple", "colorType": "200"},
+          "Effective" : {"colorShade": "Orange", "colorType": "A200"},
+          "Frustrated" : {"colorShade": "BlueGrey", "colorType": "200"}
+        };
+        console.log("activity: " +this.activity);
+        console.log("SAVE SELECTION");
+        this.activityDetails.activityType = this.activity;
+        this.activityDetails.startTime = this.periodStartSelected;
+        this.activityDetails.endTime = this.periodEndSelected;
+        this.activityDetails.duration = this.periodEndSelected - this.periodStartSelected;
+        
+        this.activityList.push(this.activityDetails);
+        var activitySelected = this.activity;
+        // console.log("activitySelected: "+activitySelected);
+        var colorShadeString = activityColors[activitySelected].colorShade;
+        // console.log("colorShadeString: "+colorShadeString);
+        var activitySelectedColor = this.$.colorSheet.colors[colorShadeString].a700;
+        this.searchDb();
+        
+        console.log("newDayExists: "+this.newDayExists);
+
+        if (!this.totalDataExists) {
+          this.createNewTotalData();
+          console.log("creating new total - first time user");
+        }
+
+        if (!this.newDayExists) {
+          this.createNewAggregateActivity();
+        }
+        
+        var tempPlaceUpdateAggregateDetails = this.oldAggregateDetails;
+        console.log("this.oldAggregateDetails");
+        console.log(this.oldAggregateDetails);
+        tempPlaceUpdateAggregateDetails.activities[this.activity] = parseInt(this.oldAggregateDetails.activities[this.activity]) + this.activityDetails.duration;
+        
+        this.updateAggregateDetails = tempPlaceUpdateAggregateDetails;
+        this.oldAggregateDetails = this.updateAggregateDetails;
+
+        console.log("tempPlaceUpdateAggregateDetails");
+        console.log(this.tempPlaceUpdateAggregateDetails);
+        this.updateNewDayAggregate();
+
+        var tempUpdateTotalDetails = this.oldTotalData;
+        console.log("oldTotalData");
+        console.log(this.oldTotalData);
+        tempUpdateTotalDetails.activities[this.activity] = parseInt(this.oldTotalData.activities[this.activity]) + this.activityDetails.duration;        
+        this.updateTotalDetails = tempUpdateTotalDetails;
+        this.oldTotalData = this.updateTotalDetails;
+        console.log("update total");
+        console.log(this.updateTotalDetails);
+        console.log("tempUpdateTotalDetails");
+        console.log(this.tempUpdateTotalDetails);
+        this.updateTotal();
+
+        // this.saveEntry();
+        // this.saveAggregateEntry();
+
+        // console.log("ENTRY SAVED AND BEFORE UPDATE NEW AGGREGATE");
+        // this.updateNewDayAggregate();
+        // console.log("UPDATED NEW AGGREGATE AND BEFORE CLOSING POP UP");
+        this._closePopUp();
+      },
+      updateAggregateActivity: function() {
+        this.updateAggregateDetails.activities[this.activity] += this.activityDetails.duration;
+        this.updateNewDayAggregate();
+      },
+      editTotal: function (diffDuration, diffActivityName) {
+        var tempUpdateTotalDetails = this.oldTotalData;
+        tempUpdateTotalDetails.activities[diffActivityName] = parseInt(this.oldTotalData.activities[diffActivityName]) + diffDuration;
+        this.updateTotalDetails = tempUpdateTotalDetails;
+        this.oldTotalData = this.updateTotalDetails;
+        console.log("update total");
+        console.log(this.updateTotalDetails);
+        this.updateTotal();
+      },
+      editAggregate: function (diffDuration, diffActivityName) {
+        var tempPlaceUpdateAggregateDetails = this.oldAggregateDetails;
+        tempPlaceUpdateAggregateDetails.activities[diffActivityName] = parseInt(this.oldAggregateDetails.activities[diffActivityName]) + diffDuration;
+
+        
+        this.updateAggregateDetails = tempPlaceUpdateAggregateDetails;
+        this.oldAggregateDetails = this.updateAggregateDetails;
+        this.updateNewDayAggregate();
+      },
+      searchDb: function() {
+        // console.log("SEARCH DB");
+        // console.log(this.datadb);
+
+        for (key in this.datadb) {
+          var obj = this.datadb[key];
+          console.log("obj");
+          console.log(obj);
+
+          var activityStartTime = obj.startTime;
+          var activityEndTime = obj.endTime;
+          var oldDuration = obj.endTime - obj.startTime;
+          var newDuration = oldDuration;
+
+          var diffActivityName = obj.activityType;
+
+          var modified = false;
+          var deleted = false;
+          if (activityStartTime < this.periodEndSelected && activityEndTime > this.periodEndSelected) {
+            //change start time of the old activity
+            obj.startTime = this.periodEndSelected;
+            newDuration = obj.endTime - obj.startTime;
+            diffDuration = newDuration - oldDuration;
+            console.log("MODIFYING START TIME");
+            modified = true;
+          }
+          else if (activityStartTime < this.periodStartSelected && activityEndTime > this.periodStartSelected) {
+            // change end time of old activity
+            obj.endTime = this.periodStartSelected;
+            newDuration = obj.endTime - obj.startTime;
+            diffDuration = newDuration - oldDuration;
+            console.log("MODIFYING END TIME");
+            modified = true;
+          }
+          else if (activityEndTime <= this.periodEndSelected && activityStartTime >= this.periodStartSelected) {
+            // delete this key
+            var key = obj.$key;
+            diffDuration = - oldDuration;
+            this.delete(key);
+            deleted = true;
+            console.log("DELETING");
+          }
+
+          if (modified) {
+            console.log("obj");
+            this.editedActivityDetails.activityType = obj.activityType;
+            this.editedActivityDetails.startTime = obj.startTime;
+            this.editedActivityDetails.endTime = obj.endTime;
+            this.editedActivityDetails.duration = obj.endTime - obj.startTime;
+            
+            console.log("editedActivityDetails");
+            console.log(this.editedActivityDetails);
+            var key = obj.$key;
+            this.editOldEntry(key);
+          }
+          if (modified || deleted) {
+            this.editAggregate(diffDuration, diffActivityName); //TODO
+            this.editTotal(diffDuration, diffActivityName); //TODO
+          }
+        }
+      },
+      printEndValue: function() {
+        console.log("printEndValue: "+this.periodEndSelected);
+      },
+    });
+
+  </script>
+
+</dom-module>
