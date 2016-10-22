@@ -307,11 +307,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
       <div class="flex">
         <iron-pages style="height:100%;" role="main" selected="[[page]]" attr-for-selected="name">
-            <my-input name="input" user="[[user.uid]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-input>
-            <my-heart name="heart" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-heart>
-            <my-mind name="mind" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-mind>
-            <my-body name="body" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-body>
-            <my-spirit name="spirit" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-spirit>
+            <my-input name="input" user="[[user.uid]]" dayselected="[[dayselected]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-input>
+            <my-heart name="heart" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-heart>
+            <my-mind name="mind" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-mind>
+            <my-body name="body" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-body>
+            <my-spirit name="spirit" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-spirit>
             <my-analysis name="analysis" user="[[user.uid]]" dailydb="{{aggregatedball}}"></my-analysis>
         </iron-pages>
       </div>
@@ -409,6 +409,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         aggregatedb: {
           type: Object
         },
+        dayselected: {
+          type: String,
+        },
         mindfulnessdb: {
           type: Object,
           value: 0,
@@ -439,7 +442,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ],
 
       ready: function() {
-        this.date = (new Date()).toDateString();
+        this.dayselected = "Thu Oct 20 2016";
+        // this.dayselected = new Date().toDateString();
+        this.date = new Date(this.dayselected).getTime();;
+        console.log("time: "+this.date);
+        this.dateString = (new Date()).toDateString();
       },
       mindfulnessChanged: function(newVaue) {
         console.log(this.mindfulnessdb);

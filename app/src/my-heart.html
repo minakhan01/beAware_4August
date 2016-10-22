@@ -495,7 +495,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           firstTime: {
             type: Boolean,
             value: true
-          }
+          },
+          dayselected: {
+          type: String,
+        },
       },
       observers: [
            'dataChanged(emotiondb.*)',
@@ -503,7 +506,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
            'totalDataChanged(totaldb.*)'
       ],
       attached: function() {
-        this.date = (new Date()).toDateString();
+        this.date = new Date(this.dayselected).getTime();
         var that = this;
         
         var happyRatings = this.$.happyRatings;
@@ -740,7 +743,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       saveEntry: function(emotionName) {  
         if (this.$.emotionFirebase.isNew) {
           var that = this;
-          return this.$.emotionFirebase.save(this.user+"/daily/"+(new Date()).toDateString()+"/emotions/", emotionName).then(function() {
+          return this.$.emotionFirebase.save(this.user+"/daily/"+that.date+"/emotions/", emotionName).then(function() {
             console.log("saving emotion");
             that.$.emotionFirebase.reset();
           });
@@ -750,7 +753,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       saveAggregateEntry: function(emotionName) {  
         if (this.$.emotionAggregateFirebase.isNew) {
           var that = this;
-          return this.$.emotionAggregateFirebase.save(this.user+"/aggregate/"+(new Date()).toDateString()+"/emotions/", emotionName).then(function() {
+          return this.$.emotionAggregateFirebase.save(this.user+"/aggregate/"+that.date+"/emotions/", emotionName).then(function() {
             console.log("saving emotion");
             that.$.emotionAggregateFirebase.reset();
           });
@@ -781,7 +784,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log("creating new aggregate day");
         if (this.$.createAggregateFirebase.isNew) {
           var that = this;
-          return this.$.createAggregateFirebase.save(this.user+"/aggregate",(new Date()).toDateString()).then(function() {
+          return this.$.createAggregateFirebase.save(this.user+"/aggregate",that.date).then(function() {
             that.$.createAggregateFirebase.reset();
           });
         }
@@ -791,7 +794,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       console.log("update new aggregate day"); 
         if (this.$.updateAggregateFirebase.isNew) {
           var that = this;
-          return this.$.updateAggregateFirebase.save(this.user+"/aggregate", (new Date()).toDateString()).then(function() {
+          return this.$.updateAggregateFirebase.save(this.user+"/aggregate", that.date).then(function() {
             that.$.updateAggregateFirebase.reset();
           });
         }
@@ -800,7 +803,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       editOldEntry: function(emotionName) {  
         if (this.$.editActivity.isNew) {
           var that = this;
-          return this.$.editActivity.save(this.user+"/daily/"+(new Date()).toDateString()+"/emotions/"+emotionName).then(function() {
+          return this.$.editActivity.save(this.user+"/daily/"+that.date+"/emotions/"+emotionName).then(function() {
             that.$.editActivity.reset();
           });
         }

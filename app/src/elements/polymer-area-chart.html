@@ -281,12 +281,12 @@
         console.log(this.dataemotion);
 
         data.forEach(function(d) {
-          d.date = new Date(d.date);
+          d.date = new Date(parseInt(d.date));
           d.value = +d.value;
         });
 
         dataemotion.forEach(function(d) {
-          d.date = new Date(d.date);
+          d.date = new Date(parseInt(d.date));
           d.value = +d.value;
         });
 
@@ -318,11 +318,6 @@
             .attr("class", "layer")
             .attr("d", function(d) { return line(d.values); })
             .style("stroke", function(d, i) { return zEmotion(i); });
-        // svg.selectAll(".layer")
-        //   .data(layers)
-        //   .enter().append("path")
-        //   .attr("class", "line")
-        //   .attr("d", line);
 
         svg.append("g")
             .attr("class", "x axis")

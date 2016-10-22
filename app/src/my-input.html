@@ -353,7 +353,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           firstTime: {
             type: Boolean,
             value: true
-          }
+          },
+          dayselected: {
+          type: String,
+          },
       },
       observers: [
            'dataChanged(datadb.*)',
@@ -467,13 +470,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _periodStartChanged: function(periodStartSelected) {
         
         },
+      ready: function() {
+        this.date = new Date(this.dayselected).getTime();
+        console.log("time: "+this.date);
+        this.dateString = (new Date()).toDateString();
+      },
       _activityListChanged: function(activityList) {
         console.log("activityList: "+this.activityList);
       },
       saveEntry: function() {  
         if (this.$.activityFirebase.isNew) {
           var that = this;
-          return this.$.activityFirebase.save(this.user+"/daily/"+(new Date()).toDateString()+"/activities/").then(function() {
+          return this.$.activityFirebase.save(this.user+"/daily/"+that.date+"/activities/").then(function() {
             that.$.activityFirebase.reset();
           });
         }
@@ -503,7 +511,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log("creating new aggregate day");
         if (this.$.createAggregateFirebase.isNew) {
           var that = this;
-          return this.$.createAggregateFirebase.save(this.user+"/aggregate",(new Date()).toDateString()).then(function() {
+          return this.$.createAggregateFirebase.save(this.user+"/aggregate",that.date).then(function() {
             that.$.createAggregateFirebase.reset();
           });
         }
@@ -513,7 +521,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       console.log("update new aggregate day"); 
         if (this.$.updateAggregateFirebase.isNew) {
           var that = this;
-          return this.$.updateAggregateFirebase.save(this.user+"/aggregate", (new Date()).toDateString()).then(function() {
+          return this.$.updateAggregateFirebase.save(this.user+"/aggregate", that.date).then(function() {
             that.$.updateAggregateFirebase.reset();
           });
         }
@@ -521,7 +529,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       delete: function(key) {  
         if (this.$.deleteActivityFirebase.isNew) {
-          this.pathDelete = this.user+"/daily/"+(new Date()).toDateString()+"/activities/"+key;
+          this.pathDelete = this.user+"/daily/"+this.date+"/activities/"+key;
           var that = this;
           return this.$.deleteActivityFirebase.destroy().then(function() {
             that.$.deleteActivityFirebase.reset();
@@ -532,7 +540,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       editOldEntry: function(key) {  
         if (this.$.editActivity.isNew) {
           var that = this;
-          return this.$.editActivity.save(this.user+"/daily/"+(new Date()).toDateString()+"/activities/", key).then(function() {
+          return this.$.editActivity.save(this.user+"/daily/"+that.date+"/activities/", key).then(function() {
             that.$.editActivity.reset();
           });
         }
