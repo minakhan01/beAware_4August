@@ -238,6 +238,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{editedActivityDetails}}">
     </firebase-document>
 
+    <firebase-document
+        id="updateEmotionsFirebase"
+        app-name="notes"
+        path="/"
+        data="{{tempaggregateemotions}}">
+    </firebase-document>
+
     <colors-material id="colorSheet"></colors-material>
     <menu-overlay no-cancel-on-outside-click id="plain" tabindex="-1" class="with-margin scrollable">
     <div style="padding-bottom: 40px;">    
@@ -298,6 +305,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             value: 0,
             notify: true,
             observer: '_periodStartChanged' 
+          },
+          emotions: {
+            type: Array,
+            value: 
+            ["happy", "sad", "peaceful", "anxious", "hopeful", "hopeless", "energetic", "tired", "confident", "insecure", "relaxed", "stressed", "grateful", "disappointed", "extroverted", "withdrawn", "empathetic", "carefree", "focused", "chaotic", "inspired", "unchallenged", "effective", "frustrated"]
+          },
+          size: {
+            type: Number,
+            value: 0
           },
           activity: {
             type: String,
@@ -372,10 +388,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         aggregateData.forEach(function(childSnapshot) {
           var key = childSnapshot.$key;
           if (key === "activities") {
-          that.tempAggregateDetails.activities = {};
+          that.tempAggregateDetails = {};
             for (var i=0; i<that.activities.length;i++) {
               var activityName = that.activities[i];
-              that.tempAggregateDetails.activities[activityName] = childSnapshot[activityName];
+              that.tempAggregateDetails[activityName] = childSnapshot[activityName];
             }
           }
         });
@@ -398,7 +414,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           that.tempTotalDetails.activities = {};
             for (var i=0; i<that.activities.length;i++) {
               var activityName = that.activities[i];
-              that.tempTotalDetails.activities[activityName] = childSnapshot[activityName];
+              that.tempTotalDetails[activityName] = childSnapshot[activityName];
             }
           }
         });
@@ -439,22 +455,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log("createNewTotalData");
         this.newTotalData = {};
         this.newTotalData.numDays = 0;
-        this.newTotalData.activities = {};
+        this.newTotalData = {};
         for (var i=0; i<this.activities.length;i++) {
           //TODO: WHY IS activity 0
           console.log(this.activities[i]);
-          this.newTotalData.activities[this.activities[i]] = 0;
+          this.newTotalData[this.activities[i]] = 0;
         }
         console.log(this.newTotalData);
         this.oldTotalData = this.newTotalData;
       },
       createNewAggregateActivity: function() {
         this.newAggregateDetails = {};
-        this.newAggregateDetails.activities = {};
+        this.newAggregateDetails = {};
         for (var i=0; i<this.activities.length;i++) {
           //TODO: WHY IS activity 0
           console.log(this.activities[i]);
-          this.newAggregateDetails.activities[this.activities[i]] = 0;
+          this.newAggregateDetails[this.activities[i]] = 0;
         }
         console.log("createNewAggregateActivity");
         console.log(this.newAggregateDetails);
@@ -478,7 +494,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _activityListChanged: function(activityList) {
         console.log("activityList: "+this.activityList);
       },
+      saveNewAggregateEmotions: function() {
+        this.tempaggregateemotions = {};
+          console.log("aggregateemotions size: "+this.size);
+          for (var i=0; i<this.emotions.length;i++) {
+            console.log("emotions: "+this.emotions[i]);
+            this.tempaggregateemotions[this.emotions[i]] = {};
+            this.tempaggregateemotions[this.emotions[i]].value = 0;
+          }
+        console.log("tempaggregateemotions: ");
+        console.log(this.tempaggregateemotions);
+        if (this.$.updateEmotionsFirebase.isNew) {
+          var that = this;
+          console.log("is new");
+          console.log(this.signedIn);
+          return this.$.updateEmotionsFirebase.save(this.user+"/aggregate/"+that.date,"emotions").then(function() {
+            console.log("reset");
+            that.$.updateEmotionsFirebase.reset();
+          });
+        }
+        return Promise.resolve();
+      },
       saveEntry: function() {  
+        if (this.size == 0) {
+            this.saveNewAggregateEmotions();
+        } 
         if (this.$.activityFirebase.isNew) {
           var that = this;
           return this.$.activityFirebase.save(this.user+"/daily/"+that.date+"/activities/").then(function() {
@@ -511,7 +551,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log("creating new aggregate day");
         if (this.$.createAggregateFirebase.isNew) {
           var that = this;
-          return this.$.createAggregateFirebase.save(this.user+"/aggregate",that.date).then(function() {
+          return this.$.createAggregateFirebase.save(this.user+"/aggregate/"+that.date,"activities").then(function() {
             that.$.createAggregateFirebase.reset();
           });
         }
@@ -521,7 +561,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       console.log("update new aggregate day"); 
         if (this.$.updateAggregateFirebase.isNew) {
           var that = this;
-          return this.$.updateAggregateFirebase.save(this.user+"/aggregate", that.date).then(function() {
+          return this.$.updateAggregateFirebase.save(this.user+"/aggregate/" + that.date, "activities").then(function() {
             that.$.updateAggregateFirebase.reset();
           });
         }
@@ -599,20 +639,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("creating new total - first time user");
         }
 
-        if (!this.newDayExists) {
-          this.createNewAggregateActivity();
+        // if (!this.newDayExists) {
+        //   this.createNewAggregateActivity();
+        //   console.log("creeate new aggregate dat");
+        // }
+        console.log("oldAggregateDetails size: "+Object.keys(this.oldAggregateDetails).length);
+        if (Object.keys(this.oldAggregateDetails).length == 0) {
+          for (var i=0; i<this.activities.length;i++) {
+              var activityName = this.activities[i];
+              this.oldAggregateDetails[activityName] = 0;
+            }
         }
-        
         var tempPlaceUpdateAggregateDetails = this.oldAggregateDetails;
         console.log("this.oldAggregateDetails");
         console.log(this.oldAggregateDetails);
-        tempPlaceUpdateAggregateDetails.activities[this.activity] = parseInt(this.oldAggregateDetails.activities[this.activity]) + this.activityDetails.duration;
+        tempPlaceUpdateAggregateDetails[this.activity] = parseInt(this.oldAggregateDetails[this.activity]) + this.activityDetails.duration;
         
         this.updateAggregateDetails = tempPlaceUpdateAggregateDetails;
         this.oldAggregateDetails = this.updateAggregateDetails;
 
         console.log("tempPlaceUpdateAggregateDetails");
-        console.log(this.tempPlaceUpdateAggregateDetails);
+        console.log(tempPlaceUpdateAggregateDetails);
         this.updateNewDayAggregate();
 
         var tempUpdateTotalDetails = this.oldTotalData;
@@ -635,7 +682,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this._closePopUp();
       },
       updateAggregateActivity: function() {
-        this.updateAggregateDetails.activities[this.activity] += this.activityDetails.duration;
+        this.updateAggregateDetails[this.activity] += this.activityDetails.duration;
         this.updateNewDayAggregate();
       },
       editTotal: function (diffDuration, diffActivityName) {
@@ -649,7 +696,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       editAggregate: function (diffDuration, diffActivityName) {
         var tempPlaceUpdateAggregateDetails = this.oldAggregateDetails;
-        tempPlaceUpdateAggregateDetails.activities[diffActivityName] = parseInt(this.oldAggregateDetails.activities[diffActivityName]) + diffDuration;
+        tempPlaceUpdateAggregateDetails[diffActivityName] = parseInt(this.oldAggregateDetails[diffActivityName]) + diffDuration;
 
         
         this.updateAggregateDetails = tempPlaceUpdateAggregateDetails;

@@ -227,8 +227,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       id="aggregateQuery"
       app-name="notes"
       sequentialTransactions=true
-      path="/[[user.uid]]/aggregate/[[date]]/activities"
+      path="/[[user.uid]]/aggregate/[[date]]"
       data="{{aggregatedb}}">
+    </firebase-query>
+
+    <firebase-query
+      id="aggregateEmotionsQuery"
+      app-name="notes"
+      sequentialTransactions=true
+      path="/[[user.uid]]/aggregate/[[date]]/emotions"
+      data="{{aggregateemotions}}">
     </firebase-query>
 
     <firebase-query
@@ -271,23 +279,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
 
-<!--     <body class="fullbleed layout vertical">
-      <paper-header-panel class="flex">
-        <paper-toolbar>
-          <div class="layout horizontal center">
-            <h1>beAware</h1>
-            <iron-icon icon="cloud" hidden$="[[!online]]"></iron-icon>
-            <iron-icon icon="cloud-off" hidden$="[[online]]"></iron-icon>
-            <paper-icon-button
-                icon="[[computeLockIcon(signedIn)]]"
-                disabled="[[!signedIn]]"
-                on-tap="lock">
-            </paper-icon-button>
-          </div>
-        </paper-toolbar>
-      </paper-header-panel>
-    </body> -->
-
       <!-- Main content -->
       <app-header-layout fullbleed flex vertical class="outer">
       <div class="layout vertical flex outer">
@@ -307,11 +298,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
       <div class="flex">
         <iron-pages style="height:100%;" role="main" selected="[[page]]" attr-for-selected="name">
-            <my-input name="input" user="[[user.uid]]" dayselected="[[dayselected]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-input>
-            <my-heart name="heart" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-heart>
-            <my-mind name="mind" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-mind>
-            <my-body name="body" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-body>
-            <my-spirit name="spirit" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-spirit>
+            <my-input name="input" user="[[user.uid]]" dayselected="[[dayselected]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}" size="[[size]]"></my-input>
+            <my-heart name="heart" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}" size="[[size]]"></my-heart>
+            <my-mind name="mind" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}" size="[[size]]" ></my-mind>
+            <my-body name="body" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" size="[[size]]" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-body>
+            <my-spirit name="spirit" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}" size="[[size]]" ></my-spirit>
             <my-analysis name="analysis" user="[[user.uid]]" dailydb="{{aggregatedball}}"></my-analysis>
         </iron-pages>
       </div>
@@ -329,43 +320,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
       </div>
       </app-header-layout>
-  <!-- <paper-header-panel>
-    <paper-toolbar>
-      <div class="layout horizontal center">
-        <h1>beAware</h1>
-        <iron-icon icon="cloud" hidden$="[[!online]]"></iron-icon>
-        <iron-icon icon="cloud-off" hidden$="[[online]]"></iron-icon>
-        <paper-icon-button
-            icon="[[computeLockIcon(signedIn)]]"
-            disabled="[[!signedIn]]"
-            on-tap="lock">
-        </paper-icon-button>
-      </div>
-    </paper-toolbar>
-    <div class="layout vertical fit">
-      <div class="layout flex">
-        <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
-            <my-input name="input" user="[[user.uid]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-input>
-            <my-heart name="heart" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-heart>
-            <my-mind name="mind" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-mind>
-            <my-body name="body" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-body>
-            <my-spirit name="spirit" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-spirit>
-            <my-analysis name="analysis" user="[[user.uid]]" dailydb="{{aggregatedball}}"></my-analysis>
-          </iron-pages>
-      </div>
-      <paper-toolbar>
-        <paper-tabs selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation" align-bottom>
-          <paper-tab><a name="input" href="/input">Input</a></paper-tab>
-          <paper-tab><a name="heart" href="/heart">Heart</a></paper-tab>
-          <paper-tab><a name="mind" href="/mind">Mind</a></paper-tab>
-          <paper-tab><a name="spirit" href="/spirit">Spirit</a></paper-tab>
-          <paper-tab><a name="body" href="/body">Body</a></paper-tab>
-          <paper-tab><a name="analysis" href="/analysis">Charts</a></paper-tab>
-        </paper-tabs>
-      </paper-toolbar>
-    </div>
-  </paper-header-panels> -->
-  
 
   </template>
 
@@ -386,15 +340,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: String,
           observer: ''
         },
+        emotions: {
+          type: Array,
+          value: 
+          ["happy", "sad", "peaceful", "anxious", "hopeful", "hopeless", "energetic", "tired", "confident", "insecure", "relaxed", "stressed", "grateful", "disappointed", "extroverted", "withdrawn", "empathetic", "carefree", "focused", "chaotic", "inspired", "unchallenged", "effective", "frustrated"]
+        },
         toggleMenu: {
           type: String,
           reflectToAttribute: true,
           observer: '_toggleOptionChanged'
-        },
-        emotions: {
-          type: Array,
-          value: 
-          ["joy", "calm", "hope", "sorrow", "anger", "fear"]
         },
         activities: {
           type: Array,
@@ -408,6 +362,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         aggregatedb: {
           type: Object
+        },
+        aggregateemotions: {
+          type: Object,
+          notify: true,
+          observer: 'dataEmotionsChanged'
+        },
+        aggregateemotionsexists: {
+          type: Boolean,
+          value: false,
         },
         dayselected: {
           type: String,
@@ -434,19 +397,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         '_routePageChanged(routeData.page)',
         'aggregateDataChanged(aggregatedb.splices)',
         'totalDataChanged(totaldb.splices)',
+        'dataEmotionsChanged(aggregateemotions.*)',
         'uuidChanged(user.uid)'
       ],
 
       behaviors: [
         Polymer.AppNetworkStatusBehavior
       ],
-
       ready: function() {
-        this.dayselected = "Thu Oct 20 2016";
+        this.dayselected = "Sat Oct 22 2016";
         // this.dayselected = new Date().toDateString();
         this.date = new Date(this.dayselected).getTime();;
         console.log("time: "+this.date);
         this.dateString = (new Date()).toDateString();
+      },
+      dataEmotionsChanged: function(aggregateemotionsdb) {
+        console.log("dataEmotionsChanged");
+        var aggregateEmotions = this.aggregateemotions;
+        // this. = {}; 
+        var that = this;
+        console.log("aggregateemotions");
+        console.log(aggregateEmotions);
+        this.size = Object.keys(aggregateEmotions).length;
       },
       mindfulnessChanged: function(newVaue) {
         console.log(this.mindfulnessdb);
@@ -492,6 +464,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       aggregateDataChanged: function(aggregatedb) {
         if (aggregatedb) {
           this.aggregateDataExists = true;
+          console.log("aggregateDataExists");
         }
       },
       totalDataChanged: function(totaldb) {

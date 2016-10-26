@@ -322,6 +322,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{editedActivityDetails}}">
     </firebase-document>
 
+    <firebase-document
+        id="updateEmotionsFirebase"
+        app-name="notes"
+        path="/"
+        data="{{tempaggregateemotions}}">
+    </firebase-document>
+
     <colors-material id="colorSheet"></colors-material>
 
   </template>
@@ -496,15 +503,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: Boolean,
             value: true
           },
+          emotions: {
+            type: Array,
+            value: 
+            ["happy", "sad", "peaceful", "anxious", "hopeful", "hopeless", "energetic", "tired", "confident", "insecure", "relaxed", "stressed", "grateful", "disappointed", "extroverted", "withdrawn", "empathetic", "carefree", "focused", "chaotic", "inspired", "unchallenged", "effective", "frustrated"]
+          },
           dayselected: {
-          type: String,
-        },
+            type: String,
+          },
+          size: {
+            type: Number,
+            value: 0
+          }
       },
       observers: [
            'dataChanged(emotiondb.*)',
            'aggregateDetailsChanged(aggregatedb.*)',
            'totalDataChanged(totaldb.*)'
       ],
+      saveNewAggregateEmotions: function() {
+        this.tempaggregateemotions = {};
+          console.log("aggregateemotions size: "+this.size);
+          for (var i=0; i<this.emotions.length;i++) {
+            console.log("emotions: "+this.emotions[i]);
+            this.tempaggregateemotions[this.emotions[i]] = {};
+            this.tempaggregateemotions[this.emotions[i]].value = 0;
+          }
+        console.log("tempaggregateemotions: ");
+        console.log(this.tempaggregateemotions);
+        if (this.$.updateEmotionsFirebase.isNew) {
+          var that = this;
+          console.log("is new");
+          console.log(this.signedIn);
+          return this.$.updateEmotionsFirebase.save(this.user+"/aggregate/"+that.date,"emotions").then(function() {
+            console.log("reset");
+            that.$.updateEmotionsFirebase.reset();
+          });
+        }
+        return Promise.resolve();
+      },
       attached: function() {
         this.date = new Date(this.dayselected).getTime();
         var that = this;
@@ -740,7 +777,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _activityListChanged: function(activityList) {
         console.log("activityList: "+this.activityList);
       },
-      saveEntry: function(emotionName) {  
+      saveEntry: function(emotionName) { 
+        if (this.size == 0) {
+          this.saveNewAggregateEmotions();
+        } 
         if (this.$.emotionFirebase.isNew) {
           var that = this;
           return this.$.emotionFirebase.save(this.user+"/daily/"+that.date+"/emotions/", emotionName).then(function() {
