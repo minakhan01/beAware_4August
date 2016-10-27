@@ -423,7 +423,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           },
           size: {
             type: Number,
-            value: 0
+            value: 0,
+            observer: 'sizeChanged'
           },
           carefreeValue: {
             type: Number,
@@ -509,14 +510,52 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             value: true
           },
           dayselected: {
-          type: String,
-        },
+            type: String,
+            observer: 'dayselectedChanged'
+          },
+          date: {
+            type: String,
+            observer: 'dateChanged'
+          },
       },
       observers: [
            'dataChanged(emotiondb.*)',
            'aggregateDetailsChanged(aggregatedb.*)',
            'totalDataChanged(totaldb.*)'
       ],
+      dayselectedChanged: function(newValue, oldValue) {
+        console.log("dayselected changed from: "+oldValue+ " to "+newValue);
+        this.date = new Date(this.dayselected).getTime();
+      },
+      sizeChanged: function(newValue, oldValue) {
+        console.log("sizeChanged");
+        if (newValue == 0 && oldValue > 0) {
+          console.log("no data found");
+            this.happyValue = 0;
+            this.sadValue = 0;
+            this.peacefulValue = 0;
+            this.anxiousValue = 0;
+            this.hopefulValue = 0;
+            this.hopelessValue = 0;
+            this.energeticValue = 0;
+            this.tiredValue = 0;
+            this.confidentValue = 0;
+            this.insecureValue = 0;
+            this.relaxedValue = 0;
+            this.stressedValue = 0;
+            this.gratefulValue = 0;
+            this.disappointedValue = 0;
+            this.extrovertedValue = 0;
+            this.withdrawnValue = 0;
+            this.carefreeValue = 0;
+            this.focusedValue = 0;
+            this.chaoticValue = 0;
+            this.inspiredValue = 0;
+            this.unchallengedValue = 0;
+            this.effectiveValue = 0;
+            this.frustratedValue = 0;
+        }
+      },
       attached: function() {
         this.date = new Date(this.dayselected).getTime();
         var that = this;

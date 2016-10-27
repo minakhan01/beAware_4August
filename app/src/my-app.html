@@ -36,6 +36,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs-icons.html">
 <link rel="import" href="../bower_components/paper-header-panel/paper-header-panel.html">
 <link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="elements/menu-overlay.html">
+<link rel="import" href="elements/paper-date-picker.html">
 
 <dom-module id="my-app">
 
@@ -240,6 +244,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </firebase-query>
 
     <firebase-query
+      id="aggregateActivitiesQuery"
+      app-name="notes"
+      sequentialTransactions=true
+      path="/[[user.uid]]/aggregate/[[date]]/activities"
+      data="{{aggregateactivities}}">
+    </firebase-query>
+
+    <firebase-query
       id="mindfulnessQuery"
       app-name="notes"
       sequentialTransactions=true
@@ -298,13 +310,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
       <div class="flex">
         <iron-pages style="height:100%;" role="main" selected="[[page]]" attr-for-selected="name">
-            <my-input name="input" user="[[user.uid]]" dayselected="[[dayselected]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}" size="[[size]]"></my-input>
-            <my-heart name="heart" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}" size="[[size]]"></my-heart>
-            <my-mind name="mind" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}" size="[[size]]" ></my-mind>
-            <my-body name="body" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" size="[[size]]" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-body>
-            <my-spirit name="spirit" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}" size="[[size]]" ></my-spirit>
+            <my-input id="input" name="input" user="[[user.uid]]" dayselected="[[dayselected]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}" size="[[size]]" activitiessize="[[activitiessize]]"></my-input>
+            <my-heart id="heart" name="heart" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{aggregateemotions}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}" size="[[size]]"></my-heart>
+            <my-mind id="mind" name="mind" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{aggregateemotions}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}" size="[[size]]" ></my-mind>
+            <my-body id="body" name="body" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{aggregateemotions}}" new-day-exists="{{aggregateDataExists}}" size="[[size]]" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-body>
+            <my-spirit id="spirit" name="spirit" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{aggregateemotions}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}" size="[[size]]" ></my-spirit>
             <my-analysis name="analysis" user="[[user.uid]]" dailydb="{{aggregatedball}}"></my-analysis>
         </iron-pages>
+      </div>
+      <div id="scope">
+        <paper-button class="btn" on-tap="showDialog" raised>{{dateFormat(dateselected, 'LL')}}</paper-button>
+        <menu-overlay always-on-top id="dialog" tabindex="-1" class="paper-date-picker-dialog" modal on-iron-overlay-closed="dismissDialog">
+          <paper-date-picker id="picker" date="[[dateselected]]"></paper-date-picker>
+          <div class="buttons">
+            <paper-button on-tap="dismiss">Cancel</paper-button>
+            <paper-button on-tap="select">OK</paper-button>
+          </div>
+        </menu-overlay>
       </div>
       <div class="footer">
         <!-- <footer> -->
@@ -338,7 +360,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         date: {
           type: String,
-          observer: ''
+          observer: 'dateChanged'
+        },
+        ready: {
+          type: Boolean,
+          value: false
         },
         emotions: {
           type: Array,
@@ -398,27 +424,65 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'aggregateDataChanged(aggregatedb.splices)',
         'totalDataChanged(totaldb.splices)',
         'dataEmotionsChanged(aggregateemotions.*)',
+        'dataActivitiesChanged(aggregateactivities.*)',
         'uuidChanged(user.uid)'
       ],
 
       behaviors: [
         Polymer.AppNetworkStatusBehavior
       ],
+      dateChanged: function(newValue, oldValue) {
+        if (this.ready == true) {
+          console.log("date changed from "+oldValue + " to "+newValue);
+        }
+      },
       ready: function() {
-        this.dayselected = "Sat Oct 22 2016";
+        var scope = this.$.scope;
+        this.dateselected = new Date();
+
+        this.dayselected = new Date().toDateString();
         // this.dayselected = new Date().toDateString();
-        this.date = new Date(this.dayselected).getTime();;
+        this.date = new Date(this.dayselected).getTime();
         console.log("time: "+this.date);
         this.dateString = (new Date()).toDateString();
+        this.ready = true;
+      },
+      dateFormat: function(date, format) {
+          return moment(date).format(format);
+      },
+      dismiss: function() {
+          this.$.dialog.close();
+      },
+      select: function() {
+        console.log("date");
+        this.dateselected = this.$.picker.date;
+        this.dayselected = this.$.picker.date.toDateString();
+        this.date = new Date(this.dayselected).getTime();
+        this.dateString = (new Date()).toDateString();
+        this.$.dialog.close();
+      },
+      showDialog: function() {
+          this.$.dialog.toggle();
       },
       dataEmotionsChanged: function(aggregateemotionsdb) {
         console.log("dataEmotionsChanged");
+        console.log("date: "+ new Date(this.date));
         var aggregateEmotions = this.aggregateemotions;
         // this. = {}; 
         var that = this;
         console.log("aggregateemotions");
         console.log(aggregateEmotions);
         this.size = Object.keys(aggregateEmotions).length;
+      },
+      dataActivitiesChanged: function(aggregateactivitiesdb) {
+        console.log("dataEmotionsChanged");
+        console.log("date: "+ new Date(this.date));
+        var aggregateActivities = this.aggregateactivities;
+        // this. = {}; 
+        var that = this;
+        console.log("aggregateactivities");
+        console.log(aggregateActivities);
+        this.activitiessize = Object.keys(aggregateActivities).length;
       },
       mindfulnessChanged: function(newVaue) {
         console.log(this.mindfulnessdb);

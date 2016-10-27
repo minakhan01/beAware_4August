@@ -115,6 +115,7 @@
         <circle class="disc-small" r$="{{_selectorDotSize}}" cx$="{{_handX}}" cy$="{{_handY}}"></circle>
       </g>
       <g id="numbers"></g>
+      <g id="paths"></g>
       <path class="select-area" on-track="_onTouch" on-tap="_onTouch"
         d$="{{_getSelectArea(_radius, _selectorInner, _selectorOuter)}}"></path>
       <path class="select-area" on-track="_onTouchInner" on-tap="_onTouchInner"
@@ -219,11 +220,15 @@
           this._populate();
           // this._selectedChanged(this.selected);
         },
+        removeAllArcs: function() {
+          var vis = d3.select(this.$.paths);
+          vis.selectAll("*").remove();
+        },
         _selectedEndChanged: function(selectedEnd) {
           console.log("_selectedEndChanged");
         },
         drawArc: function(start, end, color) {
-          var vis = d3.select(this.$.clock);
+          var vis = d3.select(this.$.paths);
 
           var pi = Math.PI;
 

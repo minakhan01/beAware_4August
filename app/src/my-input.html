@@ -25,6 +25,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 
+
 <dom-module id="my-input">
 
   <template>
@@ -290,6 +291,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Object,
           observer: 'dataChanged'
           },
+          date: {
+            type: String,
+            observer: 'dateChanged'
+          },
           user: {
             type: String,
             value: '' 
@@ -314,6 +319,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           size: {
             type: Number,
             value: 0
+          },
+          activitiessize: {
+            type: Number,
+            value: 0,
+            observer: 'activitiesSizeChanged'
           },
           activity: {
             type: String,
@@ -371,7 +381,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             value: true
           },
           dayselected: {
-          type: String,
+            type: String,
+            observer: 'dayselectedChanged'
           },
       },
       observers: [
@@ -379,6 +390,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
            'aggregateDetailsChanged(aggregatedb.*)',
            'totalDataChanged(totaldb.*)'
       ],
+      dayselectedChanged: function(newValue, oldValue) {
+        console.log("dayselected changed from: "+oldValue+ " to "+newValue);
+        this.date = new Date(this.dayselected).getTime();
+      },
+      dateChanged: function(newValue, oldValue) {
+        this.$.picker.removeAllArcs();
+      },
+      activitiesSizeChanged: function(newValue, oldValue) {
+        console.log("activitiesSizeChanged");
+        if (newValue == 0 && oldValue > 0) {
+          console.log("no activities found");
+        }
+      },
       aggregateDetailsChanged: function(aggregatedb) {
         console.log("aggregatedb: ");
         console.log(this.aggregatedb);
