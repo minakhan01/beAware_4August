@@ -268,14 +268,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </firebase-query>
 
     <firebase-query
-      id="allTotalQuery"
-      app-name="notes"
-      sequentialTransactions=true
-      path="/[[user.uid]]/total"
-      data="{{totaldb}}">
-    </firebase-query>
-
-    <firebase-query
       id="dailyAllQuery"
       app-name="notes"
       sequentialTransactions=true
@@ -310,11 +302,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
       <div class="flex">
         <iron-pages style="height:100%;" role="main" selected="[[page]]" attr-for-selected="name">
-            <my-input id="input" name="input" user="[[user.uid]]" dayselected="[[dayselected]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}" size="[[size]]" activitiessize="[[activitiessize]]"></my-input>
-            <my-heart id="heart" name="heart" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{aggregateemotions}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}" size="[[size]]"></my-heart>
-            <my-mind id="mind" name="mind" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{aggregateemotions}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}" size="[[size]]" ></my-mind>
-            <my-body id="body" name="body" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{aggregateemotions}}" new-day-exists="{{aggregateDataExists}}" size="[[size]]" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}"></my-body>
-            <my-spirit id="spirit" name="spirit" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{aggregateemotions}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" totaldb="{{totaldb}}" total-data-exists="{{totalDataExists}}" size="[[size]]" ></my-spirit>
+            <my-input id="input" name="input" user="[[user.uid]]" dayselected="[[dayselected]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" size="[[size]]" activitiessize="[[activitiessize]]"></my-input>
+            <my-heart id="heart" name="heart" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{aggregateemotions}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" size="[[size]]"></my-heart>
+            <my-mind id="mind" name="mind" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{aggregateemotions}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" size="[[size]]" ></my-mind>
+            <my-body id="body" name="body" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{aggregateemotions}}" new-day-exists="{{aggregateDataExists}}" size="[[size]]" aggregatedb="[[aggregatedb]]"></my-body>
+            <my-spirit id="spirit" name="spirit" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{aggregateemotions}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" size="[[size]]" ></my-spirit>
             <my-analysis name="analysis" user="[[user.uid]]" dailydb="{{aggregatedball}}"></my-analysis>
         </iron-pages>
       </div>
@@ -408,14 +400,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: 0,
           observer: 'mindfulnessChanged'
         },
-        totaldb: {
-          type: Object
-        },
         aggregateDataExists: {
-          type: Boolean,
-          value: false
-        },
-        totalDataExists: {
           type: Boolean,
           value: false
         },
@@ -531,13 +516,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (aggregatedb) {
           this.aggregateDataExists = true;
           console.log("aggregateDataExists");
-        }
-      },
-      totalDataChanged: function(totaldb) {
-        console.log("MY-APP this.totalDataExists");
-        console.log(this.totalDataExists);
-        if (totaldb) {
-          this.totalDataExists = true;
         }
       },
       computeAvgActivityColors: function() {
