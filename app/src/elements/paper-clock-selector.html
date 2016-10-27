@@ -116,6 +116,7 @@
       </g>
       <g id="numbers"></g>
       <g id="paths"></g>
+      <g id="selectionpath"></g>
       <path class="select-area" on-track="_onTouch" on-tap="_onTouch"
         d$="{{_getSelectArea(_radius, _selectorInner, _selectorOuter)}}"></path>
       <path class="select-area" on-track="_onTouchInner" on-tap="_onTouchInner"
@@ -264,6 +265,10 @@
                 })
                 .attr("transform", "translate("+this._radius+","+this._radius+")");
         },
+        removeSelectionPath: function() {
+          var vis = d3.select(this.$.selectionpath);
+          vis.selectAll("*").remove();
+        },
         setClockHand: function(deg, animate, callback) {
           deg = normalizeAngle(deg);
 
@@ -275,7 +280,7 @@
           // .attr("height", height)
           // .attr("width", width);
 
-          var vis = d3.select(this.$.clock);
+          var vis = d3.select(this.$.selectionpath);
 
           var pi = Math.PI;
 

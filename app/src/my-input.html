@@ -397,6 +397,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       dateChanged: function(newValue, oldValue) {
         this.$.picker.removeAllArcs();
       },
+      removeSelectionPath: function() {
+        this.$.picker.removeSelectionPath();
+      },
       activitiesSizeChanged: function(newValue, oldValue) {
         console.log("activitiesSizeChanged");
         if (newValue == 0 && oldValue > 0) {
@@ -629,6 +632,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _closePopUp: function() {
         console.log("close");
         this.$.plain.close();
+        this.removeSelectionPath();
       },
       _saveSelection: function() {
         var activityColors = 

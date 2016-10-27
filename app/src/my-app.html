@@ -319,7 +319,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </iron-pages>
       </div>
       <div id="scope">
-        <paper-button class="btn" on-tap="showDialog" raised>{{dateFormat(dateselected, 'LL')}}</paper-button>
+        <div class="layout horizontal around-justified">
+          <paper-button class="custom pink" on-tap="showDialog">{{dateFormat(dateselected, 'LL')}}</paper-button>
+        </div>
         <menu-overlay always-on-top id="dialog" tabindex="-1" class="paper-date-picker-dialog" modal on-iron-overlay-closed="dismissDialog">
           <paper-date-picker id="picker" date="[[dateselected]]"></paper-date-picker>
           <div class="buttons">
