@@ -15,14 +15,228 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-storage/app-network-status-behavior.html">
 <link rel="import" href="colors-material.html">
 <link rel="import" href="elements/polymer-area-chart.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <dom-module id="my-analysis">
+<style include="iron-flex iron-flex-alignment">
+    </style>
+<style>
+    .legend {
+          padding-right: 45px;
+    }
+    .legend-title {
+          position: relative; 
+          top: -15px;
+          left: 15px; 
+          font-size: 14px;
+    }
 
+    .happy {
+      border-color: var(--paper-yellow-a200);
+      background-color: var(--paper-yellow-a200);
+    }
+    .sad {
+      border-color: var(--paper-blue-200);
+      background-color: var(--paper-blue-200);
+    }
+    .peaceful {
+      border-color: var(--paper-teal-a200);
+      background-color: var(--paper-teal-a200);
+    }
+    .anxious {
+      border-color: var(--paper-purple-200);
+      background-color: var(--paper-purple-200);
+    }
+    .hopeful {
+      border-color: var(--paper-orange-a200);
+      background-color: var(--paper-orange-a200);
+    }
+    .hopeless {
+      border-color: var(--paper-blue-grey-200);
+      background-color: var(--paper-blue-grey-200);
+    }
+    .energetic {
+      border-color: var(--paper-deep-purple-a200);
+      background-color: var(--paper-deep-purple-a200);
+    }
+    .tired {
+      border-color: var(--paper-lime-200);
+      background-color: var(--paper-lime-200);
+    }
+    .confident {
+      border-color: var(--paper-pink-a200);
+      background-color: var(--paper-pink-a200);
+    }
+    .insecure {
+      border-color: var(--paper-green-200);
+      background-color: var(--paper-green-200);
+    }
+    .relaxed {
+      border-color: var(--paper-indigo-a200);
+      background-color: var(--paper-indigo-a200);
+    }
+    .stressed {
+      border-color: var(--paper-amber-500);
+      background-color: var(--paper-amber-500);
+    }
+    .grateful {
+      border-color: var(--paper-purple-a200);
+      background-color: var(--paper-purple-a200);
+    }
+    .disappointed {
+      border-color: var(--paper-green-200);
+      background-color: var(--paper-green-200);
+    }
+    .extroverted {
+      border-color: var(--paper-red-a200);
+      background-color: var(--paper-red-a200);
+    }
+    .withdrawn {
+      border-color: var(--paper-yellow-200);
+      background-color: var(--paper-yellow-200);
+    }
+    .empathetic {
+      border-color: var(--paper-light-blue-a200);
+      background-color: var(--paper-light-blue-a200);
+    }
+    .carefree {
+      border-color:; var(--paper-pink-200);
+      background-color: var(--paper-pink-200);
+    }
+    .focused {
+      border-color: var(--paper-blue-a200);
+      background-color: var(--paper-blue-a200);
+    }
+    .chaotic {
+      border-color: var(--paper-red-200);
+      background-color: var(--paper-red-200);
+    }
+    .inspired {
+      border-color: var(--paper-green-a200);
+      background-color: var(--paper-green-a200);
+    }
+    .unchallenged {
+      border-color: var(--paper-indigo-200);
+      background-color: var(--paper-indigo-200);
+    }
+    .effective {
+      border-color: var(--paper-deep-orange-a200);
+      background-color: var(--paper-deep-orange-a200);
+    }
+    .frustrated {
+      border-color: var(--paper-deep-purple-200);
+      background-color: var(--paper-deep-purple-200);
+    }
+
+    .work1 {
+      border-color: var(--paper-blue-a200);
+      background-color: var(--paper-blue-a200);
+    }
+
+    .work2 {
+      border-color: var(--paper-purple-a200);
+      background-color: var(--paper-purple-a200);
+    }
+
+    .sleep {
+      border-color: var(--paper-teal-a200);
+      background-color: var(--paper-teal-a200);
+    }
+
+    .exercise {
+      background-color: var(--paper-orange-a200);
+      border-color: var(--paper-orange-a200);
+    }
+
+    .social {
+      border-color: var(--paper-pink-a200);
+      background-color: var(--paper-pink-a200);
+    }
+
+    .personal {
+      border-color: var(--paper-green-a200);
+      background-color: var(--paper-green-a200);
+    }
+
+    .errands {
+      border-color: var(--paper-deep-purple-a200);
+      background-color: var(--paper-deep-purple-a200);
+    }
+    #rectangle{
+      width:10px;
+      height:10px;
+    }
+</style>
   <template>
     <style></style>
-    <div style="padding: 30px;"></div>
     <colors-material id="colorSheet"></colors-material>
     <polymer-area-chart id="charts" data="[[data]]" dataemotion="[[dataemotion]]" activityColorsList="[[activityColorsList]]"></polymer-area-chart>
+    <!-- <div class="horizontal layout center-justified wrap" style="padding:0px; margin: 0px;">
+      <div class="legend"><div id="rectangle" class="work1"></div> <div class="legend-title">Work 1</div></div>
+
+      <div class="legend"><div id="rectangle" class="work2"></div> <div class="legend-title">Work 2</div></div>
+
+      <div class="legend"><div id="rectangle" class="sleep"></div> <div class="legend-title">Sleep </div></div>
+
+      <div class="legend"><div id="rectangle" class="exercise"></div> <div class="legend-title">Exercise </div></div>
+
+      <div class="legend"><div id="rectangle" class="social"></div> <div class="legend-title">Social </div></div>
+
+      <div class="legend"><div id="rectangle" class="personal"></div> <div class="legend-title">Personal </div></div> 
+
+      <div class="legend"><div id="rectangle" class="errands"></div> <div class="legend-title">Errands/Chores </div></div> 
+    </div>
+    <div class="horizontal layout center-justified wrap" style="padding:0px; margin: 0px;">
+      <div class="legend"><div id="rectangle" class="happy"></div> <div class="legend-title">Happy</div></div>
+
+      <div class="legend"><div id="rectangle" class="sad"></div> <div class="legend-title">Sad</div></div>
+
+      <div class="legend"><div id="rectangle" class="peaceful"></div> <div class="legend-title">Peaceful </div></div>
+
+      <div class="legend"><div id="rectangle" class="anxious"></div> <div class="legend-title">Exercise </div></div>
+
+      <div class="legend"><div id="rectangle" class="hopeful"></div> <div class="legend-title">Hopeful </div></div>
+
+      <div class="legend"><div id="rectangle" class="energetic"></div> <div class="legend-title">Energetic </div></div> 
+
+      <div class="legend"><div id="rectangle" class="tired"></div> <div class="legend-title">Tired</div></div>
+
+      <div class="legend"><div id="rectangle" class="sad"></div> <div class="legend-title">Confident</div></div>
+
+      <div class="legend"><div id="rectangle" class="insecure"></div> <div class="legend-title">Insecure </div></div>
+
+      <div class="legend"><div id="rectangle" class="relaxed"></div> <div class="legend-title">Relaxed </div></div>
+
+      <div class="legend"><div id="rectangle" class="stressed"></div> <div class="legend-title">Stressed </div></div>
+
+      <div class="legend"><div id="rectangle" class="grateful"></div> <div class="legend-title">Grateful </div></div> 
+
+      <div class="legend"><div id="rectangle" class="disappointed"></div> <div class="legend-title">Disappointed</div></div>
+
+      <div class="legend"><div id="rectangle" class="extroverted"></div> <div class="legend-title">Extroverted</div></div>
+
+      <div class="legend"><div id="rectangle" class="peaceful"></div> <div class="legend-title">Peaceful </div></div>
+
+      <div class="legend"><div id="rectangle" class="withdrawn"></div> <div class="legend-title">Withdrawn </div></div>
+
+      <div class="legend"><div id="rectangle" class="empathetic"></div> <div class="legend-title">Empathetic </div></div>
+
+      <div class="legend"><div id="rectangle" class="carefree"></div> <div class="legend-title">Carefree </div></div> 
+
+      <div class="legend"><div id="rectangle" class="focused"></div> <div class="legend-title">Focused</div></div>
+
+      <div class="legend"><div id="rectangle" class="chaotic"></div> <div class="legend-title">Chaotic</div></div>
+
+      <div class="legend"><div id="rectangle" class="inspired"></div> <div class="legend-title">Inspired </div></div>
+
+      <div class="legend"><div id="rectangle" class="unchallenged"></div> <div class="legend-title">Unchallenged </div></div>
+
+      <div class="legend"><div id="rectangle" class="effective"></div> <div class="legend-title">Effective </div></div>
+
+      <div class="legend"><div id="rectangle" class="frustrated"></div> <div class="legend-title">Frustrated </div></div> 
+
+    </div>     -->
 
   </template>
 
@@ -233,7 +447,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // console.log("dataChanged");
         this.data = [];
         this.dataemotion = [];
-        // console.log(this.dataList);
+        console.log("dataEmotionList");
+        console.log(this.dataEmotionList);
         // console.log("START this.data");
         // console.log(this.data);
         for (list in this.dataList) {

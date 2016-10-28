@@ -1,13 +1,84 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <script type="text/javascript" src="../d3.min.js"></script>
 <link rel="import" href="../colors-material.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <dom-module id="polymer-area-chart">
 
   <template>
     <colors-material id="colorSheet"></colors-material>
     <div id="bodyBig" class="bodyBig">
+      <div class="horizontal layout center-justified"><h2>Activities</h2></div>
       <div id="chart" class="chart"></div>
+          <div class="horizontal layout center-justified wrap" style="padding:0px; margin: 0px;">
+      <div class="legend"><div id="rectangle" class="work1"></div> <div class="legend-title">Work 1</div></div>
+
+      <div class="legend"><div id="rectangle" class="work2"></div> <div class="legend-title">Work 2</div></div>
+
+      <div class="legend"><div id="rectangle" class="sleep"></div> <div class="legend-title">Sleep </div></div>
+
+      <div class="legend"><div id="rectangle" class="exercise"></div> <div class="legend-title">Exercise </div></div>
+
+      <div class="legend"><div id="rectangle" class="social"></div> <div class="legend-title">Social </div></div>
+
+      <div class="legend"><div id="rectangle" class="personal"></div> <div class="legend-title">Personal </div></div> 
+
+      <div class="legend"><div id="rectangle" class="errands"></div> <div class="legend-title">Errands/Chores </div></div> 
+    </div>
+      <div class="horizontal layout center-justified"><h2>Emotions</h2></div>
+      <div id="emotionschart" class="chart"></div>
+          <div class="horizontal layout center-justified wrap" style="padding:0px; margin: 0px;">
+      <div class="legend"><div id="rectangle" class="happy"></div> <div class="legend-title">Happy</div></div>
+
+      <div class="legend"><div id="rectangle" class="sad"></div> <div class="legend-title">Sad</div></div>
+
+      <div class="legend"><div id="rectangle" class="peaceful"></div> <div class="legend-title">Peaceful </div></div>
+
+      <div class="legend"><div id="rectangle" class="anxious"></div> <div class="legend-title">Anxious </div></div>
+
+      <div class="legend"><div id="rectangle" class="hopeful"></div> <div class="legend-title">Hopeful </div></div>
+
+      <div class="legend"><div id="rectangle" class="hopeless"></div> <div class="legend-title">Hopeless </div></div>
+
+
+      <div class="legend"><div id="rectangle" class="energetic"></div> <div class="legend-title">Energetic </div></div> 
+
+      <div class="legend"><div id="rectangle" class="tired"></div> <div class="legend-title">Tired</div></div>
+
+      <div class="legend"><div id="rectangle" class="sad"></div> <div class="legend-title">Confident</div></div>
+
+      <div class="legend"><div id="rectangle" class="insecure"></div> <div class="legend-title">Insecure </div></div>
+
+      <div class="legend"><div id="rectangle" class="relaxed"></div> <div class="legend-title">Relaxed </div></div>
+
+      <div class="legend"><div id="rectangle" class="stressed"></div> <div class="legend-title">Stressed </div></div>
+
+      <div class="legend"><div id="rectangle" class="grateful"></div> <div class="legend-title">Grateful </div></div> 
+
+      <div class="legend"><div id="rectangle" class="disappointed"></div> <div class="legend-title">Disappointed</div></div>
+
+      <div class="legend"><div id="rectangle" class="extroverted"></div> <div class="legend-title">Extroverted</div></div>
+
+      <div class="legend"><div id="rectangle" class="withdrawn"></div> <div class="legend-title">Withdrawn </div></div>
+
+      <div class="legend"><div id="rectangle" class="empathetic"></div> <div class="legend-title">Empathetic </div></div>
+
+      <div class="legend"><div id="rectangle" class="carefree"></div> <div class="legend-title">Carefree </div></div> 
+
+      <div class="legend"><div id="rectangle" class="focused"></div> <div class="legend-title">Focused</div></div>
+
+      <div class="legend"><div id="rectangle" class="chaotic"></div> <div class="legend-title">Chaotic</div></div>
+
+      <div class="legend"><div id="rectangle" class="inspired"></div> <div class="legend-title">Inspired </div></div>
+
+      <div class="legend"><div id="rectangle" class="unchallenged"></div> <div class="legend-title">Unchallenged </div></div>
+
+      <div class="legend"><div id="rectangle" class="effective"></div> <div class="legend-title">Effective </div></div>
+
+      <div class="legend"><div id="rectangle" class="frustrated"></div> <div class="legend-title">Frustrated </div></div> 
+
+    </div>  
     </div>
       <style>
       .bodyBig {
@@ -43,6 +114,155 @@
 
 
     </style>
+    <style include="iron-flex iron-flex-alignment">
+    </style>
+<style>
+    .legend {
+          padding-right: 45px;
+    }
+    .legend-title {
+          position: relative; 
+          top: -11px;
+          left: 11px; 
+          font-size: 12px;
+    }
+
+    .happy {
+      border-color: var(--paper-yellow-a200);
+      background-color: var(--paper-yellow-a200);
+    }
+    .sad {
+      border-color: var(--paper-blue-200);
+      background-color: var(--paper-blue-200);
+    }
+    .peaceful {
+      border-color: var(--paper-teal-a200);
+      background-color: var(--paper-teal-a200);
+    }
+    .anxious {
+      border-color: var(--paper-purple-200);
+      background-color: var(--paper-purple-200);
+    }
+    .hopeful {
+      border-color: var(--paper-orange-a200);
+      background-color: var(--paper-orange-a200);
+    }
+    .hopeless {
+      border-color: var(--paper-blue-grey-200);
+      background-color: var(--paper-blue-grey-200);
+    }
+    .energetic {
+      border-color: var(--paper-deep-purple-a200);
+      background-color: var(--paper-deep-purple-a200);
+    }
+    .tired {
+      border-color: var(--paper-lime-200);
+      background-color: var(--paper-lime-200);
+    }
+    .confident {
+      border-color: var(--paper-pink-a200);
+      background-color: var(--paper-pink-a200);
+    }
+    .insecure {
+      border-color: var(--paper-green-200);
+      background-color: var(--paper-green-200);
+    }
+    .relaxed {
+      border-color: var(--paper-indigo-a200);
+      background-color: var(--paper-indigo-a200);
+    }
+    .stressed {
+      border-color: var(--paper-amber-500);
+      background-color: var(--paper-amber-500);
+    }
+    .grateful {
+      border-color: var(--paper-purple-a200);
+      background-color: var(--paper-purple-a200);
+    }
+    .disappointed {
+      border-color: var(--paper-green-200);
+      background-color: var(--paper-green-200);
+    }
+    .extroverted {
+      border-color: var(--paper-red-a200);
+      background-color: var(--paper-red-a200);
+    }
+    .withdrawn {
+      border-color: var(--paper-yellow-200);
+      background-color: var(--paper-yellow-200);
+    }
+    .empathetic {
+      border-color: var(--paper-light-blue-a200);
+      background-color: var(--paper-light-blue-a200);
+    }
+    .carefree {
+      border-color:; var(--paper-pink-200);
+      background-color: var(--paper-pink-200);
+    }
+    .focused {
+      border-color: var(--paper-blue-a200);
+      background-color: var(--paper-blue-a200);
+    }
+    .chaotic {
+      border-color: var(--paper-red-200);
+      background-color: var(--paper-red-200);
+    }
+    .inspired {
+      border-color: var(--paper-green-a200);
+      background-color: var(--paper-green-a200);
+    }
+    .unchallenged {
+      border-color: var(--paper-indigo-200);
+      background-color: var(--paper-indigo-200);
+    }
+    .effective {
+      border-color: var(--paper-deep-orange-a200);
+      background-color: var(--paper-deep-orange-a200);
+    }
+    .frustrated {
+      border-color: var(--paper-deep-purple-200);
+      background-color: var(--paper-deep-purple-200);
+    }
+
+    .work1 {
+      border-color: var(--paper-blue-a200);
+      background-color: var(--paper-blue-a200);
+    }
+
+    .work2 {
+      border-color: var(--paper-purple-a200);
+      background-color: var(--paper-purple-a200);
+    }
+
+    .sleep {
+      border-color: var(--paper-teal-a200);
+      background-color: var(--paper-teal-a200);
+    }
+
+    .exercise {
+      background-color: var(--paper-orange-a200);
+      border-color: var(--paper-orange-a200);
+    }
+
+    .social {
+      border-color: var(--paper-pink-a200);
+      background-color: var(--paper-pink-a200);
+    }
+
+    .personal {
+      border-color: var(--paper-green-a200);
+      background-color: var(--paper-green-a200);
+    }
+
+    .errands {
+      border-color: var(--paper-deep-purple-a200);
+      background-color: var(--paper-deep-purple-a200);
+    }
+    #rectangle{
+      width:8px;
+      height:8px;
+    }
+</style>
 
   </template>
 
@@ -138,40 +358,10 @@
       readyProduce: function() {
         console.log("area color this.activityColorsList");
         console.log(this.activityColorsList);
-        /*eslint-disable */
-
-        // create dataset
-        // var names = (this.activities).concat(this.emotions);
-        // var endTime = Date.now();
-        // console.log("SEE THIS: "+this.getBoundingClientRect().width);
-        // this.$.chart.style.width = 0.9 * this.getBoundingClientRect().width;
-        // var month = 30 * 24 * 60 * 60 * 1000;
-        // var week = 7 * 24 * 60 * 60 * 1000;
-        // var day = 24 * 60 * 60 * 1000;
-        // var startTime = endTime - day;
-        // var emotionColorsList = [];
-        // for (var i = 0; i < this.emotions.length; i++) {
-        //   emotionColorsList.push(this.getEmotionColor(this.emotions[i]));
-        // }
-        // var color  = (activityColorsList).concat(emotionColorsList);
-        // for (var i = 0; i < names.length; i++) {
-        //     data.push(createEmptyEvent(names[i]));
-        // }
 
         var datearray = [];
         var colorrange = [];
 
-        color = "orange";
-
-        if (color == "blue") {
-          colorrange = ["#045A8D", "#2B8CBE", "#74A9CF", "#A6BDDB", "#D0D1E6", "#F1EEF6"];
-        }
-        else if (color == "pink") {
-          colorrange = ["#980043", "#DD1C77", "#DF65B0", "#C994C7", "#D4B9DA", "#F1EEF6"];
-        }
-        else if (color == "orange") {
-          colorrange = ["#B30000", "#E34A33", "#FC8D59", "#FDBB84", "#FDD49E", "#FEF0D9"];
-        }
         this.activityColorsList = [];
         for (var i = 0; i < this.activities.length; i++) {
           this.activityColorsList.push(this.getActivityColor(this.activities[i]));
@@ -191,14 +381,14 @@
 
         var margin = {top: 20, right: 40, bottom: 30, left: 30};
         var width = this.getBoundingClientRect().width - margin.left - margin.right;
-        var height = 400 - margin.top - margin.bottom;
+        var height = 200 - margin.top - margin.bottom;
 
         d3.select(this.$.chart).selectAll("*").remove();
         
         var tooltip = d3.select(this.$.bodyBig)
             .append("div")
             .attr("class", "remove")
-            .style("position", "absolute")
+            .style("position", "fixed")
             .style("z-index", "20")
             .style("visibility", "hidden")
             .style("top", "30px")
@@ -210,6 +400,9 @@
         var y = d3.scale.linear()
             .range([height-10, 0]);
 
+        var yEmotion = d3.scale.linear()
+            .range([height-10, 0]);
+
         var z = d3.scale.ordinal()
             .range(colorrange);
 
@@ -219,16 +412,16 @@
         var xAxis = d3.svg.axis()
             .scale(x)
             .orient("bottom")
-            .ticks(d3.time.weeks);
+            .ticks(d3.time.days);
 
         var yAxis = d3.svg.axis()
             .scale(y);
 
-        var yAxis = d3.svg.axis()
-            .scale(y);
+        var yAxisEmotion = d3.svg.axis()
+            .scale(yEmotion);
 
         var stack = d3.layout.stack()
-            .offset("silhouette")
+            .offset("zero")
             .values(function(d) { return d.values; })
             .x(function(d) { return d.date; })
             .y(function(d) { return d.value; });
@@ -237,16 +430,21 @@
             .key(function(d) { return d.key; });
 
         var area = d3.svg.area()
-            .interpolate("cardinal")
+            .interpolate("step")
             .x(function(d) { return x(d.date); })
             .y0(function(d) { return y(d.y0); })
             .y1(function(d) { return y(d.y0 + d.y); });
 
-        var line = d3.svg.line()
-            .interpolate("cardinal")
+        var areaEmotion = d3.svg.area()
+            .interpolate("step")
             .x(function(d) { return x(d.date); })
-            // .y0(function(d) { return y(d.y0); })
-            .y(function(d) { return y(d.y); });
+            .y0(function(d) { return yEmotion(d.y0); })
+            .y1(function(d) { return yEmotion(d.y0 + d.y); });
+
+        // var line = d3.svg.line()
+        //     .interpolate("cardinal")
+        //     .x(function(d) { return x(d.date); })
+        //     .y(function(d) { return y(d.y); });
 
         var svg = d3.select(this.$.chart)
             .append("svg")
@@ -255,22 +453,14 @@
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        var data = [
-          { "key": "AR", "value": 0.1, "date": "01/08/13"},
-          { "key": "AR", "value": 0.3, "date": "02/09/13"},
-          { "key": "AR", "value": 0.2, "date": "03/10/13"},
-          { "key": "DJ", "value": 0.1, "date": "01/08/13"},
-          { "key": "DJ", "value": 0.2, "date": "02/09/13"},
-          { "key": "DJ", "value": 0.4, "date": "03/10/13"},
-          { "key": "MS", "value": 0.3, "date": "01/08/13"},
-          { "key": "MS", "value": 0.2, "date": "02/09/13"},
-          { "key": "MS", "value": 0.1, "date": "03/10/13"},
-          { "key": "RC", "value": 0.3, "date": "01/08/13"},
-          { "key": "RC", "value": 0.2, "date": "02/09/13"},
-          { "key": "RC", "value": 0.1, "date": "03/10/13"},
-          { "key": "CG", "value": 0.4, "date": "01/08/13"},
-          { "key": "CG", "value": 0.2, "date": "02/09/13"},
-          { "key": "CG", "value": 0.1, "date": "03/10/13"},];
+        d3.select(this.$.emotionschart).selectAll("*").remove();
+
+        var svgEmotion = d3.select(this.$.emotionschart)
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         data = this.data;
         dataemotion = this.dataemotion;
@@ -291,7 +481,9 @@
         });
 
         console.log("data");
-        // console.log(data);
+        console.log(data);
+        console.log("dataemotion");
+        console.log(dataemotion);
         // console.log(nest.entries(data));
 
         var layers = stack(nest.entries(data));
@@ -304,6 +496,7 @@
 
         x.domain(d3.extent(data, function(d) { return d.date; }));
         y.domain([0, d3.max(data, function(d) { return d.y0 + d.y; })]);
+        yEmotion.domain([0, d3.max(dataemotion, function(d) { return d.y0 + d.y; })]);
 
         svg.selectAll(".layer")
             .data(layers)
@@ -312,26 +505,75 @@
             .attr("d", function(d) { return area(d.values); })
             .style("fill", function(d, i) { return z(i); });
 
-        svg.selectAll(".layer")
+        svgEmotion.selectAll(".layer")
             .data(layersEmotion)
           .enter().append("path")
             .attr("class", "layer")
-            .attr("d", function(d) { return line(d.values); })
-            .style("stroke", function(d, i) { return zEmotion(i); });
+            .attr("d", function(d) { return areaEmotion(d.values); })
+            .style("fill", function(d, i) { return zEmotion(i); });
 
         svg.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
             .call(xAxis);
 
-        svg.append("g")
+        svgEmotion.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis);
+
+        svgEmotion.append("g")
             .attr("class", "y axis")
-            .attr("transform", "translate(" + width + ", 0)")
-            .call(yAxis.orient("right"));
+            .call(yAxisEmotion.orient("left"));
 
         svg.append("g")
             .attr("class", "y axis")
             .call(yAxis.orient("left"));
+
+
+        svgEmotion.selectAll(".layer")
+          .attr("opacity", 1)
+          .on("mouseover", function(d, i) {
+            svgEmotion.selectAll(".layer").transition()
+            .duration(250)
+            .attr("opacity", function(d, j) {
+              return j != i ? 0.6 : 1;
+          })})
+
+          .on("mousemove", function(d, i) {
+            mousex = d3.mouse(this);
+            mousex = mousex[0];
+            var invertedx = x.invert(mousex);
+            invertedx = invertedx.getMonth() + invertedx.getDate();
+            var selected = (d.values);
+            console.log("selected: ");
+            console.log(selected);
+            for (var k = 0; k < selected.length; k++) {
+              datearray[k] = selected[k].date
+              datearray[k] = datearray[k].getMonth() + datearray[k].getDate();
+            }
+
+            mousedate = datearray.indexOf(invertedx);
+            pro = d.values[mousedate].value;
+
+            d3.select(this)
+            .classed("hover", true)
+            .attr("stroke", strokecolor)
+            .attr("stroke-width", "0.5px"), 
+            tooltip.html( "<p>" + d.key + "<br>" + pro + "</p>" ).style("visibility", "visible");
+            tooltip.style.top = d3.mouse(this)[1]+ 'px';
+            tooltip.style.left = d3.mouse(this)[0]+ 'px';
+            
+          })
+          .on("mouseout", function(d, i) {
+           svgEmotion.selectAll(".layer")
+            .transition()
+            .duration(250)
+            .attr("opacity", "1");
+            d3.select(this)
+            .classed("hover", false)
+            .attr("stroke-width", "0px"), tooltip.html( "<p>" + d.key + "<br>" + pro + "</p>" ).style("visibility", "hidden");
+        })
 
         svg.selectAll(".layer")
           .attr("opacity", 1)
@@ -361,6 +603,8 @@
             .attr("stroke", strokecolor)
             .attr("stroke-width", "0.5px"), 
             tooltip.html( "<p>" + d.key + "<br>" + pro + "</p>" ).style("visibility", "visible");
+            tooltip.style.top = d3.mouse(this)[1]+ 'px';
+            tooltip.style.left = d3.mouse(this)[0]+ 'px';
             
           })
           .on("mouseout", function(d, i) {
@@ -373,27 +617,27 @@
             .attr("stroke-width", "0px"), tooltip.html( "<p>" + d.key + "<br>" + pro + "</p>" ).style("visibility", "hidden");
         })
           
-        var vertical = d3.select(this.$.chart)
-              .append("div")
-              .attr("class", "remove")
-              .style("position", "absolute")
-              .style("z-index", "19")
-              .style("width", "1px")
-              .style("height", "380px")
-              .style("top", "10px")
-              .style("bottom", "30px")
-              .style("left", "0px")
-              .style("background", "#fff");
+        // var vertical = d3.select(this.$.chart)
+        //       .append("div")
+        //       .attr("class", "remove")
+        //       .style("position", "absolute")
+        //       .style("z-index", "19")
+        //       .style("width", "1px")
+        //       .style("height", "380px")
+        //       .style("top", "10px")
+        //       .style("bottom", "30px")
+        //       .style("left", "0px")
+        //       .style("background", "#fff");
 
-        d3.select(this.$.chart)
-            .on("mousemove", function(){  
-               mousex = d3.mouse(this);
-               mousex = mousex[0] + 5;
-               vertical.style("left", mousex + "px" )})
-            .on("mouseover", function(){  
-               mousex = d3.mouse(this);
-               mousex = mousex[0] + 5;
-               vertical.style("left", mousex + "px")});
+        // d3.select(this.$.chart)
+        //     .on("mousemove", function(){  
+        //        mousex = d3.mouse(this);
+        //        mousex = mousex[0] + 5;
+        //        vertical.style("left", mousex + "px" )})
+        //     .on("mouseover", function(){  
+        //        mousex = d3.mouse(this);
+        //        mousex = mousex[0] + 5;
+        //        vertical.style("left", mousex + "px")});
         
         
       },
