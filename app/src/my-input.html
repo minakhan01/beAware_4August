@@ -452,6 +452,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.date = new Date(this.dayselected).getTime();
         console.log("time: "+this.date);
         this.dateString = (new Date()).toDateString();
+        this.$.picker.bind('touchstart', function(event) {
+            event.preventDefault();
+        };
+        this.$.picker.bind(.ontouchmove = function(event) {
+            event.preventDefault();
+        };
       },
       _activityListChanged: function(activityList) {
         console.log("activityList: "+this.activityList);

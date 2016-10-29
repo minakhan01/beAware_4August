@@ -346,12 +346,6 @@ If you include this element as part of `paper-dialog`, use the class
         ready: function() {
           this.isTouch = 'ontouchstart' in window;
           this.view = 'hours';
-          document.ontouchstart = function(event) {
-            event.preventDefault();
-          };
-          document.ontouchmove = function(event) {
-            event.preventDefault();
-          };
         },
         drawArcOnClock: function(start, end, color)  {
           this.$.hourClock.drawArc(start, end, color);
