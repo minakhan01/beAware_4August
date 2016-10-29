@@ -452,10 +452,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.date = new Date(this.dayselected).getTime();
         console.log("time: "+this.date);
         this.dateString = (new Date()).toDateString();
-        this.$.picker.bind('touchstart', function(event) {
+        this.$.picker.addEventListener('touchstart', function(event) {
             event.preventDefault();
         });
-        this.$.picker.bind('touchmove', function(event) {
+        this.$.picker.addEventListener('touchmove', function(event) {
             event.preventDefault();
         });
       },
