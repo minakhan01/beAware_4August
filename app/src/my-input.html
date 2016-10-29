@@ -454,10 +454,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.dateString = (new Date()).toDateString();
         document.ontouchstart = function(event) {
           event.preventDefault();
-        });
+        };
         document.ontouchmove = function(event) {
           event.preventDefault();
-        });
+        };
       },
       _activityListChanged: function(activityList) {
         console.log("activityList: "+this.activityList);
