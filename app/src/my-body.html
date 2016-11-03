@@ -520,9 +520,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.date = new Date(this.dayselected).getTime();
       },
       sizeChanged: function(newValue, oldValue) {
-        console.log("sizeChanged");
+        console.log("sizeChanged newValue: "+newValue+" oldValue: "+oldValue);
         if (newValue == 0 && oldValue > 0) {
-          console.log("no data found");
+          // console.log("no data found");
+          //   this.happyValue = 0;
+          //   this.sadValue = 0;
+          //   this.peacefulValue = 0;
+          //   this.anxiousValue = 0;
+          //   this.hopefulValue = 0;
+          //   this.hopelessValue = 0;
+          //   this.energeticValue = 0;
+          //   this.tiredValue = 0;
+          //   this.confidentValue = 0;
+          //   this.insecureValue = 0;
+          //   this.relaxedValue = 0;
+          //   this.stressedValue = 0;
+          //   this.gratefulValue = 0;
+          //   this.disappointedValue = 0;
+          //   this.extrovertedValue = 0;
+          //   this.withdrawnValue = 0;
+          //   this.carefreeValue = 0;
+          //   this.focusedValue = 0;
+          //   this.chaoticValue = 0;
+          //   this.inspiredValue = 0;
+          //   this.unchallengedValue = 0;
+          //   this.effectiveValue = 0;
+          //   this.frustratedValue = 0;
+        }
+      },
+      dateChanged: function(newValue, oldValue) {
+        console.log("dateChanged");
             this.happyValue = 0;
             this.sadValue = 0;
             this.peacefulValue = 0;
@@ -546,14 +573,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.unchallengedValue = 0;
             this.effectiveValue = 0;
             this.frustratedValue = 0;
-        }
       },
       attached: function() {
         this.date = new Date(this.dayselected).getTime();;
         var that = this;
        
         var energeticRatings = this.$.energeticRatings;
-        energeticRatings.addEventListener('value-change', function() {
+        energeticRatings.addEventListener('change', function() {
           console.log("Listener"+energeticRatings.value);
           that.emotionDetails.value = energeticRatings.value;
           that.saveEntry('energetic');
@@ -561,7 +587,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         });
 
         var tiredRatings = this.$.tiredRatings;
-        tiredRatings.addEventListener('value-change', function() {
+        tiredRatings.addEventListener('change', function() {
           console.log("Listener"+tiredRatings.value);
           that.emotionDetails.value = tiredRatings.value;
           that.saveEntry('tired');
@@ -569,7 +595,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         });
 
         var confidentRatings = this.$.confidentRatings;
-        confidentRatings.addEventListener('value-change', function() {
+        confidentRatings.addEventListener('change', function() {
           console.log("Listener"+confidentRatings.value);
           that.emotionDetails.value = confidentRatings.value;
           that.saveEntry('confident');
@@ -577,7 +603,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         });
 
         var insecureRatings = this.$.insecureRatings;
-        insecureRatings.addEventListener('value-change', function() {
+        insecureRatings.addEventListener('change', function() {
           console.log("Listener"+insecureRatings.value);
           that.emotionDetails.value = insecureRatings.value;
           that.saveEntry('insecure');
@@ -585,7 +611,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         });
 
         var relaxedRatings = this.$.relaxedRatings;
-        relaxedRatings.addEventListener('value-change', function() {
+        relaxedRatings.addEventListener('change', function() {
           console.log("Listener"+relaxedRatings.value);
           that.emotionDetails.value = relaxedRatings.value;
           that.saveEntry('relaxed');
@@ -593,7 +619,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         });
 
         var stressedRatings = this.$.stressedRatings;
-        stressedRatings.addEventListener('value-change', function() {
+        stressedRatings.addEventListener('change', function() {
           console.log("Listener"+stressedRatings.value);
           that.emotionDetails.value = stressedRatings.value;
           that.saveEntry('stressed');
@@ -641,6 +667,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var localDataAster = [];
         var colorSheet = this.$.colorSheet;
         console.log(data);
+        that.tempaggregateemotions ={};
         data.forEach(function(childSnapshot) {
           var key = childSnapshot.$key; 
           console.log("value: "+childSnapshot.value);
@@ -765,9 +792,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         return Promise.resolve();
       },
       saveEntry: function(emotionName) {
-        if (this.size == 0) {
-            this.saveNewAggregateEmotions();
-        } 
         if (this.$.emotionFirebase.isNew) {
           var that = this;
           return this.$.emotionFirebase.save(this.user+"/daily/"+that.date+"/emotions/", emotionName).then(function() {

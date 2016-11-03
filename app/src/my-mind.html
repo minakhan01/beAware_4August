@@ -293,18 +293,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{updateAggregateDetails}}">
     </firebase-document>
     <firebase-document
-        id="deleteActivityFirebase"
-        app-name="notes"
-        path="{{pathDelete}}">
-    </firebase-document>
-    
-    <firebase-document
-        id="editActivity"
-        app-name="notes"
-        path="/"
-        data="{{editedActivityDetails}}">
-    </firebase-document>
-    <firebase-document
         id="updateEmotionsFirebase"
         app-name="notes"
         path="/"
@@ -461,23 +449,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: Object,
             observer: 'aggregateDetailsChanged'
           },
-          editedActivityDetails: {
-            type: Object,
-            reflectToAttribute: true
-          },          
-          activityList: {
-            type: Array,
-            value: [],
-            observer: '_activityListChanged' 
-          },
           newDayExists: {
             type: Boolean,
             value: false,
-          },
-          activities: {
-            type: Array,
-            value: 
-            ["Work1", "Work2", "Sleep", "Personal", "Social", "Exercise", "Errands"]
           },
           firstTime: {
             type: Boolean,
@@ -500,10 +474,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log("dayselected changed from: "+oldValue+ " to "+newValue);
         this.date = new Date(this.dayselected).getTime();
       },
-      sizeChanged: function(newValue, oldValue) {
-        console.log("sizeChanged");
-        if (newValue == 0 && oldValue > 0) {
-          console.log("no data found");
+      dateChanged: function(newValue, oldValue) {
+        console.log("dateChanged");
+        this.tempaggregateemotions = {};
+        console.log("aggregateemotions size: "+this.size);
+        for (var i=0; i<this.emotions.length;i++) {
+          console.log("emotions: "+this.emotions[i]);
+          this.tempaggregateemotions[this.emotions[i]] = {};
+          this.tempaggregateemotions[this.emotions[i]].value = 0;
+        }
             this.happyValue = 0;
             this.sadValue = 0;
             this.peacefulValue = 0;
@@ -527,80 +506,53 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.unchallengedValue = 0;
             this.effectiveValue = 0;
             this.frustratedValue = 0;
-        }
       },
       attached: function() {
         this.date = new Date(this.dayselected).getTime();
         var that = this;
 
         var focusedRatings = this.$.focusedRatings;
-        focusedRatings.addEventListener('value-change', function() {
+        focusedRatings.addEventListener('change', function() {
           console.log("Listener"+focusedRatings.value);
           that.emotionDetails.value = focusedRatings.value;
           that.saveEntry('focused');
-          that.saveAggregateEntry('focused');
         });
 
         var chaoticRatings = this.$.chaoticRatings;
-        chaoticRatings.addEventListener('value-change', function() {
+        chaoticRatings.addEventListener('change', function() {
           console.log("Listener"+chaoticRatings.value);
           that.emotionDetails.value = chaoticRatings.value;
           that.saveEntry('chaotic');
-          that.saveAggregateEntry('chaotic');
         });
 
         var inspiredRatings = this.$.inspiredRatings;
-        inspiredRatings.addEventListener('value-change', function() {
+        inspiredRatings.addEventListener('change', function() {
           console.log("Listener"+inspiredRatings.value);
           that.emotionDetails.value = inspiredRatings.value;
           that.saveEntry('inspired');
-          that.saveAggregateEntry('inspired');
         });
 
         var unchallengedRatings = this.$.unchallengedRatings;
-        unchallengedRatings.addEventListener('value-change', function() {
+        unchallengedRatings.addEventListener('change', function() {
           console.log("Listener"+unchallengedRatings.value);
           that.emotionDetails.value = unchallengedRatings.value;
           that.saveEntry('unchallenged');
-          that.saveAggregateEntry('unchallenged');
         });
 
         var effectiveRatings = this.$.effectiveRatings;
-        effectiveRatings.addEventListener('value-change', function() {
+        effectiveRatings.addEventListener('change', function() {
           console.log("Listener"+effectiveRatings.value);
           that.emotionDetails.value = effectiveRatings.value;
           that.saveEntry('effective');
-          that.saveAggregateEntry('effective');
         });
 
         var frustratedRatings = this.$.frustratedRatings;
-        frustratedRatings.addEventListener('value-change', function() {
+        frustratedRatings.addEventListener('change', function() {
           console.log("Listener"+frustratedRatings.value);
           that.emotionDetails.value = frustratedRatings.value;
           that.saveEntry('frustrated');
-          that.saveAggregateEntry('frustrated');
         });
 
-      },
-      aggregateDetailsChanged: function(aggregatedb) {
-        console.log("aggregatedb: ");
-        console.log(this.aggregatedb);
-        var aggregateData = this.aggregatedb;
-        this.tempAggregateDetails = {}; 
-        var that = this;
-        aggregateData.forEach(function(childSnapshot) {
-          var key = childSnapshot.$key;
-          if (key === "activities") {
-          that.tempAggregateDetails.activities = {};
-            for (var i=0; i<that.activities.length;i++) {
-              var activityName = that.activities[i];
-              that.tempAggregateDetails.activities[activityName] = childSnapshot[activityName];
-            }
-          }
-        });
-        this.oldAggregateDetails = this.tempAggregateDetails;
-        console.log("updateAggregateDetails");
-        console.log(this.oldAggregateDetails);
       },
       preventScrolling: function(event) {
         event.preventDefault();
@@ -616,6 +568,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           "Personal": {"colorShade": "Green", "colorType": "A200"}
         };
         var that = this;
+        that.tempaggregateemotions ={};
         // do something when the query returns values
         console.log("---BEFORE");
         var data = this.emotiondb;
@@ -625,7 +578,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data.forEach(function(childSnapshot) {
           var key = childSnapshot.$key; 
           console.log("value: "+childSnapshot.value);
-
+          that.tempaggregateemotions[key] = childSnapshot.value;
           if (key === "happy") {
             console.log("happyValue: "+that.happyValue);
             that.happyValue = childSnapshot.value;
@@ -745,10 +698,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         return Promise.resolve();
       },
-      saveEntry: function(emotionName) {
-        if (this.size == 0) {
-            this.saveNewAggregateEmotions();
-        }   
+      saveEntry: function(emotionName) {  
         if (this.$.emotionFirebase.isNew) {
           var that = this;
           return this.$.emotionFirebase.save(this.user+"/daily/"+that.date+"/emotions/", emotionName).then(function() {
@@ -757,65 +707,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           });
         }
         return Promise.resolve();
-      },
-      saveAggregateEntry: function(emotionName) {  
-        if (this.$.emotionAggregateFirebase.isNew) {
-          var that = this;
-          return this.$.emotionAggregateFirebase.save(this.user+"/aggregate/"+that.date+"/emotions/", emotionName).then(function() {
-            console.log("saving emotion");
-            that.$.emotionAggregateFirebase.reset();
-          });
-        }
-        return Promise.resolve();
-      },
-      createDayAggregate: function() {  
-        console.log("creating new aggregate day");
-        if (this.$.createAggregateFirebase.isNew) {
-          var that = this;
-          return this.$.createAggregateFirebase.save(this.user+"/aggregate",that.date).then(function() {
-            that.$.createAggregateFirebase.reset();
-          });
-        }
-        return Promise.resolve();
-      },
-      updateNewDayAggregate: function() { 
-      console.log("update new aggregate day"); 
-        if (this.$.updateAggregateFirebase.isNew) {
-          var that = this;
-          return this.$.updateAggregateFirebase.save(this.user+"/aggregate", that.date).then(function() {
-            that.$.updateAggregateFirebase.reset();
-          });
-        }
-        return Promise.resolve();
-      },
-      editOldEntry: function(emotionName) {  
-        if (this.$.editActivity.isNew) {
-          var that = this;
-          return this.$.editActivity.save(this.user+"/daily/"+that.date+"/emotions/"+emotionName).then(function() {
-            that.$.editActivity.reset();
-          });
-        }
-        return Promise.resolve();
-      },
-      _activityChanged: function(activitySelected) {
-        console.log("_activityChanged: "+this.activity);
-      },
-      _periodEndChanged: function(periodEndSelected) {
-        console.log("_periodEndChanged");
-        console.log("this.firstTime: "+this.firstTime);
-        
-        if (this.firstTime) {
-          this.createPopUp();
-        }
-        
-        
-      },
-      updateAggregateActivity: function() {
-        this.updateAggregateDetails.activities[this.activity] += this.activityDetails.duration;
-        this.updateNewDayAggregate();
-      },
-      printEndValue: function() {
-        console.log("printEndValue: "+this.periodEndSelected);
       },
     });
 

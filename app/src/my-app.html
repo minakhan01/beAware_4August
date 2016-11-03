@@ -303,10 +303,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div class="flex">
         <iron-pages style="height:100%;" role="main" selected="[[page]]" attr-for-selected="name">
             <my-input id="input" name="input" user="[[user.uid]]" dayselected="[[dayselected]]" datadb="{{datadb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" size="[[size]]" activitiessize="[[activitiessize]]"></my-input>
-            <my-heart id="heart" name="heart" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{aggregateemotions}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" size="[[size]]"></my-heart>
-            <my-mind id="mind" name="mind" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{aggregateemotions}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" size="[[size]]" ></my-mind>
-            <my-body id="body" name="body" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{aggregateemotions}}" new-day-exists="{{aggregateDataExists}}" size="[[size]]" aggregatedb="[[aggregatedb]]"></my-body>
-            <my-spirit id="spirit" name="spirit" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{aggregateemotions}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" size="[[size]]" ></my-spirit>
+            <my-heart id="heart" name="heart" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" size="[[size]]"></my-heart>
+            <my-mind id="mind" name="mind" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" size="[[size]]" ></my-mind>
+            <my-body id="body" name="body" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" size="[[size]]" aggregatedb="[[aggregatedb]]"></my-body>
+            <my-spirit id="spirit" name="spirit" dayselected="[[dayselected]]" user="[[user.uid]]" emotiondb="{{emotiondb}}" new-day-exists="{{aggregateDataExists}}" aggregatedb="[[aggregatedb]]" size="[[size]]" ></my-spirit>
             <my-analysis name="analysis" user="[[user.uid]]" dailydb="{{aggregatedball}}"></my-analysis>
         </iron-pages>
       </div>
@@ -409,8 +409,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       observers: [
         '_routePageChanged(routeData.page)',
         'aggregateDataChanged(aggregatedb.splices)',
-        'totalDataChanged(totaldb.splices)',
         'dataEmotionsChanged(aggregateemotions.*)',
+        'dataEmotionsListChanged(aggregateemotions.splices)',
         'dataActivitiesChanged(aggregateactivities.*)',
         'uuidChanged(user.uid)'
       ],
@@ -452,17 +452,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.dialog.toggle();
       },
       dataEmotionsChanged: function(aggregateemotionsdb) {
-        console.log("dataEmotionsChanged");
+        // console.log("dataEmotionsChanged");
+        // console.log("date: "+ new Date(this.date));
+        // var aggregateEmotions = this.aggregateemotions;
+        // // this. = {}; 
+        // var that = this;
+        // console.log("aggregateemotions");
+        // console.log(aggregateEmotions);
+        // this.size = Object.keys(aggregateEmotions).length;
+        // console.log("size");
+        // console.log(this.size);
+      },
+      dataEmotionsListChanged: function(aggregateemotionsdb) {
+        console.log("dataEmotionsChanged one");
         console.log("date: "+ new Date(this.date));
         var aggregateEmotions = this.aggregateemotions;
         // this. = {}; 
         var that = this;
         console.log("aggregateemotions");
-        console.log(aggregateEmotions);
-        this.size = Object.keys(aggregateEmotions).length;
+        console.log(JSON.stringify(aggregateEmotions));
+        aggregateEmotions.forEach(function(childSnapshot) {
+          var key = childSnapshot.$key;
+          if (key === "emotions") {
+          that.size = 24;
+          }
+        });
+        // this.size = Object.keys(aggregateEmotions).length;
+        // this.size = aggregateEmotions.length;
+        console.log("size");
+        console.log(this.size);
       },
       dataActivitiesChanged: function(aggregateactivitiesdb) {
-        console.log("dataEmotionsChanged");
+        console.log("dataActivitiesChanged");
         console.log("date: "+ new Date(this.date));
         var aggregateActivities = this.aggregateactivities;
         // this. = {}; 

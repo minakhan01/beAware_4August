@@ -295,18 +295,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         path="/"
         data="{{updateAggregateDetails}}">
     </firebase-document>
-    <firebase-document
-        id="deleteActivityFirebase"
-        app-name="notes"
-        path="{{pathDelete}}">
-    </firebase-document>
-    
-    <firebase-document
-        id="editActivity"
-        app-name="notes"
-        path="/"
-        data="{{editedActivityDetails}}">
-    </firebase-document>
 
     <firebase-document
         id="updateEmotionsFirebase"
@@ -458,24 +446,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           aggregatedb: {
             type: Object,
             observer: 'aggregateDetailsChanged'
-          },
-          editedActivityDetails: {
-            type: Object,
-            reflectToAttribute: true
-          },          
-          activityList: {
-            type: Array,
-            value: [],
-            observer: '_activityListChanged' 
-          },
+          },        
           newDayExists: {
             type: Boolean,
             value: false,
-          },
-          activities: {
-            type: Array,
-            value: 
-            ["Work1", "Work2", "Sleep", "Personal", "Social", "Exercise", "Errands"]
           },
           firstTime: {
             type: Boolean,
@@ -504,10 +478,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log("dayselected changed from: "+oldValue+ " to "+newValue);
         this.date = new Date(this.dayselected).getTime();
       },
-      sizeChanged: function(newValue, oldValue) {
-        console.log("sizeChanged");
-        if (newValue == 0 && oldValue > 0) {
-          console.log("no data found");
+      dateChanged: function(newValue, oldValue) {
+        console.log("dateChanged");
+        this.tempaggregateemotions = {};
+        console.log("aggregateemotions size: "+this.size);
+        for (var i=0; i<this.emotions.length;i++) {
+          console.log("emotions: "+this.emotions[i]);
+          this.tempaggregateemotions[this.emotions[i]] = {};
+          this.tempaggregateemotions[this.emotions[i]].value = 0;
+        }
             this.happyValue = 0;
             this.sadValue = 0;
             this.peacefulValue = 0;
@@ -531,7 +510,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.unchallengedValue = 0;
             this.effectiveValue = 0;
             this.frustratedValue = 0;
-        }
       },
       dateFormat: function(date, format) {
           return moment(date).format(format);
@@ -570,73 +548,47 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var that = this;
         
         var happyRatings = this.$.happyRatings;
-        happyRatings.addEventListener('value-change', function() {
+        happyRatings.addEventListener('change', function() {
           console.log("Listener"+happyRatings.value);
           that.emotionDetails.value = happyRatings.value;
           that.saveEntry('happy');
-          that.saveAggregateEntry('happy');
         });
 
         var sadRatings = this.$.sadRatings;
-        sadRatings.addEventListener('value-change', function() {
+        sadRatings.addEventListener('change', function() {
           console.log("Listener"+sadRatings.value);
           that.emotionDetails.value = sadRatings.value;
           that.saveEntry('sad');
-          that.saveAggregateEntry('sad');
         });
 
         var peacefulRatings = this.$.peacefulRatings;
-        peacefulRatings.addEventListener('value-change', function() {
+        peacefulRatings.addEventListener('change', function() {
           console.log("Listener"+peacefulRatings.value);
           that.emotionDetails.value = peacefulRatings.value;
           that.saveEntry('peaceful');
-          that.saveAggregateEntry('peaceful');
         });
 
         var anxiousRatings = this.$.anxiousRatings;
-        anxiousRatings.addEventListener('value-change', function() {
+        anxiousRatings.addEventListener('change', function() {
           console.log("Listener"+anxiousRatings.value);
           that.emotionDetails.value = anxiousRatings.value;
           that.saveEntry('anxious');
-          that.saveAggregateEntry('anxious');
         });
 
         var hopefulRatings = this.$.hopefulRatings;
-        hopefulRatings.addEventListener('value-change', function() {
+        hopefulRatings.addEventListener('change', function() {
           console.log("Listener"+hopefulRatings.value);
           that.emotionDetails.value = hopefulRatings.value;
           that.saveEntry('hopeful');
-          that.saveAggregateEntry('hopeful');
         });
 
         var hopelessRatings = this.$.hopelessRatings;
-        hopelessRatings.addEventListener('value-change', function() {
+        hopelessRatings.addEventListener('change', function() {
           console.log("Listener"+hopelessRatings.value);
           that.emotionDetails.value = hopelessRatings.value;
           that.saveEntry('hopeless');
-          that.saveAggregateEntry('hopeless');
         });
 
-      },
-      aggregateDetailsChanged: function(aggregatedb) {
-        console.log("aggregatedb: ");
-        console.log(this.aggregatedb);
-        var aggregateData = this.aggregatedb;
-        this.tempAggregateDetails = {}; 
-        var that = this;
-        aggregateData.forEach(function(childSnapshot) {
-          var key = childSnapshot.$key;
-          if (key === "activities") {
-          that.tempAggregateDetails.activities = {};
-            for (var i=0; i<that.activities.length;i++) {
-              var activityName = that.activities[i];
-              that.tempAggregateDetails.activities[activityName] = childSnapshot[activityName];
-            }
-          }
-        });
-        this.oldAggregateDetails = this.tempAggregateDetails;
-        console.log("updateAggregateDetails");
-        console.log(this.oldAggregateDetails);
       },
       preventScrolling: function(event) {
         event.preventDefault();
@@ -658,10 +610,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var localDataAster = [];
         var colorSheet = this.$.colorSheet;
         console.log(data);
+        that.tempaggregateemotions ={};
         data.forEach(function(childSnapshot) {
           var key = childSnapshot.$key; 
           console.log("value: "+childSnapshot.value);
-
+          that.tempaggregateemotions[key] = childSnapshot.value;
           if (key === "happy") {
             console.log("happyValue: "+that.happyValue);
             that.happyValue = childSnapshot.value;
@@ -741,29 +694,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log(childSnapshot);
         });
         console.log("AFTER");
-      },
-      createNewAggregateActivity: function() {
-        this.newAggregateDetails = {};
-        this.newAggregateDetails.activities = {};
-        for (var i=0; i<this.activities.length;i++) {
-          //TODO: WHY IS activity 0
-          console.log(this.activities[i]);
-          this.newAggregateDetails.activities[this.activities[i]] = 0;
+        if (this.$.updateEmotionsFirebase.isNew) {
+          var that = this;
+          console.log("is new");
+          return this.$.updateEmotionsFirebase.save(this.user+"/aggregate/"+that.date,"emotions").then(function() {
+            console.log("reset");
+            that.$.updateEmotionsFirebase.reset();
+          });
         }
-        console.log("createNewAggregateActivity");
-        console.log(this.newAggregateDetails);
-        this.oldAggregateDetails = this.newAggregateDetails;
-      },
-      _periodStartChanged: function(periodStartSelected) {
-        
-        },
-      _activityListChanged: function(activityList) {
-        console.log("activityList: "+this.activityList);
       },
       saveEntry: function(emotionName) { 
-        if (this.size == 0) {
-          this.saveNewAggregateEmotions();
-        } 
         if (this.$.emotionFirebase.isNew) {
           var that = this;
           return this.$.emotionFirebase.save(this.user+"/daily/"+that.date+"/emotions/", emotionName).then(function() {
@@ -772,215 +712,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           });
         }
         return Promise.resolve();
-      },
-      saveAggregateEntry: function(emotionName) {  
-        if (this.$.emotionAggregateFirebase.isNew) {
-          var that = this;
-          return this.$.emotionAggregateFirebase.save(this.user+"/aggregate/"+that.date+"/emotions/", emotionName).then(function() {
-            console.log("saving emotion");
-            that.$.emotionAggregateFirebase.reset();
-          });
-        }
-        return Promise.resolve();
-      },
-      createDayAggregate: function() {  
-        console.log("creating new aggregate day");
-        if (this.$.createAggregateFirebase.isNew) {
-          var that = this;
-          return this.$.createAggregateFirebase.save(this.user+"/aggregate",that.date).then(function() {
-            that.$.createAggregateFirebase.reset();
-          });
-        }
-        return Promise.resolve();
-      },
-      updateNewDayAggregate: function() { 
-      console.log("update new aggregate day"); 
-        if (this.$.updateAggregateFirebase.isNew) {
-          var that = this;
-          return this.$.updateAggregateFirebase.save(this.user+"/aggregate", that.date).then(function() {
-            that.$.updateAggregateFirebase.reset();
-          });
-        }
-        return Promise.resolve();
-      },
-      editOldEntry: function(emotionName) {  
-        if (this.$.editActivity.isNew) {
-          var that = this;
-          return this.$.editActivity.save(this.user+"/daily/"+that.date+"/emotions/"+emotionName).then(function() {
-            that.$.editActivity.reset();
-          });
-        }
-        return Promise.resolve();
-      },
-      _activityChanged: function(activitySelected) {
-        console.log("_activityChanged: "+this.activity);
-        },
-      _periodEndChanged: function(periodEndSelected) {
-        console.log("_periodEndChanged");
-        console.log("this.firstTime: "+this.firstTime);
-        
-        if (this.firstTime) {
-          this.createPopUp();
-        }
-        
-        
-        },
-      createPopUp: function() {
-        this.$.plain.open();
-      },
-      _closePopUp: function() {
-        console.log("close");
-        this.$.plain.close();
-      },
-      _saveSelection: function() {
-        var heartColors = 
-        { "Happy": {"colorShade": "Yellow", "colorType": "A200"},
-          "Sad" : {"colorShade": "Blue", "colorType": "200"},
-          "Peaceful" : {"colorShade": "Teal", "colorType": "A200"},
-          "Anxious" : {"colorShade": "Purple", "colorType": "200"},
-          "Hopeful" : {"colorShade": "Orange", "colorType": "A200"},
-          "Hopeless" : {"colorShade": "BlueGrey", "colorType": "200"}
-        };
-        var bodyColors = 
-        { "Energetic": {"colorShade": "DeepPurple", "colorType": "A200"},
-          "Tired" : {"colorShade": "Lime", "colorType": "200"},
-          "Confident" : {"colorShade": "Pink", "colorType": "A200"},
-          "Insecure" : {"colorShade": "Green", "colorType": "200"},
-          "Relaxed" : {"colorShade": "Indigo", "colorType": "A200"},
-          "Stressed" : {"colorShade": "Amber", "colorType": "200"}
-        };
-        var spiritColors = 
-        { "Grateful": {"colorShade": "Purple", "colorType": "A200"},
-          "Disappointed" : {"colorShade": "Green", "colorType": "200"},
-          "Extroverted" : {"colorShade": "Red", "colorType": "A200"},
-          "Withdrawn" : {"colorShade": "Yellow", "colorType": "200"},
-          "Empathetic" : {"colorShade": "LightBlue", "colorType": "A200"},
-          "Carefree" : {"colorShade": "Pink", "colorType": "200"}
-        };
-        var mindColors = 
-        { "Focused": {"colorShade": "Yellow", "colorType": "A200"},
-          "Chaotic" : {"colorShade": "Blue", "colorType": "200"},
-          "Inspired" : {"colorShade": "Teal", "colorType": "A200"},
-          "Unchallenged" : {"colorShade": "Purple", "colorType": "200"},
-          "Effective" : {"colorShade": "Orange", "colorType": "A200"},
-          "Frustrated" : {"colorShade": "BlueGrey", "colorType": "200"}
-        };
-        console.log("activity: " +this.activity);
-        console.log("SAVE SELECTION");
-        this.activityDetails.activityType = this.activity;
-        this.activityDetails.startTime = this.periodStartSelected;
-        this.activityDetails.endTime = this.periodEndSelected;
-        this.activityDetails.duration = this.periodEndSelected - this.periodStartSelected;
-        
-        this.activityList.push(this.activityDetails);
-        var activitySelected = this.activity;
-        // console.log("activitySelected: "+activitySelected);
-        var colorShadeString = activityColors[activitySelected].colorShade;
-        // console.log("colorShadeString: "+colorShadeString);
-        var activitySelectedColor = this.$.colorSheet.colors[colorShadeString].a700;
-        this.searchDb();
-        
-        console.log("newDayExists: "+this.newDayExists);
-
-        if (!this.newDayExists) {
-          this.createNewAggregateActivity();
-        }
-        
-        var tempPlaceUpdateAggregateDetails = this.oldAggregateDetails;
-        console.log("this.oldAggregateDetails");
-        console.log(this.oldAggregateDetails);
-        tempPlaceUpdateAggregateDetails.activities[this.activity] = parseInt(this.oldAggregateDetails.activities[this.activity]) + this.activityDetails.duration;
-        
-        this.updateAggregateDetails = tempPlaceUpdateAggregateDetails;
-        this.oldAggregateDetails = this.updateAggregateDetails;
-
-        console.log("tempPlaceUpdateAggregateDetails");
-        console.log(this.tempPlaceUpdateAggregateDetails);
-        this.updateNewDayAggregate();
-
-        // this.saveEntry();
-        // this.saveAggregateEntry();
-
-        // console.log("ENTRY SAVED AND BEFORE UPDATE NEW AGGREGATE");
-        // this.updateNewDayAggregate();
-        // console.log("UPDATED NEW AGGREGATE AND BEFORE CLOSING POP UP");
-        this._closePopUp();
-      },
-      updateAggregateActivity: function() {
-        this.updateAggregateDetails.activities[this.activity] += this.activityDetails.duration;
-        this.updateNewDayAggregate();
-      },
-      editAggregate: function (diffDuration, diffActivityName) {
-        var tempPlaceUpdateAggregateDetails = this.oldAggregateDetails;
-        tempPlaceUpdateAggregateDetails.activities[diffActivityName] = parseInt(this.oldAggregateDetails.activities[diffActivityName]) + diffDuration;
-
-        
-        this.updateAggregateDetails = tempPlaceUpdateAggregateDetails;
-        this.oldAggregateDetails = this.updateAggregateDetails;
-        this.updateNewDayAggregate();
-      },
-      searchDb: function() {
-        // console.log("SEARCH DB");
-        // console.log(this.datadb);
-
-        for (key in this.datadb) {
-          var obj = this.datadb[key];
-          console.log("obj");
-          console.log(obj);
-
-          var activityStartTime = obj.startTime;
-          var activityEndTime = obj.endTime;
-          var oldDuration = obj.endTime - obj.startTime;
-          var newDuration = oldDuration;
-
-          var diffActivityName = obj.activityType;
-
-          var modified = false;
-          var deleted = false;
-          if (activityStartTime < this.periodEndSelected && activityEndTime > this.periodEndSelected) {
-            //change start time of the old activity
-            obj.startTime = this.periodEndSelected;
-            newDuration = obj.endTime - obj.startTime;
-            diffDuration = newDuration - oldDuration;
-            console.log("MODIFYING START TIME");
-            modified = true;
-          }
-          else if (activityStartTime < this.periodStartSelected && activityEndTime > this.periodStartSelected) {
-            // change end time of old activity
-            obj.endTime = this.periodStartSelected;
-            newDuration = obj.endTime - obj.startTime;
-            diffDuration = newDuration - oldDuration;
-            console.log("MODIFYING END TIME");
-            modified = true;
-          }
-          else if (activityEndTime <= this.periodEndSelected && activityStartTime >= this.periodStartSelected) {
-            // delete this key
-            var key = obj.$key;
-            diffDuration = - oldDuration;
-            this.delete(key);
-            deleted = true;
-            console.log("DELETING");
-          }
-
-          if (modified) {
-            console.log("obj");
-            this.editedActivityDetails.activityType = obj.activityType;
-            this.editedActivityDetails.startTime = obj.startTime;
-            this.editedActivityDetails.endTime = obj.endTime;
-            this.editedActivityDetails.duration = obj.endTime - obj.startTime;
-            
-            console.log("editedActivityDetails");
-            console.log(this.editedActivityDetails);
-            var key = obj.$key;
-            this.editOldEntry(key);
-          }
-          if (modified || deleted) {
-            this.editAggregate(diffDuration, diffActivityName); //TODO
-          }
-        }
-      },
-      printEndValue: function() {
-        console.log("printEndValue: "+this.periodEndSelected);
       },
     });
 
