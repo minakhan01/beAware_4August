@@ -481,12 +481,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       dateChanged: function(newValue, oldValue) {
         console.log("dateChanged");
         this.tempaggregateemotions = {};
-        console.log("aggregateemotions size: "+this.size);
         for (var i=0; i<this.emotions.length;i++) {
           console.log("emotions: "+this.emotions[i]);
           this.tempaggregateemotions[this.emotions[i]] = {};
           this.tempaggregateemotions[this.emotions[i]].value = 0;
         }
+        console.log("tempaggregateemotions "+this.tempaggregateemotions);
             this.happyValue = 0;
             this.sadValue = 0;
             this.peacefulValue = 0;
@@ -525,12 +525,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       saveNewAggregateEmotions: function() {
         this.tempaggregateemotions = {};
-          console.log("aggregateemotions size: "+this.size);
-          for (var i=0; i<this.emotions.length;i++) {
-            console.log("emotions: "+this.emotions[i]);
-            this.tempaggregateemotions[this.emotions[i]] = {};
-            this.tempaggregateemotions[this.emotions[i]].value = 0;
-          }
+        console.log("aggregateemotions size: "+this.size);
+        for (var i=0; i<this.emotions.length;i++) {
+          console.log("emotions: "+this.emotions[i]);
+          this.tempaggregateemotions[this.emotions[i]] = {};
+          this.tempaggregateemotions[this.emotions[i]].value = 0;
+        }
         console.log("tempaggregateemotions: ");
         console.log(this.tempaggregateemotions);
         if (this.$.updateEmotionsFirebase.isNew) {
@@ -552,6 +552,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+happyRatings.value);
           that.emotionDetails.value = happyRatings.value;
           that.saveEntry('happy');
+          that.saveAggregate();
         });
 
         var sadRatings = this.$.sadRatings;
@@ -559,6 +560,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+sadRatings.value);
           that.emotionDetails.value = sadRatings.value;
           that.saveEntry('sad');
+          that.saveAggregate();
         });
 
         var peacefulRatings = this.$.peacefulRatings;
@@ -566,6 +568,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+peacefulRatings.value);
           that.emotionDetails.value = peacefulRatings.value;
           that.saveEntry('peaceful');
+          that.saveAggregate();
         });
 
         var anxiousRatings = this.$.anxiousRatings;
@@ -573,6 +576,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+anxiousRatings.value);
           that.emotionDetails.value = anxiousRatings.value;
           that.saveEntry('anxious');
+          that.saveAggregate();
         });
 
         var hopefulRatings = this.$.hopefulRatings;
@@ -580,6 +584,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+hopefulRatings.value);
           that.emotionDetails.value = hopefulRatings.value;
           that.saveEntry('hopeful');
+          that.saveAggregate();
         });
 
         var hopelessRatings = this.$.hopelessRatings;
@@ -587,6 +592,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+hopelessRatings.value);
           that.emotionDetails.value = hopelessRatings.value;
           that.saveEntry('hopeless');
+          that.saveAggregate();
         });
 
       },
@@ -605,16 +611,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         };
         var that = this;
         // do something when the query returns values
-        console.log("---BEFORE");
+        console.log("---BEFORE data changed");
         var data = this.emotiondb;
         var localDataAster = [];
         var colorSheet = this.$.colorSheet;
         console.log(data);
-        that.tempaggregateemotions ={};
+        
         data.forEach(function(childSnapshot) {
           var key = childSnapshot.$key; 
           console.log("value: "+childSnapshot.value);
-          that.tempaggregateemotions[key] = childSnapshot.value;
+          that.tempaggregateemotions[key].value = childSnapshot.value;
           if (key === "happy") {
             console.log("happyValue: "+that.happyValue);
             that.happyValue = childSnapshot.value;
@@ -690,14 +696,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             that.frustratedValue = childSnapshot.value;
           }
           
-          console.log("my input");
+          console.log("my input heart aggregate");
           console.log(childSnapshot);
         });
         console.log("AFTER");
+        console.log("aggregate date"+this.date);
+        console.log("tempaggregateemotions: ");
+        console.log(this.tempaggregateemotions);
+      },
+      saveAggregate: function() {
+        console.log("save aggregate tempaggregateemotions: ");
+        console.log(this.tempaggregateemotions);
         if (this.$.updateEmotionsFirebase.isNew) {
           var that = this;
           console.log("is new");
-          return this.$.updateEmotionsFirebase.save(this.user+"/aggregate/"+that.date,"emotions").then(function() {
+          return this.$.updateEmotionsFirebase.save(this.user+"/aggregate/"+this.date+"/","emotions").then(function() {
             console.log("reset");
             that.$.updateEmotionsFirebase.reset();
           });

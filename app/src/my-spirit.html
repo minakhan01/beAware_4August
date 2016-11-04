@@ -517,6 +517,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+gratefulRatings.value);
           that.emotionDetails.value = gratefulRatings.value;
           that.saveEntry('grateful');
+          that.saveAggregate();
         });
 
         var disappointedRatings = this.$.disappointedRatings;
@@ -524,6 +525,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+disappointedRatings.value);
           that.emotionDetails.value = disappointedRatings.value;
           that.saveEntry('disappointed');
+          that.saveAggregate();
         });
 
         var extrovertedRatings = this.$.extrovertedRatings;
@@ -531,6 +533,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+extrovertedRatings.value);
           that.emotionDetails.value = extrovertedRatings.value;
           that.saveEntry('extroverted');
+          that.saveAggregate();
         });
 
         var withdrawnRatings = this.$.withdrawnRatings;
@@ -538,6 +541,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+withdrawnRatings.value);
           that.emotionDetails.value = withdrawnRatings.value;
           that.saveEntry('withdrawn');
+          that.saveAggregate();
         });
 
         var empatheticRatings = this.$.empatheticRatings;
@@ -545,6 +549,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+empatheticRatings.value);
           that.emotionDetails.value = empatheticRatings.value;
           that.saveEntry('empathetic');
+          console.log("empathetic check");
+          console.log("that.tempaggregateemotions");
+          console.log(that.tempaggregateemotions);
+          that.saveAggregate();
         });
 
         var carefreeRatings = this.$.carefreeRatings;
@@ -552,6 +560,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+carefreeRatings.value);
           that.emotionDetails.value = carefreeRatings.value;
           that.saveEntry('carefree');
+          that.saveAggregate();
         });
 
       },
@@ -575,11 +584,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var localDataAster = [];
         var colorSheet = this.$.colorSheet;
         console.log(data);
-        that.tempaggregateemotions ={};
         data.forEach(function(childSnapshot) {
           var key = childSnapshot.$key; 
           console.log("value: "+childSnapshot.value);
-          that.tempaggregateemotions[key] = childSnapshot.value;
+          that.tempaggregateemotions[key].value = childSnapshot.value;
 
           if (key === "happy") {
             console.log("happyValue: "+that.happyValue);
@@ -681,6 +689,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           });
         }
         return Promise.resolve();
+      },
+      saveAggregate: function() {
+        console.log("save aggregate tempaggregateemotions: ");
+        console.log(this.tempaggregateemotions);
+        if (this.$.updateEmotionsFirebase.isNew) {
+          var that = this;
+          console.log("is new");
+          return this.$.updateEmotionsFirebase.save(this.user+"/aggregate/"+this.date+"/","emotions").then(function() {
+            console.log("reset");
+            that.$.updateEmotionsFirebase.reset();
+          });
+        }
       },
       saveEntry: function(emotionName) {
         if (this.$.emotionFirebase.isNew) {

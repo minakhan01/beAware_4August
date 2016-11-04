@@ -516,6 +516,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+focusedRatings.value);
           that.emotionDetails.value = focusedRatings.value;
           that.saveEntry('focused');
+          that.saveAggregate();
         });
 
         var chaoticRatings = this.$.chaoticRatings;
@@ -523,6 +524,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+chaoticRatings.value);
           that.emotionDetails.value = chaoticRatings.value;
           that.saveEntry('chaotic');
+          that.saveAggregate();
         });
 
         var inspiredRatings = this.$.inspiredRatings;
@@ -530,6 +532,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+inspiredRatings.value);
           that.emotionDetails.value = inspiredRatings.value;
           that.saveEntry('inspired');
+          that.saveAggregate();
         });
 
         var unchallengedRatings = this.$.unchallengedRatings;
@@ -537,6 +540,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+unchallengedRatings.value);
           that.emotionDetails.value = unchallengedRatings.value;
           that.saveEntry('unchallenged');
+          that.saveAggregate();
         });
 
         var effectiveRatings = this.$.effectiveRatings;
@@ -544,6 +548,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+effectiveRatings.value);
           that.emotionDetails.value = effectiveRatings.value;
           that.saveEntry('effective');
+          that.saveAggregate();
         });
 
         var frustratedRatings = this.$.frustratedRatings;
@@ -551,6 +556,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("Listener"+frustratedRatings.value);
           that.emotionDetails.value = frustratedRatings.value;
           that.saveEntry('frustrated');
+          that.saveAggregate();
         });
 
       },
@@ -568,7 +574,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           "Personal": {"colorShade": "Green", "colorType": "A200"}
         };
         var that = this;
-        that.tempaggregateemotions ={};
         // do something when the query returns values
         console.log("---BEFORE");
         var data = this.emotiondb;
@@ -578,7 +583,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data.forEach(function(childSnapshot) {
           var key = childSnapshot.$key; 
           console.log("value: "+childSnapshot.value);
-          that.tempaggregateemotions[key] = childSnapshot.value;
+          that.tempaggregateemotions[key].value = childSnapshot.value;
           if (key === "happy") {
             console.log("happyValue: "+that.happyValue);
             that.happyValue = childSnapshot.value;
@@ -697,6 +702,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           });
         }
         return Promise.resolve();
+      },
+      saveAggregate: function() {
+        console.log("save aggregate tempaggregateemotions: ");
+        console.log(this.tempaggregateemotions);
+        if (this.$.updateEmotionsFirebase.isNew) {
+          var that = this;
+          console.log("is new");
+          return this.$.updateEmotionsFirebase.save(this.user+"/aggregate/"+this.date+"/","emotions").then(function() {
+            console.log("reset");
+            that.$.updateEmotionsFirebase.reset();
+          });
+        }
       },
       saveEntry: function(emotionName) {  
         if (this.$.emotionFirebase.isNew) {
